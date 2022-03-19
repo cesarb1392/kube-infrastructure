@@ -1,3 +1,16 @@
+resource "kubernetes_namespace" "monitoring" {
+  metadata {
+    name = var.namespace
+    annotations = {
+      name = var.namespace
+    }
+    labels = {
+      namespace = var.namespace
+    }
+  }
+}
+
+
 resource "helm_release" "prometheus" {
   chart      = "prometheus"
   name       = var.namespace
@@ -14,23 +27,23 @@ resource "helm_release" "prometheus" {
     value = false
   }
 
-  set {
-    name = "server\\.resources"
-    value = yamlencode({
-      limits = {
-        cpu    = "200m"
-        memory = "50Mi"
-      }
-      requests = {
-        cpu    = "100m"
-        memory = "30Mi"
-      }
-    })
-  }
+#  set {
+#    name = "server\\.resources"
+#    value = yamlencode({
+#      limits = {
+#        cpu    = "200m"
+#        memory = "50Mi"
+#      }
+#      requests = {
+#        cpu    = "100m"
+#        memory = "30Mi"
+#      }
+#    })
+#  }
 }
 
 data "template_file" "grafana_values" {
-  template = file("monitoring/templates/grafana-values.yaml")
+  template = file("monitoring/grafana.yaml")
 
   vars = {
     GRAFANA_SERVICE_ACCOUNT = "grafana"

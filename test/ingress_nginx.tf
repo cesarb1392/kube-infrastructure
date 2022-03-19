@@ -1,3 +1,31 @@
+resource "kubernetes_ingress_v1" "nginx_ingress" {
+  metadata {
+    name      = "nginx"
+    namespace = var.namespace
+    annotations = {
+      "kubernetes.io/ingress.class" = "traefik"
+    }
+  }
+
+  spec {
+    rule {
+      http {
+        path {
+          path = "/"
+          backend {
+            service {
+              name = "nginx"
+              port {
+                name = "http"
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+
 resource "kubernetes_service" "nginx_service" {
   metadata {
     name      = "nginx"
