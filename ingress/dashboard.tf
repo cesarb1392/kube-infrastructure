@@ -8,8 +8,8 @@ metadata:
   namespace: ingress
 type: Opaque
 stringData:
-  email: contact@cesarb.dev
-  apiKey: 1a3d8e7a88b62b865edfb636e74d860cc72de
+  email:
+  apiKey:
 YAML
   depends_on = [
     kubernetes_namespace.traefik

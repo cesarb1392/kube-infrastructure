@@ -12,16 +12,3 @@ kubectl label nodes fastbanana2 kubernetes.io/role=worker
 kubectl label nodes fastbanana1 kubernetes.io/role=master
 
 
-https://traefik.io/blog/install-and-configure-traefik-with-helm/ => cloudflare
-
-https://rpi4cluster.com/k3s/k3s-os-logging/#on-logging-server
-- https://greg.jeanmart.me/2020/04/13/install-and-configure-a-kubernetes-cluster-w/
-- https://www.mercurialdev.com/2020/10/07/setting-up-a-lightweight-kubernetes-cluster-with-k3s/#install-helm
--
-https://github.com/rafrasenberg/kubernetes-terraform-traefik-cert-manager
-
-// remove this
-TF CLOUD LOGIN
-cesar1392
-contact@cesarb.dev
-BananaShoot13
