@@ -1,8 +1,4 @@
 locals {
-  cert_manager = {
-    name    = "certmanager",
-    enabled = false
-  }
   nginx = {
     name    = "nginx",
     enabled = true

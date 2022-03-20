@@ -18,7 +18,7 @@ resource "kubernetes_config_map" "config" {
     namespace = var.namespace
   }
   data = {
-    "traefik-config.yaml" = file("${path.module}/traefik_middleware.yaml")
+    "traefik-config.yaml" = file("${path.module}/traefik_dashboard_middleware.yaml")
   }
   depends_on = [
     kubernetes_namespace.traefik

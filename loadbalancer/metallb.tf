@@ -24,7 +24,7 @@ resource "helm_release" "metallb" {
 }
 
 data "template_file" "metallb_values" {
-  template = file("loadbalancer/values.yaml")
+  template = file("${path.module}/metallb_helm_values.yaml")
   vars = {
     ADDRESS_RANGE = var.address_range
   }

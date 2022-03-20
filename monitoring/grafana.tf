@@ -1,3 +1,26 @@
+
+data "template_file" "grafana_values" {
+  template = file("${path.module}/grafana_helm_values.yaml")
+
+  vars = {
+    GRAFANA_SERVICE_ACCOUNT = "grafana"
+    GRAFANA_ADMIN_USER      = var.K3S_GRAFANA_USER
+    GRAFANA_ADMIN_PASSWORD  = var.K3S_GRAFANA_PASSWORD
+    PROMETHEUS_SVC          = "prometheus"
+    NAMESPACE               = var.namespace
+  }
+}
+
+resource "helm_release" "grafana" {
+  chart      = "grafana"
+  name       = "grafana"
+  repository = "https://grafana.github.io/helm-charts"
+  namespace  = var.namespace
+
+  values = [
+    data.template_file.grafana_values.rendered
+  ]
+}
 resource "kubernetes_manifest" "ingress_route" {
   manifest = {
     apiVersion = "traefik.containo.us/v1alpha1"

@@ -42,28 +42,6 @@ resource "helm_release" "prometheus" {
   }
 }
 
-data "template_file" "grafana_values" {
-  template = file("monitoring/grafana.yaml")
-
-  vars = {
-    GRAFANA_SERVICE_ACCOUNT = "grafana"
-    GRAFANA_ADMIN_USER      = var.K3S_GRAFANA_USER
-    GRAFANA_ADMIN_PASSWORD  = var.K3S_GRAFANA_PASSWORD
-    PROMETHEUS_SVC          = "prometheus"
-    NAMESPACE               = var.namespace
-  }
-}
-
-resource "helm_release" "grafana" {
-  chart      = "grafana"
-  name       = "grafana"
-  repository = "https://grafana.github.io/helm-charts"
-  namespace  = var.namespace
-
-  values = [
-    data.template_file.grafana_values.rendered
-  ]
-}
 
 #https://github.com/jaegertracing/helm-charts/blob/main/charts/jaeger/values.yaml
 #resource "helm_release" "jaeger" {
