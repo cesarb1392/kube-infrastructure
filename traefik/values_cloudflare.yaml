@@ -1,0 +1,55 @@
+additionalArguments:
+  - --providers.file.filename=/data/traefik-config.yaml
+  - --entrypoints.websecure.http.tls.certresolver=cloudflare
+  - --entrypoints.websecure.http.tls.domains[0].main=cesarb.dev
+  - --entrypoints.websecure.http.tls.domains[0].sans=*.cesarb.dev
+  - --certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare
+  - --certificatesresolvers.cloudflare.acme.email=contact@cesarb.dev
+  - --certificatesresolvers.cloudflare.acme.dnschallenge.resolvers=1.1.1.1
+  - --certificatesresolvers.cloudflare.acme.storage=/certs/acme.json
+  - --log.level=INFO
+  - --metrics.prometheus
+#  - --providers.kubernetesIngress.ingressClass=traefik-cert-manager
+
+ports:
+#  web:
+#    redirectTo: websecure
+  web:
+    port: 80
+  websecure:
+    port: 443
+
+env:
+  - name: CF_API_EMAIL
+    valueFrom:
+      secretKeyRef:
+        key: email
+        name: cloudflare-api-credentials
+  - name: CF_API_KEY
+    valueFrom:
+      secretKeyRef:
+        key: apiKey
+        name: cloudflare-api-credentials
+ingressRoute:
+  dashboard:
+    enabled: false
+persistence:
+  enabled: true
+  path: /certs
+  size: 128Mi
+volumes:
+  - mountPath: /data
+    name: traefik-config
+    type: configMap
+
+# The following lines are needed if you have an error like: error while building entryPoint web: error preparing server: error opening listener: listen tcp :80: bind: permission denied
+# It just means that Traefik is unable to listen to connections on the host because of a lack of permissions.
+# Hence the need for aditionnal permissions.
+securityContext:
+  capabilities:
+    drop: [ALL]
+    add: [NET_BIND_SERVICE]
+  readOnlyRootFilesystem: true
+  runAsGroup: 0
+  runAsNonRoot: false
+  runAsUser: 0

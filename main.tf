@@ -1,24 +1,26 @@
+#module "cert_manager" {
+#  source = "./cert_manager"
+#  namespace = local.namespace.cert_manager
+#}
+
+module "metallb" {
+  source        = "./metallb"
+  namespace     = local.namespace.metallb.name
+  address_range = local.namespace.metallb.address_range
+}
+
+module "traefik" {
+  source    = "./traefik"
+  namespace = local.namespace.traefik.name
+  dashboard_ingress = local.namespace.traefik.dashboard_ingress
+}
+
+module "nginx" {
+  source    = "./nginx"
+  namespace = local.namespace.nginx
+}
+
 #module "monitoring" {
 #  source = "./monitoring"
 #  namespace = local.namespace.monitoring
 #}
-
-module "test" {
-  source = "./test"
-  namespace = local.namespace.test
-}
-
-module "loadbalancer" {
-  source = "./loadbalancer"
-  namespace = local.namespace.loadbalancer.name
-  address_range = local.namespace.loadbalancer.address_range
-}
-
-#module "cert_manager" {
-#  source = "./cert_manager"
-#  namespace = local.namespace.cert_manager
-#  cert_manager_name = "cert-manager"
-#  cert_manager_repo = "https://charts.jetstack.io"
-#  cert_manager_version = "1.0.4"
-#}
-

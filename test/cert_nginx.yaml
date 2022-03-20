@@ -1,0 +1,14 @@
+
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: nginx-cert
+  namespace: test
+spec:
+  secretName: nginx-cert
+  issuerRef:
+    name: letsencrypt-issuer
+    kind: ClusterIssuer
+  commonName: nginx.cesarb.dev
+  dnsNames:
+    - nginx.cesarb.dev

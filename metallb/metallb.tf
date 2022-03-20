@@ -1,6 +1,6 @@
 resource "kubernetes_namespace" "metallb" {
   metadata {
-    name   = var.namespace
+    name = var.namespace
     labels = {
       namespace = var.namespace
     }
@@ -24,7 +24,7 @@ resource "helm_release" "metallb" {
 }
 
 data "template_file" "metallb_values" {
-  template = file("loadbalancer/values.yaml")
+  template = file("metallb/values.yaml")
   vars = {
     ADDRESS_RANGE = var.address_range
   }

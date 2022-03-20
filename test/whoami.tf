@@ -4,6 +4,7 @@ resource "kubernetes_ingress_v1" "whoami" {
     namespace = var.namespace
     annotations = {
       "kubernetes.io/ingress.class" = "traefik"
+      #      "cert-manager.io/cluster-issuer": "letsencrypt-issuer"
     }
   }
 

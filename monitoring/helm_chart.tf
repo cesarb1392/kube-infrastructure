@@ -27,19 +27,19 @@ resource "helm_release" "prometheus" {
     value = false
   }
 
-#  set {
-#    name = "server\\.resources"
-#    value = yamlencode({
-#      limits = {
-#        cpu    = "200m"
-#        memory = "50Mi"
-#      }
-#      requests = {
-#        cpu    = "100m"
-#        memory = "30Mi"
-#      }
-#    })
-#  }
+  #  set {
+  #    name = "server\\.resources"
+  #    value = yamlencode({
+  #      limits = {
+  #        cpu    = "200m"
+  #        memory = "50Mi"
+  #      }
+  #      requests = {
+  #        cpu    = "100m"
+  #        memory = "30Mi"
+  #      }
+  #    })
+  #  }
 }
 
 data "template_file" "grafana_values" {
@@ -47,18 +47,18 @@ data "template_file" "grafana_values" {
 
   vars = {
     GRAFANA_SERVICE_ACCOUNT = "grafana"
-    GRAFANA_ADMIN_USER = var.grafana_user
-    GRAFANA_ADMIN_PASSWORD = var.grafana_password
-    PROMETHEUS_SVC = "${helm_release.prometheus.name}-server"
-    NAMESPACE = var.namespace
+    GRAFANA_ADMIN_USER      = var.grafana_user
+    GRAFANA_ADMIN_PASSWORD  = var.grafana_password
+    PROMETHEUS_SVC          = "${helm_release.prometheus.name}-server"
+    NAMESPACE               = var.namespace
   }
 }
 
 resource "helm_release" "grafana" {
-  chart = "grafana"
-  name = "grafana"
+  chart      = "grafana"
+  name       = "grafana"
   repository = "https://grafana.github.io/helm-charts"
-  namespace = var.namespace
+  namespace  = var.namespace
 
   values = [
     data.template_file.grafana_values.rendered
