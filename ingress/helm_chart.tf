@@ -33,7 +33,11 @@ resource "helm_release" "traefik" {
 }
 
 data "template_file" "ingress_values" {
-  template = file("ingress/values_cloudflare.yaml")
+  template = file("ingress/helm_values.yaml")
+  vars = {
+    EMAIL  = var.K3S_CF_EMAIL
+    DOMAIN = var.K3S_CF_DOMAIN
+  }
 }
 
 

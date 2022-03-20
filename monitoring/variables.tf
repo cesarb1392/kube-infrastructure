@@ -1,17 +1,14 @@
 variable "namespace" {
   description = "The namespace where is installed"
   type        = string
-  default     = "monitoring"
 }
 
-variable "grafana_user" {
+variable "K3S_GRAFANA_USER" {
   description = "The username to connect to Grafana UI."
   type        = string
-  default     = "banana"
 }
 
-variable "grafana_password" {
+variable "K3S_GRAFANA_PASSWORD" {
   description = "The password to connect to Grafana UI."
   type        = string
-  default     = "password"
 }

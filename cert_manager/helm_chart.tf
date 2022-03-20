@@ -25,6 +25,6 @@ resource "helm_release" "cert_manager" {
 }
 
 resource "kubectl_manifest" "cert_issuer" {
-  yaml_body = file("./cert_manager/issuer.yaml")
+  yaml_body  = file("./cert_manager/issuer.yaml")
   depends_on = [kubernetes_namespace.cert_manager]
 }
