@@ -1,9 +1,17 @@
 # kube-terraforming
 
 ## todo
-- add tags / labels 
+- add tags / labels
 
-## start up
+#### Table of Contents
+1. [Usage](#usage)
+2. [Requirements](#requirements)
+3. [Providers](#Providers)
+4. [Inputs](#inputs)
+5. [Outputs](#outputs)
+
+## Usage
+
 - Main node
 ```shell
 export K3S_KUBECONFIG_MODE="644" && export INSTALL_K3S_EXEC=" --no-deploy servicelb --no-deploy traefik" && curl -sfL https://get.k3s.io | sh -
@@ -29,6 +37,8 @@ TF_VAR_K3S_GRAFANA_USER=""
 TF_VAR_K3S_GRAFANA_PASSWORD=""
 TF_VAR_K3S_CF_DOMAIN=""
 ```
+
+
 
 <!-- BEGIN_TF_DOCS -->
  ## Requirements
