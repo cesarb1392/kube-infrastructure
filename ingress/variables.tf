@@ -3,8 +3,3 @@ variable "namespace" {
   type        = string
 }
 
-variable "dashboard_ingress" {
-  description = "Enable dashboard ingress"
-  type        = number
-}
-

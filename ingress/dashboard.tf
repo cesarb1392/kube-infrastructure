@@ -1,12 +1,11 @@
 /// change keys!!!!
 resource "kubectl_manifest" "cf_api_keys" {
-  count      = var.dashboard_ingress
-  yaml_body  = <<YAML
+  yaml_body = <<YAML
 apiVersion: v1
 kind: Secret
 metadata:
   name: cloudflare-api-credentials
-  namespace: traefik
+  namespace: ingress
 type: Opaque
 stringData:
   email: contact@cesarb.dev
@@ -18,14 +17,12 @@ YAML
 }
 
 resource "kubectl_manifest" "config" {
-  count = var.dashboard_ingress
-
-  yaml_body  = <<YAML
+  yaml_body = <<YAML
 apiVersion: v1
 kind: ConfigMap
 metadata:
   name: traefik-config
-  namespace: traefik
+  namespace: ingress
 data:
   traefik-config.yaml: |
     http:
@@ -47,14 +44,12 @@ YAML
 }
 
 resource "kubectl_manifest" "secret_dashboard" {
-  count = var.dashboard_ingress
-
-  yaml_body  = <<YAML
+  yaml_body = <<YAML
 apiVersion: v1
 kind: Secret
 metadata:
   name: traefik-dashboard-auth
-  namespace: traefik
+  namespace: ingress
 data:
   users: |
     YmFuYW5hOiRhcHIxJDd6ZmZwZGEvJFJjclQ4bDEudzlONVVSWU8vRmk1TC8KCg==
@@ -64,15 +59,13 @@ YAML
   ]
 }
 
-resource "kubectl_manifest" "middleware_basicauth" {
-  count = var.dashboard_ingress
-
-  yaml_body  = <<YAML
+resource "kubectl_manifest" "config_basicauth" {
+  yaml_body = <<YAML
 apiVersion: traefik.containo.us/v1alpha1
 kind: Middleware
 metadata:
   name: traefik-dashboard-basicauth
-  namespace: traefik
+  namespace: ingress
 spec:
   basicAuth:
     secret: traefik-dashboard-auth
@@ -83,14 +76,12 @@ YAML
 }
 
 resource "kubectl_manifest" "ingress_route" {
-  count = var.dashboard_ingress
-
-  yaml_body  = <<YAML
+  yaml_body = <<YAML
 apiVersion: traefik.containo.us/v1alpha1
 kind: IngressRoute
 metadata:
   name: traefik-dashboard
-  namespace: traefik
+  namespace: ingress
 spec:
   entryPoints:
     - websecure
@@ -99,7 +90,7 @@ spec:
       kind: Rule
       middlewares:
         - name: traefik-dashboard-basicauth
-          namespace: traefik
+          namespace: ingress
       services:
         - name: api@internal
           kind: TraefikService

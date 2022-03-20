@@ -33,7 +33,7 @@ resource "helm_release" "traefik" {
 }
 
 data "template_file" "ingress_values" {
-  template = file("traefik/values_cloudflare.yaml")
+  template = file("ingress/values_cloudflare.yaml")
 }
 
 

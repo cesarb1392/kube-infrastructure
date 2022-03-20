@@ -3,16 +3,15 @@
 #  namespace = local.namespace.cert_manager
 #}
 
-module "metallb" {
-  source        = "./metallb"
-  namespace     = local.namespace.metallb.name
-  address_range = local.namespace.metallb.address_range
+module "loadbalancer" {
+  source        = "./loadbalancer"
+  namespace     = local.namespace.loadbalancer.name
+  address_range = local.namespace.loadbalancer.address_range
 }
 
-module "traefik" {
-  source    = "./traefik"
-  namespace = local.namespace.traefik.name
-  dashboard_ingress = local.namespace.traefik.dashboard_ingress
+module "ingress" {
+  source    = "./ingress"
+  namespace = local.namespace.ingress
 }
 
 module "nginx" {

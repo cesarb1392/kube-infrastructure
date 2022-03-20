@@ -9,16 +9,11 @@ additionalArguments:
   - --certificatesresolvers.cloudflare.acme.storage=/certs/acme.json
   - --log.level=INFO
   - --metrics.prometheus
-#  - --providers.kubernetesIngress.ingressClass=traefik-cert-manager
+  - --providers.kubernetesIngress.ingressClass=traefik-cert-manager
 
 ports:
-#  web:
-#    redirectTo: websecure
   web:
-    port: 80
-  websecure:
-    port: 443
-
+    redirectTo: websecure
 env:
   - name: CF_API_EMAIL
     valueFrom:
@@ -41,15 +36,3 @@ volumes:
   - mountPath: /data
     name: traefik-config
     type: configMap
-
-# The following lines are needed if you have an error like: error while building entryPoint web: error preparing server: error opening listener: listen tcp :80: bind: permission denied
-# It just means that Traefik is unable to listen to connections on the host because of a lack of permissions.
-# Hence the need for aditionnal permissions.
-securityContext:
-  capabilities:
-    drop: [ALL]
-    add: [NET_BIND_SERVICE]
-  readOnlyRootFilesystem: true
-  runAsGroup: 0
-  runAsNonRoot: false
-  runAsUser: 0
