@@ -57,14 +57,14 @@ resource "kubernetes_manifest" "ingress_route" {
     apiVersion = "traefik.containo.us/v1alpha1"
     kind       = "IngressRoute"
     metadata = {
-      name      = "nginx"
+      name      = "nginx-ingress"
       namespace = var.namespace
     }
     spec = {
       entryPoints = ["websecure"]
       routes = [
         {
-          match = "Host(`cesarb.dev`)"
+          match = "Host(`nginx.cesarb.dev`)"
           kind  = "Rule"
           services = [
             {

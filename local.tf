@@ -16,4 +16,8 @@ locals {
     name    = "ingress",
     enabled = true
   }
+  portfolio = {
+    name    = "portfolio",
+    enabled = true
+  }
 }

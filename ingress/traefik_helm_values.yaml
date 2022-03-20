@@ -9,7 +9,7 @@ additionalArguments:
   - --certificatesresolvers.cloudflare.acme.storage=/certs/acme.json
   - --log.level=INFO
   - --metrics.prometheus
-#  - --providers.kubernetesIngress.ingressClass=traefik-cert-manager
+  #  - --providers.kubernetesIngress.ingressClass=traefik-cert-manager
   - --accesslog=true
   - --accesslog.format=json
   - --accesslog.filepath=/data/access.log

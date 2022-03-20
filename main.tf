@@ -28,3 +28,8 @@ module "monitoring" {
   K3S_GRAFANA_USER     = var.K3S_GRAFANA_USER
   K3S_GRAFANA_PASSWORD = var.K3S_GRAFANA_PASSWORD
 }
+module "portfolio" {
+  count     = local.portfolio.enabled ? 1 : 0
+  source    = "./portfolio"
+  namespace = local.portfolio.name
+}
