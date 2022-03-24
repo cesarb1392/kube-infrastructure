@@ -1,9 +1,15 @@
 # kube-terraforming
 
 ## todo
+
+- shared nfs volume
 - add tags / labels
+- create ingress,service,pods, helm, namespace modules
+- container registry
+- pipelines (github self hosted runner)
 
 #### Table of Contents
+
 1. [Usage](#usage)
 2. [Requirements](#requirements)
 3. [Providers](#Providers)
@@ -13,12 +19,14 @@
 ## Usage
 
 - Main node
+
 ```shell
 export K3S_KUBECONFIG_MODE="644" && export INSTALL_K3S_EXEC=" --no-deploy servicelb --no-deploy traefik" && curl -sfL https://get.k3s.io | sh -
 sudo cat /var/lib/rancher/k3s/server/node-token
 ```
 
 - Assistant node
+
 ```shell
 export K3S_KUBECONFIG_MODE="644" && export K3S_URL="https://192.168.x.x:6443" && export K3S_TOKEN="" && curl -sfL https://get.k3s.io | sh -
 ```
@@ -26,7 +34,6 @@ export K3S_KUBECONFIG_MODE="644" && export K3S_URL="https://192.168.x.x:6443" &&
 - Grab the config file from the main node
 
 ```shell
-kubectl label nodes <name> kubernetes.io/role=worker
 kubectl label nodes <name> kubernetes.io/role=worker
 ```
 
@@ -37,8 +44,6 @@ TF_VAR_K3S_GRAFANA_USER=""
 TF_VAR_K3S_GRAFANA_PASSWORD=""
 TF_VAR_K3S_CF_DOMAIN=""
 ```
-
-
 
 <!-- BEGIN_TF_DOCS -->
  ## Requirements
@@ -60,6 +65,7 @@ No providers.
 | <a name="module_monitoring"></a> [monitoring](#module\_monitoring) | ./monitoring | n/a |
 | <a name="module_nginx"></a> [nginx](#module\_nginx) | ./nginx | n/a |
 | <a name="module_portfolio"></a> [portfolio](#module\_portfolio) | ./portfolio | n/a |
+| <a name="module_torrente"></a> [torrente](#module\_torrente) | ./torrente | n/a |
 
 ## Resources
 
@@ -74,6 +80,8 @@ No resources.
 | <a name="input_K3S_CF_EMAIL"></a> [K3S\_CF\_EMAIL](#input\_K3S\_CF\_EMAIL) | n/a | `string` | n/a | yes |
 | <a name="input_K3S_GRAFANA_PASSWORD"></a> [K3S\_GRAFANA\_PASSWORD](#input\_K3S\_GRAFANA\_PASSWORD) | The password to connect to Grafana UI. | `string` | n/a | yes |
 | <a name="input_K3S_GRAFANA_USER"></a> [K3S\_GRAFANA\_USER](#input\_K3S\_GRAFANA\_USER) | The username to connect to Grafana UI. | `string` | n/a | yes |
+| <a name="input_K3S_OPENVPN_PASSWORD"></a> [K3S\_OPENVPN\_PASSWORD](#input\_K3S\_OPENVPN\_PASSWORD) | The username to connect to Grafana UI. | `string` | n/a | yes |
+| <a name="input_K3S_OPENVPN_USERNAME"></a> [K3S\_OPENVPN\_USERNAME](#input\_K3S\_OPENVPN\_USERNAME) | The username to connect to Grafana UI. | `string` | n/a | yes |
 | <a name="input_K3S_TRAEFIK_DASHBOARD"></a> [K3S\_TRAEFIK\_DASHBOARD](#input\_K3S\_TRAEFIK\_DASHBOARD) | n/a | `string` | n/a | yes |
 | <a name="input_k3s_config"></a> [k3s\_config](#input\_k3s\_config) | The config file used to connect to Kubectl | `string` | `"~/.kube/config_k3s"` | no |
 
@@ -81,3 +89,41 @@ No resources.
 
 No outputs.
 <!-- END_TF_DOCS -->  
+
+## ufw rules
+
+- master node: https://kubernetes.io/docs/reference/ports-and-protocols/#node
+
+```shell
+sudo ufw allow 22   
+sudo ufw allow 80/tcp                                    
+sudo ufw allow 443/tcp                    
+sudo ufw allow 6443                       
+sudo ufw allow 3000                       
+sudo ufw allow 8080    
+sudo ufw allow 8472    
+sudo ufw allow 2379:2380/tcp
+sudo ufw allow 10250/tcp                  
+sudo ufw allow 10259/tcp                  
+sudo ufw allow 10257/tcp    
+#sudo ufw default allow outgoing
+sudo ufw allow out from any
+sudo ufw enable              
+```
+- worker node:  https://kubernetes.io/docs/reference/ports-and-protocols/#node
+
+```shell
+sudo ufw allow 22                   
+sudo ufw allow 80/tcp                    
+sudo ufw allow 443/tcp                    
+sudo ufw allow 6443                       
+sudo ufw allow 3000                       
+sudo ufw allow 8080    
+sudo ufw allow 30000:32767/tcp
+sudo ufw allow 10250/tcp      
+sudo ufw allow out from any            
+sudo ufw enable              
+            
+```
+
+

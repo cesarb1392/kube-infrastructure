@@ -9,10 +9,10 @@ module "ingress" {
   count                 = local.ingress.enabled ? 1 : 0
   source                = "./ingress"
   namespace             = local.ingress.name
-  K3S_CF_API_KEY        = var.K3S_CF_API_KEY
-  K3S_CF_DOMAIN         = var.K3S_CF_DOMAIN
-  K3S_CF_EMAIL          = var.K3S_CF_EMAIL
-  K3S_TRAEFIK_DASHBOARD = var.K3S_TRAEFIK_DASHBOARD
+  K3S_CF_API_KEY        = local.ingress.K3S_CF_API_KEY
+  K3S_CF_DOMAIN         = local.ingress.K3S_CF_DOMAIN
+  K3S_CF_EMAIL          = local.ingress.K3S_CF_EMAIL
+  K3S_TRAEFIK_DASHBOARD = local.ingress.K3S_TRAEFIK_DASHBOARD
 }
 
 module "nginx" {
@@ -25,11 +25,20 @@ module "monitoring" {
   count                = local.monitoring.enabled ? 1 : 0
   source               = "./monitoring"
   namespace            = local.monitoring.name
-  K3S_GRAFANA_USER     = var.K3S_GRAFANA_USER
-  K3S_GRAFANA_PASSWORD = var.K3S_GRAFANA_PASSWORD
+  K3S_GRAFANA_USER     = local.monitoring.K3S_GRAFANA_USER
+  K3S_GRAFANA_PASSWORD = local.monitoring.K3S_GRAFANA_PASSWORD
 }
+
 module "portfolio" {
   count     = local.portfolio.enabled ? 1 : 0
   source    = "./portfolio"
   namespace = local.portfolio.name
+}
+
+module "torrente" {
+  count                = local.torrente.enabled ? 1 : 0
+  source               = "./torrente"
+  namespace            = local.torrente.name
+  K3S_OPENVPN_PASSWORD = local.torrente.K3S_OPENVPN_PASSWORD
+  K3S_OPENVPN_USERNAME = local.torrente.K3S_OPENVPN_USERNAME
 }

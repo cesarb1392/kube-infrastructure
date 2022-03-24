@@ -33,7 +33,7 @@ resource "helm_release" "traefik" {
 }
 
 data "template_file" "ingress_values" {
-  template = file("${path.module}/traefik_helm_values.yaml")
+  template = file("${path.module}/config/traefik_helm_values.yaml")
   vars = {
     EMAIL  = var.K3S_CF_EMAIL
     DOMAIN = var.K3S_CF_DOMAIN

@@ -1,6 +1,6 @@
 locals {
   nginx = {
-    name    = "nginx",
+    name    = "nginx"
     enabled = true
   }
   loadbalancer = {
@@ -9,15 +9,27 @@ locals {
     enabled       = true
   }
   monitoring = {
-    name    = "monitoring",
-    enabled = true
+    name                 = "monitoring"
+    enabled              = true
+    K3S_GRAFANA_USER     = var.K3S_GRAFANA_USER
+    K3S_GRAFANA_PASSWORD = var.K3S_GRAFANA_PASSWORD
   }
   ingress = {
-    name    = "ingress",
-    enabled = true
+    name                  = "ingress"
+    enabled               = true
+    K3S_CF_API_KEY        = var.K3S_CF_API_KEY
+    K3S_CF_DOMAIN         = var.K3S_CF_DOMAIN
+    K3S_CF_EMAIL          = var.K3S_CF_EMAIL
+    K3S_TRAEFIK_DASHBOARD = var.K3S_TRAEFIK_DASHBOARD
   }
   portfolio = {
-    name    = "portfolio",
-    enabled = true
+    name    = "portfolio"
+    enabled = false
+  }
+  torrente = {
+    name                 = "torrente"
+    enabled              = true
+    K3S_OPENVPN_PASSWORD = var.K3S_OPENVPN_PASSWORD
+    K3S_OPENVPN_USERNAME = var.K3S_OPENVPN_USERNAME
   }
 }

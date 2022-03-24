@@ -18,7 +18,7 @@ resource "kubernetes_config_map" "config" {
     namespace = var.namespace
   }
   data = {
-    "traefik-config.yaml" = file("${path.module}/traefik_dashboard_middleware.yaml")
+    "traefik-config.yaml" = file("${path.module}/config/default_middleware.yaml")
   }
   depends_on = [
     kubernetes_namespace.traefik
@@ -31,7 +31,9 @@ resource "kubernetes_secret" "secret_dashboard" {
     namespace = var.namespace
   }
   data = {
-    users = var.K3S_TRAEFIK_DASHBOARD
+    #    htpasswd -nb <username> <password>
+    #    users = var.K3S_TRAEFIK_DASHBOARD
+    users = "quesito:$apr1$jExF1p/h$PRAyZVssDxLnETFnTLa7W0"
   }
   depends_on = [
     kubernetes_namespace.traefik
@@ -91,3 +93,5 @@ resource "kubernetes_manifest" "ingress_route" {
   ]
 }
 
+#    htpasswd -nb banana banana | openssl base64
+#  users = "banana:$apr1$7zffpda/$RcrT8l1.w9N5URYO/Fi5L/"

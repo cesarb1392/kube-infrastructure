@@ -7,7 +7,6 @@ resource "kubernetes_namespace" "this" {
   }
 }
 
-
 resource "kubernetes_manifest" "ingress_route" {
   manifest = {
     apiVersion = "traefik.containo.us/v1alpha1"
