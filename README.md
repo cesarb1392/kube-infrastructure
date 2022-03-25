@@ -2,7 +2,7 @@
 
 ## todo
 
-- shared nfs volume
+- align namespaces in 1 resource..
 - add tags / labels
 - create ingress,service,pods, helm, namespace modules
 - container registry
@@ -63,6 +63,7 @@ No providers.
 | <a name="module_ingress"></a> [ingress](#module\_ingress) | ./ingress | n/a |
 | <a name="module_loadbalancer"></a> [loadbalancer](#module\_loadbalancer) | ./loadbalancer | n/a |
 | <a name="module_monitoring"></a> [monitoring](#module\_monitoring) | ./monitoring | n/a |
+| <a name="module_nfs"></a> [nfs](#module\_nfs) | ./nfs | n/a |
 | <a name="module_nginx"></a> [nginx](#module\_nginx) | ./nginx | n/a |
 | <a name="module_portfolio"></a> [portfolio](#module\_portfolio) | ./portfolio | n/a |
 | <a name="module_torrente"></a> [torrente](#module\_torrente) | ./torrente | n/a |
