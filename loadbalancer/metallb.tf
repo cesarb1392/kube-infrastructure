@@ -1,4 +1,4 @@
-resource "kubernetes_namespace" "metallb" {
+resource "kubernetes_namespace" "this" {
   metadata {
     name = var.namespace
     labels = {
@@ -20,7 +20,7 @@ resource "helm_release" "metallb" {
   values = [
     data.template_file.metallb_values.rendered
   ]
-  depends_on = [kubernetes_namespace.metallb, data.template_file.metallb_values]
+  depends_on = [kubernetes_namespace.this, data.template_file.metallb_values]
 }
 
 data "template_file" "metallb_values" {

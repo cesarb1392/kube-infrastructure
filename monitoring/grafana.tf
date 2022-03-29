@@ -33,7 +33,8 @@ resource "kubernetes_manifest" "ingress_route" {
       entryPoints = ["websecure"]
       routes = [
         {
-          match = "Host(`grafana.cesarb.dev`)"
+          #          match = "Host(`grafana.cesarb.dev`)"
+          match = "Host(`grafana.192.168.2.20.nip.io`)"
           kind  = "Rule"
           services = [
             {
@@ -46,7 +47,7 @@ resource "kubernetes_manifest" "ingress_route" {
     }
   }
   depends_on = [
-    kubernetes_namespace.monitoring
+    kubernetes_namespace.this
   ]
 }
 
@@ -64,5 +65,5 @@ resource "kubernetes_service" "grafana_lb_service" {
     }
     selector = { "app.kubernetes.io/name" : "grafana", app : "grafana" }
   }
-  depends_on = [kubernetes_namespace.monitoring]
+  depends_on = [kubernetes_namespace.this]
 }

@@ -46,25 +46,25 @@ resource "kubernetes_service" "portfolio_lb_service" {
       port = 80
       name = "http"
     }
-    selector = { "app.kubernetes.io/name" : "portfolio-ingress-lb" }
+    selector = { "app" : "portfolio-ingress-lb" }
   }
   depends_on = [kubernetes_namespace.this]
 
 }
 
 
-resource "kubernetes_deployment" "portfolio_lb_deployment" {
+resource "kubernetes_deployment_v1" "portfolio_lb_deployment" {
   metadata {
     name      = "portfolio-ingress-deployment"
     namespace = var.namespace
   }
   spec {
     selector {
-      match_labels = { "app.kubernetes.io/name" : "portfolio-ingress-lb" }
+      match_labels = { "app" : "portfolio-ingress-lb" }
     }
     template {
       metadata {
-        labels = { "app.kubernetes.io/name" : "portfolio-ingress-lb" }
+        labels = { "app" : "portfolio-ingress-lb" }
       }
       spec {
         container {

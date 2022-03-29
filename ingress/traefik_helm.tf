@@ -1,4 +1,4 @@
-resource "kubernetes_namespace" "traefik" {
+resource "kubernetes_namespace" "this" {
   metadata {
     name = var.namespace
     labels = {
@@ -6,7 +6,6 @@ resource "kubernetes_namespace" "traefik" {
     }
   }
 }
-
 
 resource "helm_release" "traefik" {
   namespace  = var.namespace
@@ -28,7 +27,7 @@ resource "helm_release" "traefik" {
     data.template_file.ingress_values.rendered
   ]
   depends_on = [
-    kubernetes_namespace.traefik
+    kubernetes_namespace.this,
   ]
 }
 

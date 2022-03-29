@@ -27,19 +27,31 @@ locals {
     enabled = true
   }
   nfs = {
-    name     = "nfs"
-    enabled  = true
-    nfs_host = "192.168.2.11" # todo: works if the pod is assigned to fastbanana2 node only!!!
-    nfs_path = "/var/nfs"
+    name    = "nfs"
+    enabled = true
+    host    = "192.168.2.11"
+    path    = "/var/nfs"
   }
-  #  false   true
   torrente = {
     name                 = "torrente"
-    enabled              = true
+    enabled              = false
     K3S_OPENVPN_PASSWORD = var.K3S_OPENVPN_PASSWORD
     K3S_OPENVPN_USERNAME = var.K3S_OPENVPN_USERNAME
     puid                 = 65534
     pgid                 = 65534
     timezone             = "Europe/Amsterdam"
+  }
+  pihole = {
+    name                = "pi-hole"
+    enabled             = false
+    K3S_PIHOLE_PASSWORD = var.K3S_PIHOLE_PASSWORD
+  }
+  wireguard = {
+    name    = "wire-guard"
+    enabled = false
+  }
+  file_manager = {
+    name    = "file-manager"
+    enabled = false
   }
 }

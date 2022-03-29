@@ -1,4 +1,4 @@
-resource "kubernetes_namespace" "monitoring" {
+resource "kubernetes_namespace" "this" {
   metadata {
     name = var.namespace
     annotations = {

@@ -10,6 +10,7 @@ resource "kubernetes_config_map_v1" "transmission_transmission_config_map" {
     LOCAL_NETWORK                         = "192.168.2.11/24"
     OPENVPN_OPTS                          = "--inactive 3600 --ping 10 --ping-exit 60"
     OPENVPN_PROVIDER                      = "NORDVPN"
+    OPENVPN_CONFIG                        = "FR Paris" #todo: testing
     TRANSMISSION_DOWNLOAD_QUEUE_SIZE      = "4"
     TRANSMISSION_RATIO_LIMIT              = "2"
     TRANSMISSION_RATIO_LIMIT_ENABLED      = "true"
@@ -147,7 +148,7 @@ resource "kubernetes_deployment_v1" "transmission_deployment" {
         volume {
           name = "data"
           persistent_volume_claim {
-            claim_name = kubernetes_persistent_volume_claim_v1.torrente_persistent_volume_claim.metadata[0].name
+            claim_name = kubernetes_persistent_volume_claim_v1.persistent_volume_claim.metadata[0].name
           }
         }
         volume {

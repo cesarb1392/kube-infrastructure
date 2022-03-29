@@ -8,7 +8,7 @@ resource "kubernetes_secret" "cert_api_keys" {
     apiKey = var.K3S_CF_API_KEY
   }
   depends_on = [
-    kubernetes_namespace.traefik
+    kubernetes_namespace.this
   ]
 }
 
@@ -21,7 +21,7 @@ resource "kubernetes_config_map" "config" {
     "traefik-config.yaml" = file("${path.module}/config/default_middleware.yaml")
   }
   depends_on = [
-    kubernetes_namespace.traefik
+    kubernetes_namespace.this
   ]
 }
 
@@ -31,14 +31,15 @@ resource "kubernetes_secret" "secret_dashboard" {
     namespace = var.namespace
   }
   data = {
-    #    htpasswd -nb <username> <password>
+    #    https://httpd.apache.org/docs/current/misc/password_encryptions.html
     #    users = var.K3S_TRAEFIK_DASHBOARD
     users = "quesito:$apr1$jExF1p/h$PRAyZVssDxLnETFnTLa7W0"
   }
   depends_on = [
-    kubernetes_namespace.traefik
+    kubernetes_namespace.this
   ]
 }
+
 resource "kubernetes_manifest" "config_basicauth" {
   manifest = {
     apiVersion = "traefik.containo.us/v1alpha1"
@@ -54,7 +55,7 @@ resource "kubernetes_manifest" "config_basicauth" {
     }
   }
   depends_on = [
-    kubernetes_namespace.traefik
+    kubernetes_namespace.this
   ]
 }
 
@@ -70,7 +71,8 @@ resource "kubernetes_manifest" "ingress_route" {
       entryPoints = ["websecure"]
       routes = [
         {
-          match = "Host(`traefik.cesarb.dev`)"
+          #          match = "Host(`traefik.cesarb.dev`)"
+          match = "Host(`traefik.192.168.2.20.nip.io`)"
           kind  = "Rule"
           middlewares = [
             {
@@ -89,9 +91,6 @@ resource "kubernetes_manifest" "ingress_route" {
     }
   }
   depends_on = [
-    kubernetes_namespace.traefik
+    kubernetes_namespace.this
   ]
 }
-
-#    htpasswd -nb banana banana | openssl base64
-#  users = "banana:$apr1$7zffpda/$RcrT8l1.w9N5URYO/Fi5L/"

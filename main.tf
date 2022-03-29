@@ -22,8 +22,8 @@ module "nfs" {
 
   source    = "./nfs"
   namespace = local.nfs.name
-  nfs_host  = local.nfs.nfs_host
-  nfs_path  = local.nfs.nfs_path
+  nfs_host  = local.nfs.host
+  nfs_path  = local.nfs.path
 }
 
 module "nginx" {
@@ -59,4 +59,27 @@ module "torrente" {
   pgid                 = local.torrente.pgid
   puid                 = local.torrente.puid
   timezone             = local.torrente.timezone
+}
+
+module "pi_hole" {
+  count = local.pihole.enabled ? 1 : 0
+
+  source              = "./pi_hole"
+  namespace           = local.pihole.name
+  K3S_PIHOLE_PASSWORD = local.pihole.K3S_PIHOLE_PASSWORD
+}
+
+module "wireguard" {
+  count = local.wireguard.enabled ? 1 : 0
+
+  source    = "./wire_guard"
+  namespace = local.wireguard.name
+}
+
+module "file_manager" {
+  count = local.wireguard.enabled ? 1 : 0
+
+  source    = "./file_manager"
+  namespace = local.file_manager.name
+
 }

@@ -30,28 +30,28 @@ resource "kubernetes_deployment_v1" "sonarr_deployment" {
           image = "linuxserver/sonarr"
           port {
             name           = "http"
-            container_port = 7878
+            container_port = 8989
           }
-          liveness_probe {
-            failure_threshold     = 3
-            initial_delay_seconds = 10
-            period_seconds        = 2
-            success_threshold     = 1
-            tcp_socket {
-              port = 7878
-            }
-            timeout_seconds = 2
-          }
-          readiness_probe {
-            failure_threshold     = 3
-            initial_delay_seconds = 10
-            period_seconds        = 2
-            success_threshold     = 2
-            tcp_socket {
-              port = 7878
-            }
-            timeout_seconds = 2
-          }
+          #          liveness_probe {
+          #            failure_threshold     = 3
+          #            initial_delay_seconds = 10
+          #            period_seconds        = 2
+          #            success_threshold     = 1
+          #            tcp_socket {
+          #              port = 8989
+          #            }
+          #            timeout_seconds = 2
+          #          }
+          #          readiness_probe {
+          #            failure_threshold     = 3
+          #            initial_delay_seconds = 10
+          #            period_seconds        = 2
+          #            success_threshold     = 2
+          #            tcp_socket {
+          #              port = 8989
+          #            }
+          #            timeout_seconds = 2
+          #          }
           env {
             name  = "TZ"
             value = var.timezone
@@ -83,7 +83,7 @@ resource "kubernetes_deployment_v1" "sonarr_deployment" {
         volume {
           name = "data"
           persistent_volume_claim {
-            claim_name = kubernetes_persistent_volume_claim_v1.torrente_persistent_volume_claim.metadata[0].name
+            claim_name = kubernetes_persistent_volume_claim_v1.persistent_volume_claim.metadata[0].name
           }
         }
       }

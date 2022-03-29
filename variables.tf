@@ -4,35 +4,54 @@ variable "k3s_config" {
   default     = "~/.kube/config_k3s"
 }
 variable "K3S_CF_EMAIL" {
-  type = string
+  description = ""
+  type        = string
+  default     = ""
 }
 variable "K3S_TRAEFIK_DASHBOARD" {
-  type = string
+  description = ""
+  type        = string
+  default     = ""
 }
 
 variable "K3S_CF_API_KEY" {
-  type = string
+  description = ""
+  type        = string
+  default     = ""
 }
 variable "K3S_CF_DOMAIN" {
-  type = string
+  description = ""
+  type        = string
+  default     = ""
 }
 
 variable "K3S_GRAFANA_USER" {
   description = "The username to connect to Grafana UI."
   type        = string
+  default     = ""
 }
 
 variable "K3S_GRAFANA_PASSWORD" {
   description = "The password to connect to Grafana UI."
   type        = string
+  default     = ""
 }
 
 variable "K3S_OPENVPN_USERNAME" {
   description = "The username to connect to Grafana UI."
   type        = string
+  default     = ""
+
 }
 
 variable "K3S_OPENVPN_PASSWORD" {
   description = "The username to connect to Grafana UI."
   type        = string
+  default     = ""
+}
+
+variable "K3S_PIHOLE_PASSWORD" {
+  description = ""
+  type        = string
+  default     = ""
 }

@@ -1,6 +1,8 @@
 #  https://github.com/traefik/traefik-helm-chart/blob/master/traefik/values.yaml
 additionalArguments:
   - --providers.file.filename=/data/traefik-config.yaml
+  #  - - --ping
+  #  - --ping.entrypoint=web
   - --entrypoints.websecure.http.tls.certresolver=cloudflare
   - --entrypoints.websecure.http.tls.domains[0].main=${DOMAIN}
   - --entrypoints.websecure.http.tls.domains[0].sans=*.${DOMAIN}
@@ -40,9 +42,24 @@ ingressRoute:
 
 persistence:
   enabled: true
-  path: /certs
+  path: /data
   size: 128Mi
+
 volumes:
   - mountPath: /data
     name: traefik-config
     type: configMap
+
+autoscaling:
+  enabled: false
+  minReplicas: 1
+  maxReplicas: 3
+  metrics:
+    - type: Resource
+      resource:
+        name: cpu
+        targetAverageUtilization: 50
+    - type: Resource
+      resource:
+        name: memory
+        targetAverageUtilization: 50

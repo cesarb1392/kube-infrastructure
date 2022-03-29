@@ -1,10 +1,18 @@
 # kube-terraforming
 
+## remember
+<serviceName>.<namespaceName>.svc.cluster.local
+
 ## todo
 
+- install cert manager
+- manage cloudflare records from code!
+- move everything to a pvc
 - align namespaces in 1 resource..
+- move secrets and policies from type resource to data
+- improve variables
+- move to input vars traefik.ymal config
 - add tags / labels
-- create ingress,service,pods, helm, namespace modules
 - container registry
 - pipelines (github self hosted runner)
 
@@ -60,13 +68,16 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
+| <a name="module_file_manager"></a> [file\_manager](#module\_file\_manager) | ./file_manager | n/a |
 | <a name="module_ingress"></a> [ingress](#module\_ingress) | ./ingress | n/a |
 | <a name="module_loadbalancer"></a> [loadbalancer](#module\_loadbalancer) | ./loadbalancer | n/a |
 | <a name="module_monitoring"></a> [monitoring](#module\_monitoring) | ./monitoring | n/a |
 | <a name="module_nfs"></a> [nfs](#module\_nfs) | ./nfs | n/a |
 | <a name="module_nginx"></a> [nginx](#module\_nginx) | ./nginx | n/a |
+| <a name="module_pi_hole"></a> [pi\_hole](#module\_pi\_hole) | ./pi_hole | n/a |
 | <a name="module_portfolio"></a> [portfolio](#module\_portfolio) | ./portfolio | n/a |
 | <a name="module_torrente"></a> [torrente](#module\_torrente) | ./torrente | n/a |
+| <a name="module_wireguard"></a> [wireguard](#module\_wireguard) | ./wire_guard | n/a |
 
 ## Resources
 
@@ -76,20 +87,21 @@ No resources.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_K3S_CF_API_KEY"></a> [K3S\_CF\_API\_KEY](#input\_K3S\_CF\_API\_KEY) | n/a | `string` | n/a | yes |
-| <a name="input_K3S_CF_DOMAIN"></a> [K3S\_CF\_DOMAIN](#input\_K3S\_CF\_DOMAIN) | n/a | `string` | n/a | yes |
-| <a name="input_K3S_CF_EMAIL"></a> [K3S\_CF\_EMAIL](#input\_K3S\_CF\_EMAIL) | n/a | `string` | n/a | yes |
-| <a name="input_K3S_GRAFANA_PASSWORD"></a> [K3S\_GRAFANA\_PASSWORD](#input\_K3S\_GRAFANA\_PASSWORD) | The password to connect to Grafana UI. | `string` | n/a | yes |
-| <a name="input_K3S_GRAFANA_USER"></a> [K3S\_GRAFANA\_USER](#input\_K3S\_GRAFANA\_USER) | The username to connect to Grafana UI. | `string` | n/a | yes |
-| <a name="input_K3S_OPENVPN_PASSWORD"></a> [K3S\_OPENVPN\_PASSWORD](#input\_K3S\_OPENVPN\_PASSWORD) | The username to connect to Grafana UI. | `string` | n/a | yes |
-| <a name="input_K3S_OPENVPN_USERNAME"></a> [K3S\_OPENVPN\_USERNAME](#input\_K3S\_OPENVPN\_USERNAME) | The username to connect to Grafana UI. | `string` | n/a | yes |
-| <a name="input_K3S_TRAEFIK_DASHBOARD"></a> [K3S\_TRAEFIK\_DASHBOARD](#input\_K3S\_TRAEFIK\_DASHBOARD) | n/a | `string` | n/a | yes |
+| <a name="input_K3S_CF_API_KEY"></a> [K3S\_CF\_API\_KEY](#input\_K3S\_CF\_API\_KEY) | n/a | `string` | `""` | no |
+| <a name="input_K3S_CF_DOMAIN"></a> [K3S\_CF\_DOMAIN](#input\_K3S\_CF\_DOMAIN) | n/a | `string` | `""` | no |
+| <a name="input_K3S_CF_EMAIL"></a> [K3S\_CF\_EMAIL](#input\_K3S\_CF\_EMAIL) | n/a | `string` | `""` | no |
+| <a name="input_K3S_GRAFANA_PASSWORD"></a> [K3S\_GRAFANA\_PASSWORD](#input\_K3S\_GRAFANA\_PASSWORD) | The password to connect to Grafana UI. | `string` | `""` | no |
+| <a name="input_K3S_GRAFANA_USER"></a> [K3S\_GRAFANA\_USER](#input\_K3S\_GRAFANA\_USER) | The username to connect to Grafana UI. | `string` | `""` | no |
+| <a name="input_K3S_OPENVPN_PASSWORD"></a> [K3S\_OPENVPN\_PASSWORD](#input\_K3S\_OPENVPN\_PASSWORD) | The username to connect to Grafana UI. | `string` | `""` | no |
+| <a name="input_K3S_OPENVPN_USERNAME"></a> [K3S\_OPENVPN\_USERNAME](#input\_K3S\_OPENVPN\_USERNAME) | The username to connect to Grafana UI. | `string` | `""` | no |
+| <a name="input_K3S_PIHOLE_PASSWORD"></a> [K3S\_PIHOLE\_PASSWORD](#input\_K3S\_PIHOLE\_PASSWORD) | n/a | `string` | `""` | no |
+| <a name="input_K3S_TRAEFIK_DASHBOARD"></a> [K3S\_TRAEFIK\_DASHBOARD](#input\_K3S\_TRAEFIK\_DASHBOARD) | n/a | `string` | `""` | no |
 | <a name="input_k3s_config"></a> [k3s\_config](#input\_k3s\_config) | The config file used to connect to Kubectl | `string` | `"~/.kube/config_k3s"` | no |
 
 ## Outputs
 
 No outputs.
-<!-- END_TF_DOCS -->  
+<!-- END_TF_DOCS -->
 
 ## ufw rules
 

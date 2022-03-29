@@ -1,3 +1,23 @@
+
+resource "kubernetes_service_v1" "jackett_service" {
+  metadata {
+    name      = join("", [var.namespace, "-jackett-service"])
+    namespace = var.namespace
+    labels = {
+      namespace = var.namespace
+    }
+  }
+  spec {
+    port {
+      port = 9117
+      name = "http"
+    }
+    selector = { app = "jackett" }
+    type     = "ClusterIP"
+  }
+  depends_on = [kubernetes_namespace.this]
+}
+
 resource "kubernetes_deployment_v1" "jackett_deployment" {
   metadata {
     name      = join("", [var.namespace, "-jackett-deployment"])
@@ -87,7 +107,7 @@ resource "kubernetes_deployment_v1" "jackett_deployment" {
         volume {
           name = "data"
           persistent_volume_claim {
-            claim_name = kubernetes_persistent_volume_claim_v1.torrente_persistent_volume_claim.metadata[0].name
+            claim_name = kubernetes_persistent_volume_claim_v1.persistent_volume_claim.metadata[0].name
           }
         }
       }

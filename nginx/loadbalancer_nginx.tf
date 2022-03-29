@@ -7,6 +7,24 @@ resource "kubernetes_namespace" "this" {
   }
 }
 
+resource "kubernetes_manifest" "config_basicauth" {
+  manifest = {
+    apiVersion = "traefik.containo.us/v1alpha1"
+    kind       = "Middleware"
+    metadata = {
+      name      = "traefik-dashboard-basicauth"
+      namespace = var.namespace
+    }
+    spec = {
+      basicAuth = {
+        secret = "traefik-dashboard-auth"
+      }
+    }
+  }
+  depends_on = [
+    kubernetes_namespace.this
+  ]
+}
 
 resource "kubernetes_manifest" "ingress_route" {
   manifest = {
@@ -21,7 +39,14 @@ resource "kubernetes_manifest" "ingress_route" {
       routes = [
         {
           match = "Host(`nginx.cesarb.dev`)"
-          kind  = "Rule"
+          #          match = "Host(`nginx.192.168.2.20.nip.io`)"
+          kind = "Rule"
+#          middlewares = [
+#            {
+#              name : "traefik-dashboard-basicauth"
+#              namespace : var.namespace
+#            }
+#          ]
           services = [
             {
               name = "nginx-ingress-lb-service"
@@ -47,25 +72,25 @@ resource "kubernetes_service" "nginx_lb_service" {
       port = 80
       name = "http"
     }
-    selector = { "app.kubernetes.io/name" : "nginx-ingress-lb" }
+    selector = { "app" : "nginx-ingress-lb" }
   }
   depends_on = [kubernetes_namespace.this]
 
 }
 
 
-resource "kubernetes_deployment" "nginx_lb_deployment" {
+resource "kubernetes_deployment_v1" "nginx_lb_deployment" {
   metadata {
     name      = "nginx-ingress-deployment"
     namespace = var.namespace
   }
   spec {
     selector {
-      match_labels = { "app.kubernetes.io/name" : "nginx-ingress-lb" }
+      match_labels = { "app" : "nginx-ingress-lb" }
     }
     template {
       metadata {
-        labels = { "app.kubernetes.io/name" : "nginx-ingress-lb" }
+        labels = { "app" : "nginx-ingress-lb" }
       }
       spec {
         container {
