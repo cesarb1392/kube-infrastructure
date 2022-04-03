@@ -6,13 +6,11 @@
 ## todo
 
 - install cert manager
-- manage cloudflare records from code!
 - move everything to a pvc
-- align namespaces in 1 resource..
 - move secrets and policies from type resource to data
 - improve variables
 - move to input vars traefik.ymal config
-- add tags / labels
+- improve tags / labels
 - container registry
 - pipelines (github self hosted runner)
 
@@ -58,6 +56,9 @@ TF_VAR_K3S_CF_DOMAIN=""
 
 | Name | Version |
 |------|---------|
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.2 |
+| <a name="requirement_cloudflare"></a> [cloudflare](#requirement\_cloudflare) | >= 3.7 |
+| <a name="requirement_helm"></a> [helm](#requirement\_helm) | 2.5.0 |
 | <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | 2.8.0 |
 
 ## Providers
@@ -68,6 +69,7 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
+| <a name="module_dns"></a> [dns](#module\_dns) | ./dns | n/a |
 | <a name="module_file_manager"></a> [file\_manager](#module\_file\_manager) | ./file_manager | n/a |
 | <a name="module_ingress"></a> [ingress](#module\_ingress) | ./ingress | n/a |
 | <a name="module_loadbalancer"></a> [loadbalancer](#module\_loadbalancer) | ./loadbalancer | n/a |
@@ -87,9 +89,10 @@ No resources.
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_K3S_CF_API_KEY"></a> [K3S\_CF\_API\_KEY](#input\_K3S\_CF\_API\_KEY) | n/a | `string` | `""` | no |
+| <a name="input_K3S_CF_ACCOUNT_ID"></a> [K3S\_CF\_ACCOUNT\_ID](#input\_K3S\_CF\_ACCOUNT\_ID) | n/a | `string` | n/a | yes |
+| <a name="input_K3S_CF_API_KEY"></a> [K3S\_CF\_API\_KEY](#input\_K3S\_CF\_API\_KEY) | n/a | `string` | n/a | yes |
 | <a name="input_K3S_CF_DOMAIN"></a> [K3S\_CF\_DOMAIN](#input\_K3S\_CF\_DOMAIN) | n/a | `string` | `""` | no |
-| <a name="input_K3S_CF_EMAIL"></a> [K3S\_CF\_EMAIL](#input\_K3S\_CF\_EMAIL) | n/a | `string` | `""` | no |
+| <a name="input_K3S_CF_EMAIL"></a> [K3S\_CF\_EMAIL](#input\_K3S\_CF\_EMAIL) | n/a | `string` | n/a | yes |
 | <a name="input_K3S_GRAFANA_PASSWORD"></a> [K3S\_GRAFANA\_PASSWORD](#input\_K3S\_GRAFANA\_PASSWORD) | The password to connect to Grafana UI. | `string` | `""` | no |
 | <a name="input_K3S_GRAFANA_USER"></a> [K3S\_GRAFANA\_USER](#input\_K3S\_GRAFANA\_USER) | The username to connect to Grafana UI. | `string` | `""` | no |
 | <a name="input_K3S_OPENVPN_PASSWORD"></a> [K3S\_OPENVPN\_PASSWORD](#input\_K3S\_OPENVPN\_PASSWORD) | The username to connect to Grafana UI. | `string` | `""` | no |

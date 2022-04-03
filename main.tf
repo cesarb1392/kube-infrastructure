@@ -81,5 +81,11 @@ module "file_manager" {
 
   source    = "./file_manager"
   namespace = local.file_manager.name
+}
 
+module "dns" {
+  count = local.dns.enabled ? 1 : 0
+
+  source     = "./dns"
+  namespace  = local.dns.name
 }

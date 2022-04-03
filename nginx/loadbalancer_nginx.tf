@@ -7,24 +7,24 @@ resource "kubernetes_namespace" "this" {
   }
 }
 
-resource "kubernetes_manifest" "config_basicauth" {
-  manifest = {
-    apiVersion = "traefik.containo.us/v1alpha1"
-    kind       = "Middleware"
-    metadata = {
-      name      = "traefik-dashboard-basicauth"
-      namespace = var.namespace
-    }
-    spec = {
-      basicAuth = {
-        secret = "traefik-dashboard-auth"
-      }
-    }
-  }
-  depends_on = [
-    kubernetes_namespace.this
-  ]
-}
+#resource "kubernetes_manifest" "config_basicauth" {
+#  manifest = {
+#    apiVersion = "traefik.containo.us/v1alpha1"
+#    kind       = "Middleware"
+#    metadata = {
+#      name      = "traefik-dashboard-basicauth"
+#      namespace = var.namespace
+#    }
+#    spec = {
+#      basicAuth = {
+#        secret = "traefik-dashboard-auth"
+#      }
+#    }
+#  }
+#  depends_on = [
+#    kubernetes_namespace.this
+#  ]
+#}
 
 resource "kubernetes_manifest" "ingress_route" {
   manifest = {
@@ -41,12 +41,12 @@ resource "kubernetes_manifest" "ingress_route" {
           match = "Host(`nginx.cesarb.dev`)"
           #          match = "Host(`nginx.192.168.2.20.nip.io`)"
           kind = "Rule"
-#          middlewares = [
-#            {
-#              name : "traefik-dashboard-basicauth"
-#              namespace : var.namespace
-#            }
-#          ]
+          #          middlewares = [
+          #            {
+          #              name : "traefik-dashboard-basicauth"
+          #              namespace : var.namespace
+          #            }
+          #          ]
           services = [
             {
               name = "nginx-ingress-lb-service"

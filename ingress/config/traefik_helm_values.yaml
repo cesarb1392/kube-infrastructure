@@ -42,24 +42,24 @@ ingressRoute:
 
 persistence:
   enabled: true
-  path: /data
+  path: /certs
   size: 128Mi
-
 volumes:
   - mountPath: /data
     name: traefik-config
     type: configMap
 
-autoscaling:
-  enabled: false
-  minReplicas: 1
-  maxReplicas: 3
-  metrics:
-    - type: Resource
-      resource:
-        name: cpu
-        targetAverageUtilization: 50
-    - type: Resource
-      resource:
-        name: memory
-        targetAverageUtilization: 50
+# enabling this doesn't create default middlewares!
+#autoscaling:
+#  enabled: false
+#  minReplicas: 1
+#  maxReplicas: 3
+#  metrics:
+#    - type: Resource
+#      resource:
+#        name: cpu
+#        targetAverageUtilization: 50
+#    - type: Resource
+#      resource:
+#        name: memory
+#        targetAverageUtilization: 50

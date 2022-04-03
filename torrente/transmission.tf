@@ -1,40 +1,50 @@
-resource "kubernetes_config_map_v1" "transmission_transmission_config_map" {
-  metadata {
-    name      = join("", [var.namespace, "-transmission-config-map"])
-    namespace = var.namespace
-    labels = {
+
+resource "kubernetes_manifest" "transmission_route" {
+  manifest = {
+    apiVersion = "traefik.containo.us/v1alpha1"
+    kind       = "IngressRoute"
+    metadata = {
+      name      = join("", [var.namespace, "-transmission-ingress"])
       namespace = var.namespace
     }
+    spec = {
+      entryPoints = ["websecure"]
+      routes = [
+        {
+          match = local.hosts.transmission
+          kind  = "Rule"
+          services = [
+            {
+              name = kubernetes_service_v1.transmission_service.metadata[0].name
+              port = local.ports.transmission
+            }
+          ]
+        }
+      ]
+    }
   }
-  data = {
-    LOCAL_NETWORK                         = "192.168.2.11/24"
-    OPENVPN_OPTS                          = "--inactive 3600 --ping 10 --ping-exit 60"
-    OPENVPN_PROVIDER                      = "NORDVPN"
-    OPENVPN_CONFIG                        = "FR Paris" #todo: testing
-    TRANSMISSION_DOWNLOAD_QUEUE_SIZE      = "4"
-    TRANSMISSION_RATIO_LIMIT              = "2"
-    TRANSMISSION_RATIO_LIMIT_ENABLED      = "true"
-    TRANSMISSION_SPEED_LIMIT_DOWN         = "10000"
-    TRANSMISSION_SPEED_LIMIT_DOWN_ENABLED = "true"
-    TRANSMISSION_SPEED_LIMIT_UP           = "1000"
-    TRANSMISSION_SPEED_LIMIT_UP_ENABLED   = "true"
-    WEBPROXY_ENABLED                      = "false"
-  }
-  depends_on = [kubernetes_namespace.this]
+  depends_on = [
+    kubernetes_namespace.this
+  ]
 }
 
-resource "kubernetes_secret_v1" "transmission_secret_keys" {
+resource "kubernetes_service_v1" "transmission_service" {
   metadata {
-    name      = join("", [var.namespace, "-transmission-secret"])
+    name      = join("", [var.namespace, "-transmission-service"])
     namespace = var.namespace
     labels = {
       namespace = var.namespace
     }
   }
-  data = {
-    username = var.K3S_OPENVPN_USERNAME
-    password = var.K3S_OPENVPN_PASSWORD
+  spec {
+    port {
+      port = local.ports.transmission
+      name = "http"
+    }
+    selector = { app = "transmission" }
+    type     = "ClusterIP"
   }
+  depends_on = [kubernetes_namespace.this]
 }
 
 resource "kubernetes_deployment_v1" "transmission_deployment" {
@@ -72,7 +82,7 @@ resource "kubernetes_deployment_v1" "transmission_deployment" {
           image = "haugene/transmission-openvpn"
 
           port {
-            container_port = 9091
+            container_port = local.ports.transmission
           }
           liveness_probe {
             failure_threshold     = 3
@@ -80,7 +90,7 @@ resource "kubernetes_deployment_v1" "transmission_deployment" {
             period_seconds        = 2
             success_threshold     = 1
             tcp_socket {
-              port = 9091
+              port = local.ports.transmission
             }
             timeout_seconds = 2
           }
@@ -90,7 +100,7 @@ resource "kubernetes_deployment_v1" "transmission_deployment" {
             period_seconds        = 2
             success_threshold     = 2
             tcp_socket {
-              port = 9091
+              port = local.ports.transmission
             }
             timeout_seconds = 2
           }
@@ -167,4 +177,44 @@ resource "kubernetes_deployment_v1" "transmission_deployment" {
     }
   }
   depends_on = [kubernetes_namespace.this]
+}
+
+resource "kubernetes_config_map_v1" "transmission_transmission_config_map" {
+  metadata {
+    name      = join("", [var.namespace, "-transmission-config-map"])
+    namespace = var.namespace
+    labels = {
+      namespace = var.namespace
+    }
+  }
+  data = {
+    LOCAL_NETWORK    = "192.168.2.0/24"
+    OPENVPN_OPTS     = "--inactive 3600 --ping 10 --ping-exit 60"
+    OPENVPN_PROVIDER = "NORDVPN"
+    #    OPENVPN_CONFIG                        = "FR Paris" # doesnt work todo: testing
+    #    NORDVPN_COUNTRY                       = "NL" # not working
+    TRANSMISSION_DOWNLOAD_QUEUE_SIZE      = "6"
+    TRANSMISSION_RATIO_LIMIT              = "4"
+    TRANSMISSION_RATIO_LIMIT_ENABLED      = "true"
+    TRANSMISSION_SPEED_LIMIT_DOWN         = "10000"
+    TRANSMISSION_SPEED_LIMIT_DOWN_ENABLED = "true"
+    TRANSMISSION_SPEED_LIMIT_UP           = "1000"
+    TRANSMISSION_SPEED_LIMIT_UP_ENABLED   = "true"
+    WEBPROXY_ENABLED                      = "false"
+  }
+  depends_on = [kubernetes_namespace.this]
+}
+
+resource "kubernetes_secret_v1" "transmission_secret_keys" {
+  metadata {
+    name      = join("", [var.namespace, "-transmission-secret"])
+    namespace = var.namespace
+    labels = {
+      namespace = var.namespace
+    }
+  }
+  data = {
+    username = var.K3S_OPENVPN_USERNAME
+    password = var.K3S_OPENVPN_PASSWORD
+  }
 }

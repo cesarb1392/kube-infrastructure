@@ -1,3 +1,31 @@
+resource "kubernetes_manifest" "jackett_route" {
+  manifest = {
+    apiVersion = "traefik.containo.us/v1alpha1"
+    kind       = "IngressRoute"
+    metadata = {
+      name      = join("", [var.namespace, "-jackett-ingress"])
+      namespace = var.namespace
+    }
+    spec = {
+      entryPoints = ["websecure"]
+      routes = [
+        {
+          match = local.hosts.jackett
+          kind  = "Rule"
+          services = [
+            {
+              name = kubernetes_service_v1.jackett_service.metadata[0].name
+              port = local.ports.jackett
+            }
+          ]
+        }
+      ]
+    }
+  }
+  depends_on = [
+    kubernetes_namespace.this
+  ]
+}
 
 resource "kubernetes_service_v1" "jackett_service" {
   metadata {
@@ -9,7 +37,7 @@ resource "kubernetes_service_v1" "jackett_service" {
   }
   spec {
     port {
-      port = 9117
+      port = local.ports.jackett
       name = "http"
     }
     selector = { app = "jackett" }
@@ -50,7 +78,7 @@ resource "kubernetes_deployment_v1" "jackett_deployment" {
           image = "linuxserver/jackett"
           port {
             name           = "http"
-            container_port = 9117
+            container_port = local.ports.jackett
           }
           #          liveness_probe {
           #            failure_threshold     = 5
@@ -58,7 +86,7 @@ resource "kubernetes_deployment_v1" "jackett_deployment" {
           #            period_seconds        = 2
           #            success_threshold     = 1
           #            tcp_socket {
-          #              port = 9117
+          #              port = local.ports.jackett
           #            }
           #            timeout_seconds = 5
           #          }
@@ -68,7 +96,7 @@ resource "kubernetes_deployment_v1" "jackett_deployment" {
           #            period_seconds        = 2
           #            success_threshold     = 2
           #            tcp_socket {
-          #              port = 9117
+          #              port = local.ports.jackett
           #            }
           #            timeout_seconds = 5
           #          }
