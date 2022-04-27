@@ -7,6 +7,7 @@ additionalArguments:
   - --entrypoints.websecure.http.tls.domains[0].main=${DOMAIN}
   - --entrypoints.websecure.http.tls.domains[0].sans=*.${DOMAIN}
   - --certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare
+#  - --certificatesresolvers.dns-cloudflare.acme.dnschallenge=true
   - --certificatesresolvers.cloudflare.acme.email=${EMAIL}
   - --certificatesresolvers.cloudflare.acme.dnschallenge.resolvers=1.1.1.1
   - --certificatesresolvers.cloudflare.acme.storage=/certs/acme.json
@@ -44,6 +45,8 @@ persistence:
   enabled: true
   path: /certs
   size: 128Mi
+#  existingClaim: "ingress-traefik-volume-claim"
+
 volumes:
   - mountPath: /data
     name: traefik-config

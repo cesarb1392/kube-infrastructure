@@ -180,18 +180,16 @@ extraContainerVolumes: [ ]
 ## Enable persistence using Persistent Volume Claims
 ## ref: http://kubernetes.io/docs/user-guide/persistent-volumes/
 ##
+
 persistence:
   type: pvc
-  enabled: false
-  # storageClassName: default
+  enabled: true
+  existingClaim: ${PVC_NAME}
   accessModes:
     - ReadWriteOnce
-  size: 2Gi
-  # annotations: {}
+  size: 1Gi
   finalizers:
     - kubernetes.io/pvc-protection
-  # subPath: ""
-  # existingClaim:
 
 initChownData:
   ## If false, data ownership will not be reset at startup

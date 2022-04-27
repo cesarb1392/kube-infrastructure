@@ -86,6 +86,13 @@ module "file_manager" {
 module "dns" {
   count = local.dns.enabled ? 1 : 0
 
-  source     = "./dns"
-  namespace  = local.dns.name
+  source    = "./dns"
+  namespace = local.dns.name
+}
+
+module "container_registry" {
+  count = local.container_registry.enabled ? 1 : 0
+
+  source    = "./container_registry"
+  namespace = local.container_registry.name
 }

@@ -1,0 +1,92 @@
+podSecurityPolicy:
+  enabled: true
+
+server:
+  enabled: true
+  tcpSocketProbeEnabled: false
+  probeScheme: HTTP
+  readinessProbeInitialDelay: 120
+  readinessProbePeriodSeconds: 30
+  readinessProbeTimeout: 60
+  readinessProbeFailureThreshold: 10
+  readinessProbeSuccessThreshold: 1
+  livenessProbeInitialDelay: 120
+  livenessProbePeriodSeconds: 30
+  livenessProbeTimeout: 60
+  livenessProbeFailureThreshold: 10
+  livenessProbeSuccessThreshold: 1
+  startupProbe:
+    enabled: false
+    periodSeconds: 5
+    failureThreshold: 30
+    timeoutSeconds: 10
+  persistentVolume:
+    enabled: true
+    accessModes:
+      - ReadWriteOnce
+    existingClaim: "monitoring-prometheus-volume-claim"
+    mountPath: /data
+    size: 8Gi
+    finalizers:
+      - kubernetes.io/pvc-protection
+  resources:
+    limits:
+      cpu: 100m
+      memory: 128Mi
+    requests:
+      cpu: 100m
+      memory: 128Mi
+
+alertmanager:
+  enabled: false
+  persistentVolume:
+    enabled: true
+    accessModes:
+      - ReadWriteOnce
+    annotations: { }
+    existingClaim: "monitoring-prometheus-volume-claim"
+    mountPath: /data
+    size: 1Gi
+    finalizers:
+      - kubernetes.io/pvc-protection
+
+  pushgateway:
+    enabled: false
+    replicaCount: 1
+    resources:
+      limits:
+        cpu: 10m
+        memory: 32Mi
+      requests:
+        cpu: 10m
+        memory: 32Mi
+
+    persistentVolume:
+      enabled: true
+      accessModes:
+        - ReadWriteOnce
+      annotations: { }
+      existingClaim: "monitoring-prometheus-volume-claim"
+      mountPath: /data
+      size: 1Gi
+      subPath: ""
+
+#alertmanagerFiles:
+#  alertmanager.yml:
+#    global: {}
+#    # slack_api_url: ''
+#
+#    receivers:
+#      - name: default-receiver
+#        # slack_configs:
+#        #  - channel: '@you'
+#        #    send_resolved: true
+#
+#    route:
+#      group_wait: 10s
+#      group_interval: 5m
+#      receiver: default-receiver
+#      repeat_interval: 3h
+
+
+

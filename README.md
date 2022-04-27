@@ -2,11 +2,16 @@
 
 ## remember
 <serviceName>.<namespaceName>.svc.cluster.local
+```
+ kubectl logs monitoring-prometheus-server-66b6b5897f-jt56w -c prometheus-server -n monitoring --follow
+ kubectl patch pvc monitoring-prometheus-volume-claim -n monitoring -p '{"metadata":{"finalizers": []}}' --type=merge
+ kubectl delete pods <pod_name> --grace-period=0 --force -n <namespace>
+```
 
 ## todo
 
+- set helm charts versions 
 - install cert manager
-- move everything to a pvc
 - move secrets and policies from type resource to data
 - improve variables
 - move to input vars traefik.ymal config
@@ -69,6 +74,7 @@ No providers.
 
 | Name | Source | Version |
 |------|--------|---------|
+| <a name="module_container_registry"></a> [container\_registry](#module\_container\_registry) | ./container_registry | n/a |
 | <a name="module_dns"></a> [dns](#module\_dns) | ./dns | n/a |
 | <a name="module_file_manager"></a> [file\_manager](#module\_file\_manager) | ./file_manager | n/a |
 | <a name="module_ingress"></a> [ingress](#module\_ingress) | ./ingress | n/a |
@@ -93,6 +99,7 @@ No resources.
 | <a name="input_K3S_CF_API_KEY"></a> [K3S\_CF\_API\_KEY](#input\_K3S\_CF\_API\_KEY) | n/a | `string` | n/a | yes |
 | <a name="input_K3S_CF_DOMAIN"></a> [K3S\_CF\_DOMAIN](#input\_K3S\_CF\_DOMAIN) | n/a | `string` | `""` | no |
 | <a name="input_K3S_CF_EMAIL"></a> [K3S\_CF\_EMAIL](#input\_K3S\_CF\_EMAIL) | n/a | `string` | n/a | yes |
+| <a name="input_K3S_CF_ZONE_ID"></a> [K3S\_CF\_ZONE\_ID](#input\_K3S\_CF\_ZONE\_ID) | n/a | `string` | n/a | yes |
 | <a name="input_K3S_GRAFANA_PASSWORD"></a> [K3S\_GRAFANA\_PASSWORD](#input\_K3S\_GRAFANA\_PASSWORD) | The password to connect to Grafana UI. | `string` | `""` | no |
 | <a name="input_K3S_GRAFANA_USER"></a> [K3S\_GRAFANA\_USER](#input\_K3S\_GRAFANA\_USER) | The username to connect to Grafana UI. | `string` | `""` | no |
 | <a name="input_K3S_OPENVPN_PASSWORD"></a> [K3S\_OPENVPN\_PASSWORD](#input\_K3S\_OPENVPN\_PASSWORD) | The username to connect to Grafana UI. | `string` | `""` | no |

@@ -1,7 +1,7 @@
 locals {
   dns = {
-    name                  = "dns"
-    enabled               = true
+    name    = "dns"
+    enabled = true
   }
   nginx = {
     name    = "nginx"
@@ -38,7 +38,7 @@ locals {
   }
   torrente = {
     name                 = "torrente"
-    enabled              = true
+    enabled              = false
     K3S_OPENVPN_PASSWORD = var.K3S_OPENVPN_PASSWORD
     K3S_OPENVPN_USERNAME = var.K3S_OPENVPN_USERNAME
     puid                 = 65534
@@ -56,6 +56,10 @@ locals {
   }
   file_manager = {
     name    = "file-manager"
+    enabled = false
+  }
+  container_registry = {
+    name    = "container_registry"
     enabled = false
   }
 }

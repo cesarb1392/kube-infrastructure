@@ -6,8 +6,9 @@ data "template_file" "grafana_values" {
     GRAFANA_SERVICE_ACCOUNT = "grafana"
     GRAFANA_ADMIN_USER      = var.K3S_GRAFANA_USER
     GRAFANA_ADMIN_PASSWORD  = var.K3S_GRAFANA_PASSWORD
-    PROMETHEUS_SVC          = "prometheus"
+    PROMETHEUS_SVC          = "monitoring-prometheus-server"
     NAMESPACE               = var.namespace
+    PVC_NAME                = kubernetes_persistent_volume_claim_v1.grafana_persistent_volume_claim.metadata[0].name
   }
 }
 
