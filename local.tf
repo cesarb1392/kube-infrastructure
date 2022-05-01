@@ -14,7 +14,7 @@ locals {
   }
   monitoring = {
     name                 = "monitoring"
-    enabled              = true
+    enabled              = false
     K3S_GRAFANA_USER     = var.K3S_GRAFANA_USER
     K3S_GRAFANA_PASSWORD = var.K3S_GRAFANA_PASSWORD
   }
@@ -56,7 +56,7 @@ locals {
   }
   file_manager = {
     name    = "file-manager"
-    enabled = true
+    enabled = false
   }
   container_registry = {
     name    = "container_registry"

@@ -6,15 +6,6 @@ resource "cloudflare_record" "cesarb_dev_A_cesarb_dev" {
   proxied = true
   ttl     = local.default_ttl
 }
-#resource "cloudflare_record" "cesarb_dev_A_grafana" {
-#  zone_id  = local.cloudflare_zone_id
-#  name     = "grafana"
-#  type     = "A"
-#  value    = "84.85.77.49"
-#  proxied  = true
-#  ttl      = local.default_ttl
-#}
-
 resource "cloudflare_record" "cesarb_dev_A_nginx" {
   zone_id = local.cloudflare_zone_id
   name    = "nginx"
@@ -22,7 +13,6 @@ resource "cloudflare_record" "cesarb_dev_A_nginx" {
   value   = "84.85.77.49"
   proxied = true
   ttl     = local.default_ttl
-
 }
 resource "cloudflare_record" "cesarb_dev_A_traefik" {
   zone_id = local.cloudflare_zone_id
@@ -33,6 +23,7 @@ resource "cloudflare_record" "cesarb_dev_A_traefik" {
   ttl     = local.default_ttl
 
 }
+
 resource "cloudflare_record" "cesarb_dev_CNAME_fm1__domainkey" {
   zone_id = local.cloudflare_zone_id
   name    = "fm1._domainkey"
@@ -49,6 +40,7 @@ resource "cloudflare_record" "cesarb_dev_CNAME_fm2__domainkey" {
   value   = "fm2.cesarb.dev.dkim.fmhosted.com"
   proxied = true
   ttl     = local.default_ttl
+
 }
 resource "cloudflare_record" "cesarb_dev_CNAME_fm3__domainkey" {
   zone_id = local.cloudflare_zone_id
@@ -57,8 +49,8 @@ resource "cloudflare_record" "cesarb_dev_CNAME_fm3__domainkey" {
   value   = "fm3.cesarb.dev.dkim.fmhosted.com"
   proxied = true
   ttl     = local.default_ttl
-}
 
+}
 resource "cloudflare_record" "cesarb_dev_CNAME_www" {
   zone_id = local.cloudflare_zone_id
   name    = "www"
@@ -66,19 +58,9 @@ resource "cloudflare_record" "cesarb_dev_CNAME_www" {
   value   = "cesarb.dev"
   proxied = true
   ttl     = local.default_ttl
-}
 
-resource "cloudflare_record" "cesarb_dev_MX_in2_smt" {
-  zone_id  = local.cloudflare_zone_id
-  name     = "*"
-  type     = "MX"
-  value    = "in2-smtp.messagingengine.com"
-  proxied  = false
-  ttl      = local.default_ttl
-  priority = 20
 }
-
-resource "cloudflare_record" "cesarb_dev_MX_in1_smt" {
+resource "cloudflare_record" "cesarb_dev_MX_1" {
   zone_id  = local.cloudflare_zone_id
   name     = "*"
   type     = "MX"
@@ -87,8 +69,16 @@ resource "cloudflare_record" "cesarb_dev_MX_in1_smt" {
   ttl      = local.default_ttl
   priority = 10
 }
-
-resource "cloudflare_record" "cesarb_dev_MX_cesarb_dev_in2_smtp" {
+resource "cloudflare_record" "cesarb_dev_MX_2" {
+  zone_id  = local.cloudflare_zone_id
+  name     = "*"
+  type     = "MX"
+  value    = "in2-smtp.messagingengine.com"
+  proxied  = false
+  ttl      = local.default_ttl
+  priority = 20
+}
+resource "cloudflare_record" "cesarb_dev_MX_cesarb_dev_1" {
   zone_id  = local.cloudflare_zone_id
   name     = "cesarb.dev"
   type     = "MX"
@@ -97,8 +87,7 @@ resource "cloudflare_record" "cesarb_dev_MX_cesarb_dev_in2_smtp" {
   ttl      = local.default_ttl
   priority = 20
 }
-
-resource "cloudflare_record" "cesarb_dev_MX_cesarb_dev_in1_smtp" {
+resource "cloudflare_record" "cesarb_dev_MX_cesarb_dev_2" {
   zone_id  = local.cloudflare_zone_id
   name     = "cesarb.dev"
   type     = "MX"
@@ -107,7 +96,6 @@ resource "cloudflare_record" "cesarb_dev_MX_cesarb_dev_in1_smtp" {
   ttl      = local.default_ttl
   priority = 10
 }
-
 resource "cloudflare_record" "cesarb_dev_TXT_cesarb_dev" {
   zone_id = local.cloudflare_zone_id
   name    = "cesarb.dev"
@@ -115,5 +103,5 @@ resource "cloudflare_record" "cesarb_dev_TXT_cesarb_dev" {
   value   = "v=spf1 include:spf.messagingengine.com ?all"
   proxied = false
   ttl     = local.default_ttl
-}
 
+}

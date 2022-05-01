@@ -19,8 +19,19 @@ resource "kubernetes_manifest" "ingress_route" {
       entryPoints = ["websecure"]
       routes = [
         {
-          match = "Host(`cesarb.dev`)"
+          #          match = "Host(`cesarb.dev`)"
+          match = "Host(`cesarb.192.168.2.20.nip.io`)"
           kind  = "Rule"
+          middlewares = [
+            {
+              name : "cloudflare-ip-whitelist"
+              namespace : var.namespace
+            },
+            {
+              name : "rate-limit"
+              namespace : var.namespace
+            }
+          ]
           services = [
             {
               name = "portfolio-ingress-lb-service"
