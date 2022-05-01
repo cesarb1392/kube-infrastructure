@@ -38,7 +38,7 @@ locals {
   }
   torrente = {
     name                 = "torrente"
-    enabled              = false
+    enabled              = true
     K3S_OPENVPN_PASSWORD = var.K3S_OPENVPN_PASSWORD
     K3S_OPENVPN_USERNAME = var.K3S_OPENVPN_USERNAME
     puid                 = 65534
@@ -56,7 +56,7 @@ locals {
   }
   file_manager = {
     name    = "file-manager"
-    enabled = false
+    enabled = true
   }
   container_registry = {
     name    = "container_registry"

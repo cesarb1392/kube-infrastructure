@@ -4,12 +4,12 @@ variable "namespace" {
 }
 
 variable "K3S_OPENVPN_USERNAME" {
-  description = "The username to connect to Grafana UI."
+  description = ""
   type        = string
 }
 
 variable "K3S_OPENVPN_PASSWORD" {
-  description = "The username to connect to Grafana UI."
+  description = ""
   type        = string
 }
 

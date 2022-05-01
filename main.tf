@@ -77,7 +77,7 @@ module "wireguard" {
 }
 
 module "file_manager" {
-  count = local.wireguard.enabled ? 1 : 0
+  count = local.file_manager.enabled ? 1 : 0
 
   source    = "./file_manager"
   namespace = local.file_manager.name
