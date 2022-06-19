@@ -23,9 +23,7 @@ resource "kubernetes_manifest" "transmission_route" {
       ]
     }
   }
-  depends_on = [
-    kubernetes_namespace.this
-  ]
+
 }
 
 resource "kubernetes_service_v1" "transmission_service" {
@@ -44,7 +42,7 @@ resource "kubernetes_service_v1" "transmission_service" {
     selector = { app = "transmission" }
     type     = "ClusterIP"
   }
-  depends_on = [kubernetes_namespace.this]
+
 }
 
 resource "kubernetes_deployment_v1" "transmission_deployment" {
@@ -176,7 +174,7 @@ resource "kubernetes_deployment_v1" "transmission_deployment" {
       }
     }
   }
-  depends_on = [kubernetes_namespace.this]
+
 }
 
 resource "kubernetes_config_map_v1" "transmission_transmission_config_map" {
@@ -202,7 +200,7 @@ resource "kubernetes_config_map_v1" "transmission_transmission_config_map" {
     TRANSMISSION_SPEED_LIMIT_UP_ENABLED   = "true"
     WEBPROXY_ENABLED                      = "false"
   }
-  depends_on = [kubernetes_namespace.this]
+
 }
 
 resource "kubernetes_secret_v1" "transmission_secret_keys" {

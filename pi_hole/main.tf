@@ -1,11 +1,4 @@
-resource "kubernetes_namespace" "this" {
-  metadata {
-    name = var.namespace
-    labels = {
-      namespace = var.namespace
-    }
-  }
-}
+
 #https://greg.jeanmart.me/2020/04/13/self-host-pi-hole-on-kubernetes-and-block-ad/
 resource "kubernetes_manifest" "pi_hole_ingress" {
   manifest = {
@@ -31,9 +24,7 @@ resource "kubernetes_manifest" "pi_hole_ingress" {
       ]
     }
   }
-  depends_on = [
-    kubernetes_namespace.this
-  ]
+
 }
 
 resource "kubernetes_service_v1" "pi_hole_service_tcp" {
@@ -63,7 +54,7 @@ resource "kubernetes_service_v1" "pi_hole_service_tcp" {
     selector = { app = "pihole" }
     type     = "LoadBalancer"
   }
-  depends_on = [kubernetes_namespace.this]
+
 }
 
 resource "kubernetes_service_v1" "pi_hole_service_udp" {
@@ -89,7 +80,7 @@ resource "kubernetes_service_v1" "pi_hole_service_udp" {
     selector = { app = "pihole" }
     type     = "LoadBalancer"
   }
-  depends_on = [kubernetes_namespace.this]
+
 }
 
 resource "kubernetes_secret_v1" "pihole_secret_keys" {

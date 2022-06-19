@@ -1,11 +1,3 @@
-resource "kubernetes_namespace" "this" {
-  metadata {
-    name = var.namespace
-    labels = {
-      namespace = var.namespace
-    }
-  }
-}
 
 resource "kubernetes_manifest" "ingress_route" {
   manifest = {
@@ -19,19 +11,18 @@ resource "kubernetes_manifest" "ingress_route" {
       entryPoints = ["websecure"]
       routes = [
         {
-          #          match = "Host(`cesarb.dev`)"
-          match = "Host(`cesarb.192.168.2.20.nip.io`)"
+          match = "Host(`cesarb.dev`)"
           kind  = "Rule"
-          middlewares = [
-            {
-              name : "cloudflare-ip-whitelist"
-              namespace : var.namespace
-            },
-            {
-              name : "rate-limit"
-              namespace : var.namespace
-            }
-          ]
+          #          middlewares = [
+          #            {
+          #              name : "cloudflare-ip-whitelist"
+          #              namespace : var.namespace
+          #            },
+          #            {
+          #              name : "rate-limit"
+          #              namespace : var.namespace
+          #            }
+          #          ]
           services = [
             {
               name = "portfolio-ingress-lb-service"
@@ -42,9 +33,7 @@ resource "kubernetes_manifest" "ingress_route" {
       ]
     }
   }
-  depends_on = [
-    kubernetes_namespace.this
-  ]
+
 }
 
 resource "kubernetes_service" "portfolio_lb_service" {
@@ -59,7 +48,7 @@ resource "kubernetes_service" "portfolio_lb_service" {
     }
     selector = { "app" : "portfolio-ingress-lb" }
   }
-  depends_on = [kubernetes_namespace.this]
+
 
 }
 
@@ -97,5 +86,5 @@ resource "kubernetes_deployment_v1" "portfolio_lb_deployment" {
       }
     }
   }
-  depends_on = [kubernetes_namespace.this]
+
 }

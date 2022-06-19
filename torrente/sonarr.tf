@@ -89,5 +89,5 @@ resource "kubernetes_deployment_v1" "sonarr_deployment" {
       }
     }
   }
-  depends_on = [kubernetes_namespace.this]
+
 }

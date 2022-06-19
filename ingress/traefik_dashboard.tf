@@ -8,7 +8,7 @@ resource "kubernetes_secret" "cert_api_keys" {
     apiKey = var.K3S_CF_API_KEY
   }
   depends_on = [
-    kubernetes_namespace.this
+
   ]
 }
 
@@ -21,7 +21,7 @@ resource "kubernetes_config_map" "config" {
     "traefik-config.yaml" = file("${path.module}/config/default_middleware.yaml")
   }
   depends_on = [
-    kubernetes_namespace.this
+
   ]
 }
 
@@ -31,31 +31,12 @@ resource "kubernetes_secret" "secret_dashboard" {
     namespace = var.namespace
   }
   data = {
-    #    https://httpd.apache.org/docs/current/misc/password_encryptions.html
+    #    https=//httpd.apache.org/docs/current/misc/password_encryptions.html
     #    users = var.K3S_TRAEFIK_DASHBOARD
-    users = "quesito:$apr1$jExF1p/h$PRAyZVssDxLnETFnTLa7W0"
+    users = "quesito=$apr1$jExF1p/h$PRAyZVssDxLnETFnTLa7W0"
   }
   depends_on = [
-    kubernetes_namespace.this
-  ]
-}
 
-resource "kubernetes_manifest" "config_basicauth" {
-  manifest = {
-    apiVersion = "traefik.containo.us/v1alpha1"
-    kind       = "Middleware"
-    metadata = {
-      name      = "traefik-dashboard-basicauth"
-      namespace = var.namespace
-    }
-    spec = {
-      basicAuth = {
-        secret = "traefik-dashboard-auth"
-      }
-    }
-  }
-  depends_on = [
-    kubernetes_namespace.this
   ]
 }
 
@@ -76,9 +57,17 @@ resource "kubernetes_manifest" "ingress_route" {
           kind  = "Rule"
           middlewares = [
             {
-              name : "traefik-dashboard-basicauth"
-              namespace : var.namespace
-            }
+              name      = kubernetes_manifest.rate_limit.manifest.metadata.name
+              namespace = var.namespace
+            },
+            {
+              name      = "traefik-dashboard-basicauth"
+              namespace = var.namespace
+            },
+            #            {
+            #              name = "cloudflare-ip-whitelist"
+            #              namespace = var.namespace
+            #            },
           ]
           services = [
             {
@@ -91,6 +80,6 @@ resource "kubernetes_manifest" "ingress_route" {
     }
   }
   depends_on = [
-    kubernetes_namespace.this
+
   ]
 }

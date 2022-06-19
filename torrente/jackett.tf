@@ -22,9 +22,7 @@ resource "kubernetes_manifest" "jackett_route" {
       ]
     }
   }
-  depends_on = [
-    kubernetes_namespace.this
-  ]
+
 }
 
 resource "kubernetes_service_v1" "jackett_service" {
@@ -43,7 +41,7 @@ resource "kubernetes_service_v1" "jackett_service" {
     selector = { app = "jackett" }
     type     = "ClusterIP"
   }
-  depends_on = [kubernetes_namespace.this]
+
 }
 
 resource "kubernetes_deployment_v1" "jackett_deployment" {
@@ -141,5 +139,5 @@ resource "kubernetes_deployment_v1" "jackett_deployment" {
       }
     }
   }
-  depends_on = [kubernetes_namespace.this]
+
 }

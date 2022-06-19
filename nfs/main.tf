@@ -1,14 +1,3 @@
-resource "kubernetes_namespace" "this" {
-  metadata {
-    name = var.namespace
-    annotations = {
-      name = var.namespace
-    }
-    labels = {
-      namespace = var.namespace
-    }
-  }
-}
 
 # https://www.digitalocean.com/community/tutorials/how-to-set-up-an-nfs-mount-on-ubuntu-20-04
 # https://www.phillipsj.net/posts/k3s-enable-nfs-storage/

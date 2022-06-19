@@ -16,5 +16,5 @@ resource "kubernetes_persistent_volume_claim_v1" "persistent_volume_claim" {
     }
     #    volume_name = kubernetes_persistent_volume_v1.torrente_persistent_volume.metadata[0].name
   }
-  depends_on = [kubernetes_namespace.this]
+
 }

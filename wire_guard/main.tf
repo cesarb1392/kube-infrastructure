@@ -1,12 +1,3 @@
-resource "kubernetes_namespace" "this" {
-  metadata {
-    name = var.namespace
-    labels = {
-      namespace = var.namespace
-    }
-  }
-}
-
 resource "helm_release" "wireguard" {
   name      = var.namespace
   namespace = var.namespace
@@ -17,7 +8,7 @@ resource "helm_release" "wireguard" {
   values = [
     data.template_file.wireguard_values.rendered
   ]
-  depends_on = [kubernetes_namespace.this, data.template_file.wireguard_values]
+  depends_on = [data.template_file.wireguard_values]
 
 }
 

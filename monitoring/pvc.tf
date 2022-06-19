@@ -15,7 +15,6 @@ resource "kubernetes_persistent_volume_claim_v1" "grafana_persistent_volume_clai
       }
     }
   }
-  depends_on = [kubernetes_namespace.this]
 }
 
 resource "kubernetes_persistent_volume_claim_v1" "prometheus_persistent_volume_claim" {
@@ -35,5 +34,4 @@ resource "kubernetes_persistent_volume_claim_v1" "prometheus_persistent_volume_c
       }
     }
   }
-  depends_on = [kubernetes_namespace.this]
 }

@@ -52,6 +52,13 @@ volumes:
     name: traefik-config
     type: configMap
 
+logs:
+  general:
+    # By default, the level is set to ERROR. Alternative logging levels are DEBUG, PANIC, FATAL, ERROR, WARN, and INFO.
+    level: INFO
+  access:
+    enabled: true
+
 # enabling this doesn't create default middlewares!
 #autoscaling:
 #  enabled: false

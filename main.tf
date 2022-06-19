@@ -1,98 +1,123 @@
 module "loadbalancer" {
-  count = local.loadbalancer.enabled ? 1 : 0
+  count = local.applications.loadbalancer.enabled ? 1 : 0
 
   source        = "./loadbalancer"
-  namespace     = local.loadbalancer.name
-  address_range = local.loadbalancer.address_range
+  namespace     = local.applications.loadbalancer.name
+  address_range = local.applications.loadbalancer.address_range
+
+  depends_on = [kubernetes_namespace.this]
 }
 
 module "ingress" {
-  count = local.ingress.enabled ? 1 : 0
+  count = local.applications.ingress.enabled ? 1 : 0
 
   source                = "./ingress"
-  namespace             = local.ingress.name
-  K3S_CF_API_KEY        = local.ingress.K3S_CF_API_KEY
-  K3S_CF_DOMAIN         = local.ingress.K3S_CF_DOMAIN
-  K3S_CF_EMAIL          = local.ingress.K3S_CF_EMAIL
-  K3S_TRAEFIK_DASHBOARD = local.ingress.K3S_TRAEFIK_DASHBOARD
+  namespace             = local.applications.ingress.name
+  K3S_CF_API_KEY        = local.applications.ingress.K3S_CF_API_KEY
+  K3S_CF_DOMAIN         = local.applications.ingress.K3S_CF_DOMAIN
+  K3S_CF_EMAIL          = local.applications.ingress.K3S_CF_EMAIL
+  K3S_TRAEFIK_DASHBOARD = local.applications.ingress.K3S_TRAEFIK_DASHBOARD
+
+  depends_on = [kubernetes_namespace.this]
+
 }
 
 module "nfs" {
-  count = local.nfs.enabled ? 1 : 0
+  count = local.applications.nfs.enabled ? 1 : 0
 
   source    = "./nfs"
-  namespace = local.nfs.name
-  nfs_host  = local.nfs.host
-  nfs_path  = local.nfs.path
+  namespace = local.applications.nfs.name
+  nfs_host  = local.applications.nfs.host
+  nfs_path  = local.applications.nfs.path
+
+  depends_on = [kubernetes_namespace.this]
 }
 
 module "nginx" {
-  count = local.nginx.enabled ? 1 : 0
+  count = local.applications.nginx.enabled ? 1 : 0
 
   source    = "./nginx"
-  namespace = local.nginx.name
+  namespace = local.applications.nginx.name
+
+  depends_on = [kubernetes_namespace.this]
 }
 
 module "monitoring" {
-  count = local.monitoring.enabled ? 1 : 0
+  count = local.applications.monitoring.enabled ? 1 : 0
 
   source               = "./monitoring"
-  namespace            = local.monitoring.name
-  K3S_GRAFANA_USER     = local.monitoring.K3S_GRAFANA_USER
-  K3S_GRAFANA_PASSWORD = local.monitoring.K3S_GRAFANA_PASSWORD
+  namespace            = local.applications.monitoring.name
+  K3S_GRAFANA_USER     = local.applications.monitoring.K3S_GRAFANA_USER
+  K3S_GRAFANA_PASSWORD = local.applications.monitoring.K3S_GRAFANA_PASSWORD
+
+  depends_on = [kubernetes_namespace.this]
 }
 
 module "portfolio" {
-  count = local.portfolio.enabled ? 1 : 0
+  count = local.applications.portfolio.enabled ? 1 : 0
 
   source    = "./portfolio"
-  namespace = local.portfolio.name
+  namespace = local.applications.portfolio.name
+
+  depends_on = [kubernetes_namespace.this]
 }
 
 module "torrente" {
-  count = local.torrente.enabled ? 1 : 0
+  count = local.applications.torrente.enabled ? 1 : 0
 
   source               = "./torrente"
-  namespace            = local.torrente.name
-  K3S_OPENVPN_PASSWORD = local.torrente.K3S_OPENVPN_PASSWORD
-  K3S_OPENVPN_USERNAME = local.torrente.K3S_OPENVPN_USERNAME
-  pgid                 = local.torrente.pgid
-  puid                 = local.torrente.puid
-  timezone             = local.torrente.timezone
+  namespace            = local.applications.torrente.name
+  K3S_OPENVPN_PASSWORD = local.applications.torrente.K3S_OPENVPN_PASSWORD
+  K3S_OPENVPN_USERNAME = local.applications.torrente.K3S_OPENVPN_USERNAME
+  pgid                 = local.applications.torrente.pgid
+  puid                 = local.applications.torrente.puid
+  timezone             = local.applications.torrente.timezone
+
+  depends_on = [kubernetes_namespace.this]
 }
 
 module "pi_hole" {
-  count = local.pihole.enabled ? 1 : 0
+  count = local.applications.pihole.enabled ? 1 : 0
 
   source              = "./pi_hole"
-  namespace           = local.pihole.name
-  K3S_PIHOLE_PASSWORD = local.pihole.K3S_PIHOLE_PASSWORD
+  namespace           = local.applications.pihole.name
+  K3S_PIHOLE_PASSWORD = local.applications.pihole.K3S_PIHOLE_PASSWORD
+
+  depends_on = [kubernetes_namespace.this]
 }
 
 module "wireguard" {
-  count = local.wireguard.enabled ? 1 : 0
+  count = local.applications.wireguard.enabled ? 1 : 0
 
   source    = "./wire_guard"
-  namespace = local.wireguard.name
+  namespace = local.applications.wireguard.name
+
+  depends_on = [kubernetes_namespace.this]
 }
 
 module "file_manager" {
-  count = local.file_manager.enabled ? 1 : 0
+  count = local.applications.file_manager.enabled ? 1 : 0
 
   source    = "./file_manager"
-  namespace = local.file_manager.name
+  namespace = local.applications.file_manager.name
+
+  depends_on = [kubernetes_namespace.this]
 }
 
 module "dns" {
-  count = local.dns.enabled ? 1 : 0
+  count = local.applications.dns.enabled ? 1 : 0
 
   source    = "./dns"
-  namespace = local.dns.name
+  namespace = local.applications.dns.name
+
+  depends_on = [kubernetes_namespace.this]
 }
 
 module "container_registry" {
-  count = local.container_registry.enabled ? 1 : 0
+  count = local.applications.container_registry.enabled ? 1 : 0
 
   source    = "./container_registry"
-  namespace = local.container_registry.name
+  namespace = local.applications.container_registry.name
+
+  depends_on = [kubernetes_namespace.this]
 }

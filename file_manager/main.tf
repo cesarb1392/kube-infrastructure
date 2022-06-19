@@ -1,11 +1,3 @@
-resource "kubernetes_namespace" "this" {
-  metadata {
-    name = var.namespace
-    labels = {
-      namespace = var.namespace
-    }
-  }
-}
 resource "kubernetes_manifest" "ingress_route" {
   manifest = {
     apiVersion = "traefik.containo.us/v1alpha1"
@@ -42,7 +34,7 @@ resource "kubernetes_manifest" "ingress_route" {
     }
   }
   depends_on = [
-    kubernetes_namespace.this
+
   ]
 }
 
@@ -58,7 +50,7 @@ resource "kubernetes_service" "filemanager_lb_service" {
     }
     selector = { "app" : var.namespace }
   }
-  depends_on = [kubernetes_namespace.this]
+
 
 }
 
@@ -98,5 +90,5 @@ resource "kubernetes_deployment_v1" "filemanager_lb_deployment" {
       }
     }
   }
-  depends_on = [kubernetes_namespace.this]
+
 }

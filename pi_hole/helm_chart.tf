@@ -11,7 +11,7 @@ resource "helm_release" "pihole" {
   values = [
     data.template_file.pihole_values.rendered
   ]
-  depends_on = [kubernetes_namespace.this, data.template_file.pihole_values]
+  depends_on = [data.template_file.pihole_values]
 }
 
 data "template_file" "pihole_values" {

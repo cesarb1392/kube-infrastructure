@@ -60,7 +60,9 @@ TF_VAR_K3S_CF_DOMAIN=""
 
 ## Providers
 
-No providers.
+| Name | Version |
+|------|---------|
+| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 2.8.0 |
 
 ## Modules
 
@@ -81,7 +83,9 @@ No providers.
 
 ## Resources
 
-No resources.
+| Name | Type |
+|------|------|
+| [kubernetes_namespace.this](https://registry.terraform.io/providers/hashicorp/kubernetes/2.8.0/docs/resources/namespace) | resource |
 
 ## Inputs
 
@@ -102,7 +106,9 @@ No resources.
 
 ## Outputs
 
-No outputs.
+| Name | Description |
+|------|-------------|
+| <a name="output_modules_enabled"></a> [modules\_enabled](#output\_modules\_enabled) | n/a |
 <!-- END_TF_DOCS -->
 
 ## ufw rules

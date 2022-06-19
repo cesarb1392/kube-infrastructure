@@ -1,30 +1,3 @@
-resource "kubernetes_namespace" "this" {
-  metadata {
-    name = var.namespace
-    labels = {
-      namespace = var.namespace
-    }
-  }
-}
-
-#resource "kubernetes_manifest" "config_basicauth" {
-#  manifest = {
-#    apiVersion = "traefik.containo.us/v1alpha1"
-#    kind       = "Middleware"
-#    metadata = {
-#      name      = "traefik-dashboard-basicauth"
-#      namespace = var.namespace
-#    }
-#    spec = {
-#      basicAuth = {
-#        secret = "traefik-dashboard-auth"
-#      }
-#    }
-#  }
-#  depends_on = [
-#    kubernetes_namespace.this
-#  ]
-#}
 
 resource "kubernetes_manifest" "ingress_route" {
   manifest = {
@@ -39,14 +12,23 @@ resource "kubernetes_manifest" "ingress_route" {
       routes = [
         {
           match = "Host(`nginx.cesarb.dev`)"
-          #          match = "Host(`nginx.192.168.2.20.nip.io`)"
-          kind = "Rule"
-          #          middlewares = [
-          #            {
-          #              name : "traefik-dashboard-basicauth"
-          #              namespace : var.namespace
-          #            }
-          #          ]
+          kind  = "Rule"
+          middlewares = [
+            #            {
+            #              name : kubernetes_manifest.cloudflare_ipwhitelist_middleware.manifest.metadata.name
+            #              namespace : var.namespace
+            #            },
+            {
+              name : kubernetes_manifest.rate_limit.manifest.metadata.name
+              namespace : var.namespace
+
+            },
+            #            {
+            #              name : kubernetes_manifest.simultaneous_connections.manifest.metadata.name
+            #              namespace : var.namespace
+            #
+            #            },
+          ]
           services = [
             {
               name = "nginx-ingress-lb-service"
@@ -57,9 +39,7 @@ resource "kubernetes_manifest" "ingress_route" {
       ]
     }
   }
-  depends_on = [
-    kubernetes_namespace.this
-  ]
+
 }
 
 resource "kubernetes_service" "nginx_lb_service" {
@@ -74,7 +54,7 @@ resource "kubernetes_service" "nginx_lb_service" {
     }
     selector = { "app" : "nginx-ingress-lb" }
   }
-  depends_on = [kubernetes_namespace.this]
+
 
 }
 
@@ -103,5 +83,5 @@ resource "kubernetes_deployment_v1" "nginx_lb_deployment" {
       }
     }
   }
-  depends_on = [kubernetes_namespace.this]
+
 }

@@ -15,5 +15,5 @@ resource "kubernetes_persistent_volume_claim_v1" "persistent_volume_claim" {
       }
     }
   }
-  depends_on = [kubernetes_namespace.this]
+
 }
