@@ -1,7 +1,7 @@
 locals {
   available_namespaces = {
     for k, v in local.applications :
-    k => k if(v.enabled == true)
+    k => v.name if(v.enabled == true)
   }
 }
 

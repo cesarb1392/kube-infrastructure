@@ -1,4 +1,3 @@
-
 resource "kubernetes_manifest" "ingress_route" {
   manifest = {
     apiVersion = "traefik.containo.us/v1alpha1"
@@ -54,8 +53,6 @@ resource "kubernetes_service" "nginx_lb_service" {
     }
     selector = { "app" : "nginx-ingress-lb" }
   }
-
-
 }
 
 
@@ -83,5 +80,4 @@ resource "kubernetes_deployment_v1" "nginx_lb_deployment" {
       }
     }
   }
-
 }

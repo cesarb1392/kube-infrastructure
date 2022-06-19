@@ -30,7 +30,7 @@ resource "kubernetes_persistent_volume_claim_v1" "prometheus_persistent_volume_c
     access_modes       = ["ReadWriteMany"]
     resources {
       requests = {
-        storage = "10Gi"
+        storage = "5Gi"
       }
     }
   }

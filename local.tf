@@ -47,8 +47,8 @@ locals {
       timezone             = "Europe/Amsterdam"
     }
     pihole = {
-      name                = "pi-hole"
-      enabled             = false
+      name                = "pihole"
+      enabled             = true
       K3S_PIHOLE_PASSWORD = var.K3S_PIHOLE_PASSWORD
     }
     wireguard = {

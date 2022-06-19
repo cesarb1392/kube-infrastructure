@@ -2,7 +2,7 @@
 
 ## todo
 
-- set helm charts versions 
+- set helm charts versions!!! 
 - install cert manager
 - move secrets and policies from type resource to data
 - improve variables
@@ -113,38 +113,8 @@ TF_VAR_K3S_CF_DOMAIN=""
 
 ## ufw rules
 
-- master node: https://kubernetes.io/docs/reference/ports-and-protocols/#node
+- [master node](https://kubernetes.io/docs/reference/ports-and-protocols/#node) 
+- [worker node](https://kubernetes.io/docs/reference/ports-and-protocols/#node)  
 
-```shell
-sudo ufw allow 22   
-sudo ufw allow 80/tcp                                    
-sudo ufw allow 443/tcp                    
-sudo ufw allow 6443                       
-sudo ufw allow 3000                       
-sudo ufw allow 8080    
-sudo ufw allow 8472    
-sudo ufw allow 2379:2380/tcp
-sudo ufw allow 10250/tcp                  
-sudo ufw allow 10259/tcp                  
-sudo ufw allow 10257/tcp    
-#sudo ufw default allow outgoing
-sudo ufw allow out from any
-sudo ufw enable              
-```
-- worker node:  https://kubernetes.io/docs/reference/ports-and-protocols/#node
-
-```shell
-sudo ufw allow 22                   
-sudo ufw allow 80/tcp                    
-sudo ufw allow 443/tcp                    
-sudo ufw allow 6443                       
-sudo ufw allow 3000                       
-sudo ufw allow 8080    
-sudo ufw allow 30000:32767/tcp
-sudo ufw allow 10250/tcp      
-sudo ufw allow out from any            
-sudo ufw enable              
-            
-```
 
 

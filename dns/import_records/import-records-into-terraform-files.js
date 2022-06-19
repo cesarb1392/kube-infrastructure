@@ -12,7 +12,7 @@ const os = require("os");
 const dnsRecordsCOM = {
     "result": [
         {
-            "id": "b4ebba203dea7671b0e1e03ec15ab818",
+            "id": "50fabd62a45174aa9381a80edda90fb1",
             "zone_id": "b8991a88e1b412fa8a94e7e2808b0cfa",
             "zone_name": "cesarb.dev",
             "name": "cesarb.dev",
@@ -28,11 +28,11 @@ const dnsRecordsCOM = {
                 "managed_by_argo_tunnel": false,
                 "source": "primary"
             },
-            "created_on": "2022-04-03T10:03:26.386717Z",
-            "modified_on": "2022-04-03T10:03:26.386717Z"
+            "created_on": "2022-05-01T11:21:19.841495Z",
+            "modified_on": "2022-05-01T11:21:19.841495Z"
         },
         {
-            "id": "b2b0b5cb6d40bb8b37d25bd0c6172de4",
+            "id": "4738881d60cd7d9f7e39d4c31bb8e7cd",
             "zone_id": "b8991a88e1b412fa8a94e7e2808b0cfa",
             "zone_name": "cesarb.dev",
             "name": "nginx.cesarb.dev",
@@ -48,11 +48,11 @@ const dnsRecordsCOM = {
                 "managed_by_argo_tunnel": false,
                 "source": "primary"
             },
-            "created_on": "2022-04-03T10:03:26.893404Z",
-            "modified_on": "2022-04-03T10:03:26.893404Z"
+            "created_on": "2022-05-01T11:21:16.902733Z",
+            "modified_on": "2022-05-01T11:21:16.902733Z"
         },
         {
-            "id": "3919a61baaa9dffe8175db6cf1b67818",
+            "id": "5f8df9659e89b46327aa66864f7cedb8",
             "zone_id": "b8991a88e1b412fa8a94e7e2808b0cfa",
             "zone_name": "cesarb.dev",
             "name": "traefik.cesarb.dev",
@@ -68,11 +68,11 @@ const dnsRecordsCOM = {
                 "managed_by_argo_tunnel": false,
                 "source": "primary"
             },
-            "created_on": "2022-04-03T10:03:27.09688Z",
-            "modified_on": "2022-04-03T10:03:27.09688Z"
+            "created_on": "2022-05-01T11:21:20.376255Z",
+            "modified_on": "2022-05-01T11:21:20.376255Z"
         },
         {
-            "id": "b70a505c469881c3741665faebf8d880",
+            "id": "12fb64e8089e657415aab281aff62425",
             "zone_id": "b8991a88e1b412fa8a94e7e2808b0cfa",
             "zone_name": "cesarb.dev",
             "name": "fm1._domainkey.cesarb.dev",
@@ -88,11 +88,11 @@ const dnsRecordsCOM = {
                 "managed_by_argo_tunnel": false,
                 "source": "primary"
             },
-            "created_on": "2022-04-03T10:03:27.700509Z",
-            "modified_on": "2022-04-03T10:03:27.700509Z"
+            "created_on": "2022-05-01T11:21:24.349374Z",
+            "modified_on": "2022-05-01T11:21:24.349374Z"
         },
         {
-            "id": "686fa25c088a4e1cb54d7d498152878b",
+            "id": "21cf286e8fdc613f0bd4df709d4f7949",
             "zone_id": "b8991a88e1b412fa8a94e7e2808b0cfa",
             "zone_name": "cesarb.dev",
             "name": "fm2._domainkey.cesarb.dev",
@@ -108,11 +108,11 @@ const dnsRecordsCOM = {
                 "managed_by_argo_tunnel": false,
                 "source": "primary"
             },
-            "created_on": "2022-04-03T10:03:30.655107Z",
-            "modified_on": "2022-04-03T10:03:30.655107Z"
+            "created_on": "2022-05-01T11:21:25.348113Z",
+            "modified_on": "2022-05-01T11:21:25.348113Z"
         },
         {
-            "id": "417a20c75300114dd1060d93cc96bfbd",
+            "id": "902ce18d8d5fceed612ba77a4fa51c1d",
             "zone_id": "b8991a88e1b412fa8a94e7e2808b0cfa",
             "zone_name": "cesarb.dev",
             "name": "fm3._domainkey.cesarb.dev",
@@ -128,11 +128,31 @@ const dnsRecordsCOM = {
                 "managed_by_argo_tunnel": false,
                 "source": "primary"
             },
-            "created_on": "2022-04-03T10:03:25.786546Z",
-            "modified_on": "2022-04-03T10:03:25.786546Z"
+            "created_on": "2022-05-01T11:21:16.620096Z",
+            "modified_on": "2022-05-01T11:21:16.620096Z"
         },
         {
-            "id": "0d1bedb4c54f935252ee62b768e1b3ff",
+            "id": "4964b716ebab55755f3f70ea7146f930",
+            "zone_id": "b8991a88e1b412fa8a94e7e2808b0cfa",
+            "zone_name": "cesarb.dev",
+            "name": "test.cesarb.dev",
+            "type": "CNAME",
+            "content": "74cba19543fd017e8f7b8df22ffad823.m.pipedream.net",
+            "proxiable": true,
+            "proxied": true,
+            "ttl": 1,
+            "locked": false,
+            "meta": {
+                "auto_added": false,
+                "managed_by_apps": false,
+                "managed_by_argo_tunnel": false,
+                "source": "primary"
+            },
+            "created_on": "2022-05-01T15:21:11.351115Z",
+            "modified_on": "2022-05-01T15:21:11.351115Z"
+        },
+        {
+            "id": "5b64e68c22d6d0da002a959ca9d3c62e",
             "zone_id": "b8991a88e1b412fa8a94e7e2808b0cfa",
             "zone_name": "cesarb.dev",
             "name": "www.cesarb.dev",
@@ -148,11 +168,11 @@ const dnsRecordsCOM = {
                 "managed_by_argo_tunnel": false,
                 "source": "primary"
             },
-            "created_on": "2022-04-03T10:03:26.129083Z",
-            "modified_on": "2022-04-03T10:03:26.129083Z"
+            "created_on": "2022-05-01T11:21:22.85226Z",
+            "modified_on": "2022-05-01T11:21:22.85226Z"
         },
         {
-            "id": "788974b545830e8c0a289ef9daf63ed8",
+            "id": "d89ded09ea53f6b6a9fd9effcd81d950",
             "zone_id": "b8991a88e1b412fa8a94e7e2808b0cfa",
             "zone_name": "cesarb.dev",
             "name": "*.cesarb.dev",
@@ -169,11 +189,11 @@ const dnsRecordsCOM = {
                 "managed_by_argo_tunnel": false,
                 "source": "primary"
             },
-            "created_on": "2022-04-03T10:03:28.243754Z",
-            "modified_on": "2022-04-03T10:03:28.243754Z"
+            "created_on": "2022-05-01T11:21:24.855512Z",
+            "modified_on": "2022-05-01T11:21:24.855512Z"
         },
         {
-            "id": "374e1f6f3146c25e1628acc03d645076",
+            "id": "dd12cb1c11aa6d6d960ae36420c8c7bb",
             "zone_id": "b8991a88e1b412fa8a94e7e2808b0cfa",
             "zone_name": "cesarb.dev",
             "name": "*.cesarb.dev",
@@ -190,11 +210,11 @@ const dnsRecordsCOM = {
                 "managed_by_argo_tunnel": false,
                 "source": "primary"
             },
-            "created_on": "2022-04-03T10:03:25.952091Z",
-            "modified_on": "2022-04-03T10:03:25.952091Z"
+            "created_on": "2022-05-01T11:21:21.599875Z",
+            "modified_on": "2022-05-01T11:21:21.599875Z"
         },
         {
-            "id": "c44387b29508f37ddcc1a6fe34fae2d0",
+            "id": "493a7bb13855ecb754ba03d1e7fef6c8",
             "zone_id": "b8991a88e1b412fa8a94e7e2808b0cfa",
             "zone_name": "cesarb.dev",
             "name": "cesarb.dev",
@@ -211,11 +231,11 @@ const dnsRecordsCOM = {
                 "managed_by_argo_tunnel": false,
                 "source": "primary"
             },
-            "created_on": "2022-04-03T10:03:31.137361Z",
-            "modified_on": "2022-04-03T10:03:31.137361Z"
+            "created_on": "2022-05-01T11:21:23.861368Z",
+            "modified_on": "2022-05-01T11:21:23.861368Z"
         },
         {
-            "id": "29479b2ff96e825ea972b144ceda216c",
+            "id": "e76f1fbf6f574c9636a33175f013b30f",
             "zone_id": "b8991a88e1b412fa8a94e7e2808b0cfa",
             "zone_name": "cesarb.dev",
             "name": "cesarb.dev",
@@ -232,11 +252,11 @@ const dnsRecordsCOM = {
                 "managed_by_argo_tunnel": false,
                 "source": "primary"
             },
-            "created_on": "2022-04-03T10:03:27.445487Z",
-            "modified_on": "2022-04-03T10:03:27.445487Z"
+            "created_on": "2022-05-01T11:21:16.408355Z",
+            "modified_on": "2022-05-01T11:21:16.408355Z"
         },
         {
-            "id": "42e0b3be202cf14634299ecca3723aec",
+            "id": "b4ca1c2af778b9908fbde9d3a76e883a",
             "zone_id": "b8991a88e1b412fa8a94e7e2808b0cfa",
             "zone_name": "cesarb.dev",
             "name": "cesarb.dev",
@@ -252,8 +272,8 @@ const dnsRecordsCOM = {
                 "managed_by_argo_tunnel": false,
                 "source": "primary"
             },
-            "created_on": "2022-04-03T10:03:26.723175Z",
-            "modified_on": "2022-04-03T10:03:26.723175Z"
+            "created_on": "2022-05-01T11:21:17.11509Z",
+            "modified_on": "2022-05-01T11:21:17.11509Z"
         }
     ],
     "success": true,
@@ -262,8 +282,8 @@ const dnsRecordsCOM = {
     "result_info": {
         "page": 1,
         "per_page": 100,
-        "count": 12,
-        "total_count": 12,
+        "count": 13,
+        "total_count": 13,
         "total_pages": 1
     }
 }
@@ -273,7 +293,7 @@ const createFile = async (dnsRecords, zoneName) => {
     const commands = []
     const template =
         'resource \"cloudflare_record\" \"RECORD_LOCAL_NAME\" {' + os.EOL +
-        '  zone_id    = local.zone_id.RECORD_ZONE_ID ' + os.EOL +
+        '  zone_id    = local.cloudflare_zone_id ' + os.EOL +
         '  name   = \"RECORD_NAME\"' + os.EOL +
         '  type    = \"RECORD_TYPE\"' + os.EOL +
         '  value = \"RECORD_VALUE\"' + os.EOL +

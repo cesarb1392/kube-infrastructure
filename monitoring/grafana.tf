@@ -1,12 +1,4 @@
 
-resource "helm_release" "grafana" {
-  chart      = "grafana"
-  name       = "grafana"
-  repository = "https://grafana.github.io/helm-charts"
-  namespace  = var.namespace
-
-  values = [yamlencode(local.grafana_values)]
-}
 #
 #resource "kubernetes_manifest" "ingress_route" {
 #  manifest = {

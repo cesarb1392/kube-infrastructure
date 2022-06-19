@@ -1,5 +1,6 @@
 locals {
   prometheus_values = {
+    #    https://github.com/prometheus-community/helm-charts/blob/main/charts/prometheus/values.yaml
     "alertmanager"     = { "enabled" = false }
     "kubeStateMetrics" = { "enabled" = true }
     "nodeExporter"     = { "enabled" = false }
@@ -19,6 +20,7 @@ locals {
     }
   }
   grafana_values = {
+    #    https://github.com/grafana/helm-charts/blob/main/charts/grafana/values.yaml
     adminUser      = var.K3S_GRAFANA_USER
     adminPassword  = var.K3S_GRAFANA_PASSWORD
     serviceAccount = { name : "grafana" }
@@ -29,11 +31,11 @@ locals {
       finalizers : []
     }
     datasources = {
-      "datasources.yaml"= {
+      "datasources.yaml" = {
         datasources = [{
-          name= "Prometheus"
-          type= "prometheus"
-          url = "http://prometheus-server.${var.namespace}.svc.cluster.local"
+          name = "Prometheus"
+          type = "prometheus"
+          url  = "http://${var.namespace}-prometheus-server.${var.namespace}.svc.cluster.local"
         }]
       }
     }

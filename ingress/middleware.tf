@@ -12,9 +12,6 @@ resource "kubernetes_manifest" "config_basicauth" {
       }
     }
   }
-  depends_on = [
-
-  ]
 }
 
 resource "kubernetes_manifest" "cloudflare_ipwhitelist_middleware" {
@@ -27,6 +24,7 @@ resource "kubernetes_manifest" "cloudflare_ipwhitelist_middleware" {
     }
     spec = {
       ipWhiteList = {
+        #                https://www.cloudflare.com/ips-v4
         sourceRange = [
           "173.245.48.0/20"
           , "103.21.244.0/22"
@@ -62,6 +60,29 @@ resource "kubernetes_manifest" "rate_limit" {
         period : "1m"
         average : 500
         burst : 300
+      }
+    }
+  }
+}
+
+resource "kubernetes_manifest" "default_headers" {
+  manifest = {
+    "apiVersion" = "traefik.containo.us/v1alpha1"
+    kind         = "Middleware"
+    metadata = {
+      name      = "default-headers"
+      namespace = var.namespace
+    }
+    spec = {
+      headers = {
+        sslRedirect : true
+        browserXssFilter : true
+        contentTypeNosniff : true
+        forceSTSHeader : true
+        stsIncludeSubdomains : true
+        stsPreload : true
+        stsSeconds : 15552000
+        customFrameOptionsValue : "SAMEORIGIN"
       }
     }
   }

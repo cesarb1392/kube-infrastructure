@@ -33,9 +33,7 @@ resource "kubernetes_manifest" "ingress_route" {
       ]
     }
   }
-  depends_on = [
 
-  ]
 }
 
 resource "kubernetes_service" "filemanager_lb_service" {
