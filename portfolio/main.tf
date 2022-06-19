@@ -13,16 +13,22 @@ resource "kubernetes_manifest" "ingress_route" {
         {
           match = "Host(`cesarb.dev`)"
           kind  = "Rule"
-          #          middlewares = [
-          #            {
-          #              name : "cloudflare-ip-whitelist"
-          #              namespace : var.namespace
-          #            },
-          #            {
-          #              name : "rate-limit"
-          #              namespace : var.namespace
-          #            }
-          #          ]
+          middlewares = [
+            {
+              name : kubernetes_manifest.cloudflare_ipwhitelist_middleware.manifest.metadata.name
+              namespace : var.namespace
+            },
+            {
+              name : kubernetes_manifest.rate_limit.manifest.metadata.name
+              namespace : var.namespace
+
+            },
+            {
+              name : kubernetes_manifest.simultaneous_connections.manifest.metadata.name
+              namespace : var.namespace
+
+            },
+          ]
           services = [
             {
               name = "portfolio-ingress-lb-service"

@@ -19,9 +19,9 @@ locals {
       }
     }
     "persistentVolume" = {
-      enabled = true
-      size = "1Gi"
-      existingClaim  = kubernetes_persistent_volume_claim_v1.prometheus_persistent_volume_claim.metadata[0].name
+      enabled       = true
+      size          = "1Gi"
+      existingClaim = kubernetes_persistent_volume_claim_v1.prometheus_persistent_volume_claim.metadata[0].name
     }
   }
   grafana_config = {
@@ -46,7 +46,7 @@ locals {
     }
   }
   netdata_config = {
-#    https://github.com/netdata/helmchart/blob/master/charts/netdata/values.yaml
+    #    https://github.com/netdata/helmchart/blob/master/charts/netdata/values.yaml
     database = {
       storageclass = "nfs"
     }

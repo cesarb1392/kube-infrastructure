@@ -19,7 +19,7 @@ resource "kubernetes_persistent_volume_claim_v1" "grafana_persistent_volume_clai
 
 resource "kubernetes_persistent_volume_claim_v1" "prometheus_persistent_volume_claim" {
   metadata {
-    name      = "${var.namespace}-prometheus"
+    name = "${var.namespace}-prometheus"
 
     namespace = var.namespace
     labels = {

@@ -33,43 +33,43 @@ resource "kubernetes_secret" "secret_dashboard" {
 
 }
 
-#resource "kubernetes_manifest" "ingress_route" {
-#  manifest = {
-#    apiVersion = "traefik.containo.us/v1alpha1"
-#    kind       = "IngressRoute"
-#    metadata = {
-#      name      = "traefik-dashboard"
-#      namespace = var.namespace
-#    }
-#    spec = {
-#      entryPoints = ["websecure"]
-#      routes = [
-#        {
-#          #          match = "Host(`traefik.cesarb.dev`)"
-#          match = "Host(`traefik.192.168.2.20.nip.io`)"
-#          kind  = "Rule"
-#          middlewares = [
-#            {
-#              name      = kubernetes_manifest.rate_limit.manifest.metadata.name
-#              namespace = var.namespace
-#            },
-##            {
-##              name      = "traefik-dashboard-basicauth"
-##              namespace = var.namespace
-##            },
-#            #            {
-#            #              name = "cloudflare-ip-whitelist"
-#            #              namespace = var.namespace
-#            #            },
-#          ]
-#          services = [
-#            {
-#              name = "api@internal"
-#              kind = "TraefikService"
-#            }
-#          ]
-#        }
-#      ]
-#    }
-#  }
-#}
+resource "kubernetes_manifest" "ingress_route" {
+  manifest = {
+    apiVersion = "traefik.containo.us/v1alpha1"
+    kind       = "IngressRoute"
+    metadata = {
+      name      = "traefik-dashboard"
+      namespace = var.namespace
+    }
+    spec = {
+      entryPoints = ["websecure"]
+      routes = [
+        {
+          #          match = "Host(`traefik.cesarb.dev`)"
+          match = "Host(`traefik.192.168.2.20.nip.io`)"
+          kind  = "Rule"
+          middlewares = [
+            {
+              name      = kubernetes_manifest.rate_limit.manifest.metadata.name
+              namespace = var.namespace
+            },
+            #            {
+            #              name      = kubernetes_manifest.config_basicauth.manifest.metadata.name
+            #              namespace = var.namespace
+            #            },
+            #            {
+            #              name = kubernetes_manifest.cloudflare_ipwhitelist_middleware.manifest.metadata.name
+            #              namespace = var.namespace
+            #            },
+          ]
+          services = [
+            {
+              name = "api@internal"
+              kind = "TraefikService"
+            }
+          ]
+        }
+      ]
+    }
+  }
+}

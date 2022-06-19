@@ -2,26 +2,31 @@ locals {
   traefik_config = {
     #    https://github.com/traefik/traefik-helm-chart/blob/master/traefik/values.yaml
     additionalArguments = [
-      "--providers.file.filename=/config/traefik-config.yaml",
-      #  "--ping",
-      #  "--ping.entrypoint=web",
-      "--entrypoints.websecure.http.tls.certresolver=cloudflare",
-      "--entrypoints.websecure.http.tls.domains[0].main=${var.K3S_CF_DOMAIN}",
-      "--entrypoints.websecure.http.tls.domains[0].sans=*.${var.K3S_CF_DOMAIN}",
-      "--certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare",
-      #  "--certificatesresolvers.dns-cloudflare.acme.dnschallenge=true
-      "--certificatesresolvers.cloudflare.acme.email=${var.K3S_CF_EMAIL}",
-      "--certificatesresolvers.cloudflare.acme.dnschallenge.resolvers=1.1.1.1",
-      "--certificatesresolvers.cloudflare.acme.storage=/certs/acme.json",
-      "--log.level=INFO",
+      "--log.level=DEBUG",
       "--metrics.prometheus",
-      #  "--providers.kubernetesIngress.ingressClass=traefik-cert-manager",
       "--accesslog=true",
       "--accesslog.format=json",
       "--accesslog.filepath=/data/access.log",
-      #  "--tracing.jaeger=true",
-      #  "--tracing.jaeger.samplingServerURL=http://jaeger-agent.default.svc:5778/sampling",
-      #  "--tracing.jaeger.localAgentHostPort=jaeger-agent.default.svc:6831",
+      "--api.dashboard=true",
+
+      #      "--providers.file.filename=/config/traefik-config.yaml",
+      #  "--ping",
+      #  "--ping.entrypoint=web",
+
+      "--entrypoints.websecure.address=:8443",
+      "--entrypoints.websecure.http.tls=true",
+      "--entrypoints.websecure.http.tls.certresolver=cloudflare",
+      "--entrypoints.websecure.http.tls.domains[0].main=${var.K3S_CF_DOMAIN}",
+      "--entrypoints.websecure.http.tls.domains[0].sans=*.${var.K3S_CF_DOMAIN}",
+      "--certificatesresolvers.cloudflare.acme.email=${var.K3S_CF_EMAIL}",
+      "--certificatesresolvers.cloudflare.acme.dnschallenge.provider=cloudflare",
+      "--certificatesresolvers.cloudflare.acme.dnschallenge.resolvers=1.1.1.1",
+      "--certificatesresolvers.cloudflare.acme.storage=/certs/acme.json",
+      # Set up an insecure listener that redirects all traffic to TLS
+      "--entrypoints.web.address=:8000",
+      "--entrypoints.web.http.redirections.entrypoint.to=websecure",
+      "--entrypoints.web.http.redirections.entrypoint.scheme=https",
+      "--entrypoints.web.http.redirections.entrypoint.permanent=true",
     ]
     ports = {
       web = {
@@ -54,18 +59,18 @@ locals {
       }
     ]
     persistence = {
-      enabled = true
-      path    = "/certs"
-      size    = "128Mi"
+      enabled       = true
+      path          = "/certs"
+      size          = "128Mi"
       existingClaim = kubernetes_persistent_volume_claim_v1.persistent_volume_claim.metadata[0].name
     }
-    volumes = [
-      {
-        mountPath = "/config"
-        name      = "traefik-config"
-        type      = "configMap"
-      }
-    ]
+    #    volumes = [
+    #      {
+    #        mountPath = "/config"
+    #        name      = "traefik-config"
+    #        type      = "configMap"
+    #      }
+    #    ]
     logs = {
       general = {
         level = "INFO"

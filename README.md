@@ -57,6 +57,7 @@ TF_VAR_K3S_CF_DOMAIN=""
 | <a name="requirement_cloudflare"></a> [cloudflare](#requirement\_cloudflare) | >= 3.7 |
 | <a name="requirement_helm"></a> [helm](#requirement\_helm) | 2.5.0 |
 | <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | 2.8.0 |
+| <a name="requirement_pihole"></a> [pihole](#requirement\_pihole) | >= 0.0.12 |
 
 ## Providers
 
