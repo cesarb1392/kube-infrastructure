@@ -25,7 +25,7 @@
 
 resource "kubernetes_persistent_volume_claim_v1" "persistent_volume_claim" {
   metadata {
-    name      = join("", [var.namespace, "-volume-claim"])
+    name      = var.namespace
     namespace = var.namespace
     labels = {
       namespace = var.namespace

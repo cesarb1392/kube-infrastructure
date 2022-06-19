@@ -2,7 +2,7 @@ locals {
   traefik_config = {
     #    https://github.com/traefik/traefik-helm-chart/blob/master/traefik/values.yaml
     additionalArguments = [
-      "--providers.file.filename=/data/traefik-config.yaml",
+      "--providers.file.filename=/config/traefik-config.yaml",
       #  "--ping",
       #  "--ping.entrypoint=web",
       "--entrypoints.websecure.http.tls.certresolver=cloudflare",
@@ -57,11 +57,11 @@ locals {
       enabled = true
       path    = "/certs"
       size    = "128Mi"
-      #  existingClaim: "ingress-traefik-volume-claim"
+      existingClaim = kubernetes_persistent_volume_claim_v1.persistent_volume_claim.metadata[0].name
     }
     volumes = [
       {
-        mountPath = "/data"
+        mountPath = "/config"
         name      = "traefik-config"
         type      = "configMap"
       }

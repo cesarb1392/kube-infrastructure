@@ -14,6 +14,10 @@ terraform {
       source  = "cloudflare/cloudflare"
       version = ">= 3.7"
     }
+    pihole = {
+      source = "ryanwholey/pihole"
+      version = ">= 0.0.12"
+    }
   }
 }
 

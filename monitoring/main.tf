@@ -5,7 +5,7 @@ resource "helm_release" "grafana" {
   namespace  = var.namespace
   version    = "6.30.2"
 
-  values = [yamlencode(local.grafana_values)]
+  values = [yamlencode(local.grafana_config)]
 }
 
 resource "helm_release" "prometheus" {
@@ -15,10 +15,8 @@ resource "helm_release" "prometheus" {
   repository = "https://prometheus-community.github.io/helm-charts"
   version    = "15.10.1"
 
-  values = [yamlencode(local.prometheus_values)]
+  values = [yamlencode(local.prometheus_config)]
 }
-
-
 
 resource "helm_release" "netdata" {
   chart      = "netdata"
@@ -26,5 +24,6 @@ resource "helm_release" "netdata" {
   repository = "https://netdata.github.io/helmchart"
   namespace  = var.namespace
 
+  values = [yamlencode(local.netdata_config)]
 }
 
