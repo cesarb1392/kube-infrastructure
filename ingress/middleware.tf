@@ -12,6 +12,7 @@ resource "kubernetes_manifest" "config_basicauth" {
       }
     }
   }
+  depends_on = [helm_release.traefik]
 }
 
 resource "kubernetes_manifest" "cloudflare_ipwhitelist_middleware" {
@@ -45,6 +46,8 @@ resource "kubernetes_manifest" "cloudflare_ipwhitelist_middleware" {
       }
     }
   }
+
+  depends_on = [helm_release.traefik]
 }
 
 resource "kubernetes_manifest" "rate_limit" {
@@ -63,6 +66,8 @@ resource "kubernetes_manifest" "rate_limit" {
       }
     }
   }
+  depends_on = [helm_release.traefik]
+
 }
 
 resource "kubernetes_manifest" "default_headers" {
@@ -86,4 +91,6 @@ resource "kubernetes_manifest" "default_headers" {
       }
     }
   }
+  depends_on = [helm_release.traefik]
+
 }

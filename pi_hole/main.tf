@@ -28,7 +28,7 @@ resource "kubernetes_deployment" "pi_hole" {
           }
           env {
             name  = "WEBPASSWORD"
-            value = var.K3S_PIHOLE_PASSWORD
+            value = var.PIHOLE_PASSWORD
           }
           port {
             container_port = 53

@@ -19,15 +19,14 @@ locals {
       }
     }
     "persistentVolume" = {
-      enabled       = true
       size          = "1Gi"
       existingClaim = kubernetes_persistent_volume_claim_v1.prometheus_persistent_volume_claim.metadata[0].name
     }
   }
   grafana_config = {
     #    https://github.com/grafana/helm-charts/blob/main/charts/grafana/values.yaml
-    adminUser      = var.K3S_GRAFANA_USER
-    adminPassword  = var.K3S_GRAFANA_PASSWORD
+    adminUser      = var.GRAFANA_USER
+    adminPassword  = var.GRAFANA_PASSWORD
     serviceAccount = { name : "grafana" }
     persistence = {
       enabled : true

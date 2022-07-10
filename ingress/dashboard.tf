@@ -4,8 +4,8 @@ resource "kubernetes_secret" "cert_api_keys" {
     namespace = var.namespace
   }
   data = {
-    email  = var.K3S_CF_EMAIL
-    apiKey = var.K3S_CF_API_KEY
+    email  = var.CF_EMAIL
+    apiKey = var.CF_API_TOKEN
   }
 
 }
@@ -27,10 +27,9 @@ resource "kubernetes_secret" "secret_dashboard" {
   }
   data = {
     #    https=//httpd.apache.org/docs/current/misc/password_encryptions.html
-    #    users = var.K3S_TRAEFIK_DASHBOARD
+    #    users = var.TRAEFIK_DASHBOARD
     users = "quesito=$apr1$jExF1p/h$PRAyZVssDxLnETFnTLa7W0"
   }
-
 }
 
 resource "kubernetes_manifest" "ingress_route" {
@@ -46,17 +45,17 @@ resource "kubernetes_manifest" "ingress_route" {
       routes = [
         {
           #          match = "Host(`traefik.cesarb.dev`)"
-          match = "Host(`traefik.192.168.2.20.nip.io`)"
+          match = "Host(`traefik.192.168.2.12.nip.io`)"
           kind  = "Rule"
           middlewares = [
             {
               name      = kubernetes_manifest.rate_limit.manifest.metadata.name
               namespace = var.namespace
             },
-            #            {
-            #              name      = kubernetes_manifest.config_basicauth.manifest.metadata.name
-            #              namespace = var.namespace
-            #            },
+            {
+              name      = kubernetes_manifest.config_basicauth.manifest.metadata.name
+              namespace = var.namespace
+            },
             #            {
             #              name = kubernetes_manifest.cloudflare_ipwhitelist_middleware.manifest.metadata.name
             #              namespace = var.namespace

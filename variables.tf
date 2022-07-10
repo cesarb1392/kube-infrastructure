@@ -4,62 +4,90 @@ variable "k3s_config" {
   default     = "~/.kube/config_k3s"
 }
 
-variable "K3S_TRAEFIK_DASHBOARD" {
+variable "TRAEFIK_DASHBOARD" {
   description = ""
   type        = string
   default     = ""
 }
 
-variable "K3S_CF_DOMAIN" {
+variable "CF_DOMAIN" {
   description = ""
   type        = string
   default     = ""
 }
 
-variable "K3S_CF_ACCOUNT_ID" {
+variable "CF_EMAIL" {
   description = ""
   type        = string
 }
-variable "K3S_CF_EMAIL" {
+variable "CF_API_TOKEN" {
   description = ""
   type        = string
 }
-variable "K3S_CF_API_KEY" {
-  description = ""
-  type        = string
-}
-variable "K3S_CF_ZONE_ID" {
-  description = ""
-  type        = string
-}
-variable "K3S_GRAFANA_USER" {
+
+variable "GRAFANA_USER" {
   description = "The username to connect to Grafana UI."
   type        = string
   default     = ""
 }
 
-variable "K3S_GRAFANA_PASSWORD" {
+variable "GRAFANA_PASSWORD" {
   description = "The password to connect to Grafana UI."
   type        = string
   default     = ""
 }
 
-variable "K3S_OPENVPN_USERNAME" {
+variable "OPENVPN_USERNAME" {
   description = "The username to connect to Grafana UI."
   type        = string
   default     = ""
 
 }
 
-variable "K3S_OPENVPN_PASSWORD" {
+variable "OPENVPN_PASSWORD" {
   description = "The username to connect to Grafana UI."
   type        = string
   default     = ""
 }
 
-variable "K3S_PIHOLE_PASSWORD" {
+variable "PIHOLE_PASSWORD" {
   description = ""
   type        = string
   default     = ""
 }
 
+
+variable "ACCESS_TOKEN" {
+  type = string
+}
+variable "REPO_URL" {
+  type = string
+}
+variable "RUNNER_WORKDIR" {
+  type = string
+}
+variable "RUNNER_NAME" {
+  type = string
+}
+
+variable "SCRAPE_URL_BUY" {
+  type = string
+}
+variable "SCRAPE_URL_RENT" {
+  type = string
+}
+variable "EMAIL_FROM" {
+  type = string
+}
+variable "EMAIL_TO" {
+  type = string
+}
+variable "REFRESH_TOKEN" {
+  type = string
+}
+variable "CLIENT_SECRET" {
+  type = string
+}
+variable "CLIENT_ID" {
+  type = string
+}

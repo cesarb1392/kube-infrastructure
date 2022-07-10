@@ -18,7 +18,7 @@
 #  template = file("${path.module}/values.yaml")
 #  vars = {
 #    PVC      = kubernetes_persistent_volume_claim_v1.persistent_volume_claim.metadata[0].name
-#    PASSWORD = var.K3S_PIHOLE_PASSWORD # changes to existingSecret
+#    PASSWORD = var.PIHOLE_PASSWORD # changes to existingSecret
 #  }
 #}
 ##
@@ -31,7 +31,7 @@
 ##    }
 ##  }
 ##  data = {
-##    password = var.K3S_PIHOLE_PASSWORD
+##    password = var.PIHOLE_PASSWORD
 ##  }
 ##}
 #
@@ -129,6 +129,6 @@
 #    }
 #  }
 #  data = {
-#    password = var.K3S_PIHOLE_PASSWORD
+#    password = var.PIHOLE_PASSWORD
 #  }
 #}

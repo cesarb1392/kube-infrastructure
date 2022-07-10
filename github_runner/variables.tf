@@ -3,17 +3,15 @@ variable "namespace" {
   type        = string
 }
 
-variable "CF_EMAIL" {
+variable "ACCESS_TOKEN" {
   type = string
 }
-
-variable "CF_API_TOKEN" {
+variable "REPO_URL" {
   type = string
 }
-variable "CF_DOMAIN" {
-  type    = string
-  default = "cesarb.dev"
+variable "RUNNER_WORKDIR" {
+  type = string
 }
-variable "TRAEFIK_DASHBOARD" {
+variable "RUNNER_NAME" {
   type = string
 }

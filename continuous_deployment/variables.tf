@@ -3,8 +3,3 @@ variable "namespace" {
   type        = string
 }
 
-variable "PIHOLE_PASSWORD" {
-  description = ""
-  type        = string
-}
-

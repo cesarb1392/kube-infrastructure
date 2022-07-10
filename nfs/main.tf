@@ -18,4 +18,8 @@ resource "helm_release" "helm_nfs_provisioner" {
     name  = "storageClass.name"
     value = "nfs"
   }
+  set {
+    name  = "storageClass.onDelete"
+    value = "delete"
+  }
 }

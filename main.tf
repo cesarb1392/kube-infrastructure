@@ -5,7 +5,6 @@ module "loadbalancer" {
   namespace     = local.applications.loadbalancer.name
   address_range = local.applications.loadbalancer.address_range
 
-  depends_on = [kubernetes_namespace.this]
 }
 
 module "ingress" {
@@ -13,13 +12,12 @@ module "ingress" {
 
   source                = "./ingress"
   namespace             = local.applications.ingress.name
-  K3S_CF_API_KEY        = local.applications.ingress.K3S_CF_API_KEY
-  K3S_CF_DOMAIN         = local.applications.ingress.K3S_CF_DOMAIN
-  K3S_CF_EMAIL          = local.applications.ingress.K3S_CF_EMAIL
-  K3S_TRAEFIK_DASHBOARD = local.applications.ingress.K3S_TRAEFIK_DASHBOARD
+  CF_API_TOKEN      = local.applications.ingress.CF_API_TOKEN
+  CF_DOMAIN         = local.applications.ingress.CF_DOMAIN
+  CF_EMAIL          = local.applications.ingress.CF_EMAIL
+  TRAEFIK_DASHBOARD = local.applications.ingress.TRAEFIK_DASHBOARD
 
-  depends_on = [kubernetes_namespace.this]
-
+  depends_on = [module.nfs]
 }
 
 module "nfs" {
@@ -39,7 +37,7 @@ module "nginx" {
   source    = "./nginx"
   namespace = local.applications.nginx.name
 
-  depends_on = [kubernetes_namespace.this]
+  depends_on = [module.ingress, module.loadbalancer]
 }
 
 module "monitoring" {
@@ -47,10 +45,10 @@ module "monitoring" {
 
   source               = "./monitoring"
   namespace            = local.applications.monitoring.name
-  K3S_GRAFANA_USER     = local.applications.monitoring.K3S_GRAFANA_USER
-  K3S_GRAFANA_PASSWORD = local.applications.monitoring.K3S_GRAFANA_PASSWORD
+  GRAFANA_USER     = local.applications.monitoring.GRAFANA_USER
+  GRAFANA_PASSWORD = local.applications.monitoring.GRAFANA_PASSWORD
 
-  depends_on = [kubernetes_namespace.this]
+  depends_on = [module.nfs]
 }
 
 module "portfolio" {
@@ -59,7 +57,7 @@ module "portfolio" {
   source    = "./portfolio"
   namespace = local.applications.portfolio.name
 
-  depends_on = [kubernetes_namespace.this]
+  depends_on = [module.ingress, module.loadbalancer]
 }
 
 module "torrente" {
@@ -67,13 +65,13 @@ module "torrente" {
 
   source               = "./torrente"
   namespace            = local.applications.torrente.name
-  K3S_OPENVPN_PASSWORD = local.applications.torrente.K3S_OPENVPN_PASSWORD
-  K3S_OPENVPN_USERNAME = local.applications.torrente.K3S_OPENVPN_USERNAME
+  OPENVPN_PASSWORD = local.applications.torrente.OPENVPN_PASSWORD
+  OPENVPN_USERNAME = local.applications.torrente.OPENVPN_USERNAME
   pgid                 = local.applications.torrente.pgid
   puid                 = local.applications.torrente.puid
   timezone             = local.applications.torrente.timezone
 
-  depends_on = [kubernetes_namespace.this]
+  depends_on = [module.nfs, module.ingress, module.loadbalancer]
 }
 
 module "pi_hole" {
@@ -81,9 +79,9 @@ module "pi_hole" {
 
   source              = "./pi_hole"
   namespace           = local.applications.pihole.name
-  K3S_PIHOLE_PASSWORD = local.applications.pihole.K3S_PIHOLE_PASSWORD
+  PIHOLE_PASSWORD = local.applications.pihole.PIHOLE_PASSWORD
 
-  depends_on = [kubernetes_namespace.this]
+  depends_on = [module.nfs, module.ingress, module.loadbalancer]
 }
 
 module "wireguard" {
@@ -92,7 +90,7 @@ module "wireguard" {
   source    = "./wire_guard"
   namespace = local.applications.wireguard.name
 
-  depends_on = [kubernetes_namespace.this]
+  depends_on = [module.nfs, module.ingress, module.loadbalancer]
 }
 
 module "file_manager" {
@@ -101,7 +99,7 @@ module "file_manager" {
   source    = "./file_manager"
   namespace = local.applications.file_manager.name
 
-  depends_on = [kubernetes_namespace.this]
+  depends_on = [module.nfs]
 }
 
 module "dns" {
@@ -119,5 +117,45 @@ module "container_registry" {
   source    = "./container_registry"
   namespace = local.applications.container_registry.name
 
-  depends_on = [kubernetes_namespace.this]
+  depends_on = [module.nfs, module.ingress, module.loadbalancer]
+}
+
+module "continuous_deployment" {
+  count = local.applications.continuous_deployment.enabled ? 1 : 0
+
+  source    = "./continuous_deployment"
+  namespace = local.applications.continuous_deployment.name
+
+  depends_on = [module.nfs, module.ingress, module.loadbalancer]
+}
+
+module "house_searching_notifier" {
+  count = local.applications.house_searching_notifier.enabled ? 1 : 0
+
+  source    = "./house_searching_notifier"
+  namespace = local.applications.house_searching_notifier.name
+
+  CLIENT_ID       = var.CLIENT_ID
+  CLIENT_SECRET   = var.CLIENT_SECRET
+  EMAIL_FROM      = var.EMAIL_FROM
+  EMAIL_TO        = var.EMAIL_TO
+  REFRESH_TOKEN   = var.REFRESH_TOKEN
+  SCRAPE_URL_BUY  = var.SCRAPE_URL_BUY
+  SCRAPE_URL_RENT = var.SCRAPE_URL_RENT
+
+  depends_on = [module.ingress, module.loadbalancer]
+}
+
+module "github_runner" {
+  count = local.applications.github_runner.enabled ? 1 : 0
+
+  source    = "./github_runner"
+  namespace = local.applications.github_runner.name
+
+  ACCESS_TOKEN   = var.ACCESS_TOKEN
+  REPO_URL       = var.REPO_URL
+  RUNNER_WORKDIR = var.RUNNER_WORKDIR
+  RUNNER_NAME    = var.RUNNER_NAME
+
+  depends_on = [module.nfs]
 }

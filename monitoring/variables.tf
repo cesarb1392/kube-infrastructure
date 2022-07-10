@@ -3,12 +3,12 @@ variable "namespace" {
   type        = string
 }
 
-variable "K3S_GRAFANA_USER" {
+variable "GRAFANA_USER" {
   description = "The username to connect to Grafana UI."
   type        = string
 }
 
-variable "K3S_GRAFANA_PASSWORD" {
+variable "GRAFANA_PASSWORD" {
   description = "The password to connect to Grafana UI."
   type        = string
 }

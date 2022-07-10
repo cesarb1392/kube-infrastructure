@@ -3,8 +3,8 @@
 ## todo
 
 - set helm charts versions!!! 
-- install cert manager
-- move secrets and policies from type resource to data
+- ~~install cert manager~~ Cloudflare!
+- When installing from scratch Traefik CRD are not defined, therefore TF operations failed 
 - improve variables
 - move to input vars traefik.ymal config
 - improve tags / labels
@@ -24,14 +24,14 @@
 - Main node
 
 ```shell
-export K3S_KUBECONFIG_MODE="644" && export INSTALL_K3S_EXEC=" --no-deploy servicelb --no-deploy traefik" && curl -sfL https://get.k3s.io | sh -
+export KUBECONFIG_MODE="644" && export INSTALL_EXEC=" --no-deploy servicelb --no-deploy traefik" && curl -sfL https://get.k3s.io | sh -
 sudo cat /var/lib/rancher/k3s/server/node-token
 ```
 
 - Assistant node
 
 ```shell
-export K3S_KUBECONFIG_MODE="644" && export K3S_URL="https://192.168.x.x:6443" && export K3S_TOKEN="" && curl -sfL https://get.k3s.io | sh -
+export KUBECONFIG_MODE="644" && export URL="https://192.168.x.x:6443" && export TOKEN="" && curl -sfL https://get.k3s.io | sh -
 ```
 
 - Grab the config file from the main node
@@ -40,13 +40,11 @@ export K3S_KUBECONFIG_MODE="644" && export K3S_URL="https://192.168.x.x:6443" &&
 kubectl label nodes <name> kubernetes.io/role=worker
 ```
 
-```dotenv
-TF_VAR_K3S_CF_EMAIL=""
-TF_VAR_K3S_CF_API_KEY=""
-TF_VAR_K3S_GRAFANA_USER=""
-TF_VAR_K3S_GRAFANA_PASSWORD=""
-TF_VAR_K3S_CF_DOMAIN=""
-```
+### Env vars
+- `terraform.tfvars`
+
+### How to update the docs?
+>  `for d in ./*/ ; do (cd "$d" && tcl); done`
 
 <!-- BEGIN_TF_DOCS -->
  ## Requirements
@@ -70,8 +68,11 @@ TF_VAR_K3S_CF_DOMAIN=""
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_container_registry"></a> [container\_registry](#module\_container\_registry) | ./container_registry | n/a |
+| <a name="module_continuous_deployment"></a> [continuous\_deployment](#module\_continuous\_deployment) | ./continuous_deployment | n/a |
 | <a name="module_dns"></a> [dns](#module\_dns) | ./dns | n/a |
 | <a name="module_file_manager"></a> [file\_manager](#module\_file\_manager) | ./file_manager | n/a |
+| <a name="module_github_runner"></a> [github\_runner](#module\_github\_runner) | ./github_runner | n/a |
+| <a name="module_house_searching_notifier"></a> [house\_searching\_notifier](#module\_house\_searching\_notifier) | ./house_searching_notifier | n/a |
 | <a name="module_ingress"></a> [ingress](#module\_ingress) | ./ingress | n/a |
 | <a name="module_loadbalancer"></a> [loadbalancer](#module\_loadbalancer) | ./loadbalancer | n/a |
 | <a name="module_monitoring"></a> [monitoring](#module\_monitoring) | ./monitoring | n/a |
@@ -92,17 +93,26 @@ TF_VAR_K3S_CF_DOMAIN=""
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
-| <a name="input_K3S_CF_ACCOUNT_ID"></a> [K3S\_CF\_ACCOUNT\_ID](#input\_K3S\_CF\_ACCOUNT\_ID) | n/a | `string` | n/a | yes |
-| <a name="input_K3S_CF_API_KEY"></a> [K3S\_CF\_API\_KEY](#input\_K3S\_CF\_API\_KEY) | n/a | `string` | n/a | yes |
-| <a name="input_K3S_CF_DOMAIN"></a> [K3S\_CF\_DOMAIN](#input\_K3S\_CF\_DOMAIN) | n/a | `string` | `""` | no |
-| <a name="input_K3S_CF_EMAIL"></a> [K3S\_CF\_EMAIL](#input\_K3S\_CF\_EMAIL) | n/a | `string` | n/a | yes |
-| <a name="input_K3S_CF_ZONE_ID"></a> [K3S\_CF\_ZONE\_ID](#input\_K3S\_CF\_ZONE\_ID) | n/a | `string` | n/a | yes |
-| <a name="input_K3S_GRAFANA_PASSWORD"></a> [K3S\_GRAFANA\_PASSWORD](#input\_K3S\_GRAFANA\_PASSWORD) | The password to connect to Grafana UI. | `string` | `""` | no |
-| <a name="input_K3S_GRAFANA_USER"></a> [K3S\_GRAFANA\_USER](#input\_K3S\_GRAFANA\_USER) | The username to connect to Grafana UI. | `string` | `""` | no |
-| <a name="input_K3S_OPENVPN_PASSWORD"></a> [K3S\_OPENVPN\_PASSWORD](#input\_K3S\_OPENVPN\_PASSWORD) | The username to connect to Grafana UI. | `string` | `""` | no |
-| <a name="input_K3S_OPENVPN_USERNAME"></a> [K3S\_OPENVPN\_USERNAME](#input\_K3S\_OPENVPN\_USERNAME) | The username to connect to Grafana UI. | `string` | `""` | no |
-| <a name="input_K3S_PIHOLE_PASSWORD"></a> [K3S\_PIHOLE\_PASSWORD](#input\_K3S\_PIHOLE\_PASSWORD) | n/a | `string` | `""` | no |
-| <a name="input_K3S_TRAEFIK_DASHBOARD"></a> [K3S\_TRAEFIK\_DASHBOARD](#input\_K3S\_TRAEFIK\_DASHBOARD) | n/a | `string` | `""` | no |
+| <a name="input_ACCESS_TOKEN"></a> [ACCESS\_TOKEN](#input\_ACCESS\_TOKEN) | n/a | `string` | n/a | yes |
+| <a name="input_CLIENT_ID"></a> [CLIENT\_ID](#input\_CLIENT\_ID) | n/a | `string` | n/a | yes |
+| <a name="input_CLIENT_SECRET"></a> [CLIENT\_SECRET](#input\_CLIENT\_SECRET) | n/a | `string` | n/a | yes |
+| <a name="input_EMAIL_FROM"></a> [EMAIL\_FROM](#input\_EMAIL\_FROM) | n/a | `string` | n/a | yes |
+| <a name="input_EMAIL_TO"></a> [EMAIL\_TO](#input\_EMAIL\_TO) | n/a | `string` | n/a | yes |
+| <a name="input_CF_API_TOKEN"></a> [K3S\_CF\_API\_TOKEN](#input\_K3S\_CF\_API\_TOKEN) | n/a | `string` | n/a | yes |
+| <a name="input_CF_DOMAIN"></a> [K3S\_CF\_DOMAIN](#input\_K3S\_CF\_DOMAIN) | n/a | `string` | `""` | no |
+| <a name="input_CF_EMAIL"></a> [K3S\_CF\_EMAIL](#input\_K3S\_CF\_EMAIL) | n/a | `string` | n/a | yes |
+| <a name="input_GRAFANA_PASSWORD"></a> [K3S\_GRAFANA\_PASSWORD](#input\_K3S\_GRAFANA\_PASSWORD) | The password to connect to Grafana UI. | `string` | `""` | no |
+| <a name="input_GRAFANA_USER"></a> [K3S\_GRAFANA\_USER](#input\_K3S\_GRAFANA\_USER) | The username to connect to Grafana UI. | `string` | `""` | no |
+| <a name="input_OPENVPN_PASSWORD"></a> [K3S\_OPENVPN\_PASSWORD](#input\_K3S\_OPENVPN\_PASSWORD) | The username to connect to Grafana UI. | `string` | `""` | no |
+| <a name="input_OPENVPN_USERNAME"></a> [K3S\_OPENVPN\_USERNAME](#input\_K3S\_OPENVPN\_USERNAME) | The username to connect to Grafana UI. | `string` | `""` | no |
+| <a name="input_PIHOLE_PASSWORD"></a> [K3S\_PIHOLE\_PASSWORD](#input\_K3S\_PIHOLE\_PASSWORD) | n/a | `string` | `""` | no |
+| <a name="input_TRAEFIK_DASHBOARD"></a> [K3S\_TRAEFIK\_DASHBOARD](#input\_K3S\_TRAEFIK\_DASHBOARD) | n/a | `string` | `""` | no |
+| <a name="input_REFRESH_TOKEN"></a> [REFRESH\_TOKEN](#input\_REFRESH\_TOKEN) | n/a | `string` | n/a | yes |
+| <a name="input_REPO_URL"></a> [REPO\_URL](#input\_REPO\_URL) | n/a | `string` | n/a | yes |
+| <a name="input_RUNNER_NAME"></a> [RUNNER\_NAME](#input\_RUNNER\_NAME) | n/a | `string` | n/a | yes |
+| <a name="input_RUNNER_WORKDIR"></a> [RUNNER\_WORKDIR](#input\_RUNNER\_WORKDIR) | n/a | `string` | n/a | yes |
+| <a name="input_SCRAPE_URL_BUY"></a> [SCRAPE\_URL\_BUY](#input\_SCRAPE\_URL\_BUY) | n/a | `string` | n/a | yes |
+| <a name="input_SCRAPE_URL_RENT"></a> [SCRAPE\_URL\_RENT](#input\_SCRAPE\_URL\_RENT) | n/a | `string` | n/a | yes |
 | <a name="input_k3s_config"></a> [k3s\_config](#input\_k3s\_config) | The config file used to connect to Kubectl | `string` | `"~/.kube/config_k3s"` | no |
 
 ## Outputs

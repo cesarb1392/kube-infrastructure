@@ -189,8 +189,6 @@ resource "kubernetes_config_map_v1" "transmission_transmission_config_map" {
     LOCAL_NETWORK    = "192.168.2.0/24"
     OPENVPN_OPTS     = "--inactive 3600 --ping 10 --ping-exit 60"
     OPENVPN_PROVIDER = "NORDVPN"
-    #    OPENVPN_CONFIG                        = "FR Paris" # doesnt work todo: testing
-    #    NORDVPN_COUNTRY                       = "NL" # not working
     TRANSMISSION_DOWNLOAD_QUEUE_SIZE      = "6"
     TRANSMISSION_RATIO_LIMIT              = "4"
     TRANSMISSION_RATIO_LIMIT_ENABLED      = "true"
@@ -212,7 +210,7 @@ resource "kubernetes_secret_v1" "transmission_secret_keys" {
     }
   }
   data = {
-    username = var.K3S_OPENVPN_USERNAME
-    password = var.K3S_OPENVPN_PASSWORD
+    username = var.OPENVPN_USERNAME
+    password = var.OPENVPN_PASSWORD
   }
 }

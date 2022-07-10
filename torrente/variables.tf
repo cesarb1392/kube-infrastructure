@@ -3,12 +3,12 @@ variable "namespace" {
   type        = string
 }
 
-variable "K3S_OPENVPN_USERNAME" {
+variable "OPENVPN_USERNAME" {
   description = ""
   type        = string
 }
 
-variable "K3S_OPENVPN_PASSWORD" {
+variable "OPENVPN_PASSWORD" {
   description = ""
   type        = string
 }
