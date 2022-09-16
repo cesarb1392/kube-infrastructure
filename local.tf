@@ -1,9 +1,5 @@
 locals {
   applications = {
-    dns = {
-      name    = "dns"
-      enabled = true
-    }
     nfs = {
       name    = "nfs"
       enabled = true

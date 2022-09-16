@@ -3,10 +3,8 @@
 ## todo
 
 - set helm charts versions!!! 
-- ~~install cert manager~~ Cloudflare!
 - When installing from scratch Traefik CRD are not defined, therefore TF operations failed 
 - improve variables
-- move to input vars traefik.ymal config
 - improve tags / labels
 - container registry
 - pipelines (github self hosted runner)
@@ -41,7 +39,7 @@ kubectl label nodes <name> kubernetes.io/role=worker
 ```
 
 ### Env vars
-- `terraform.tfvars`
+- Create and populate the file `terraform.tfvars` on the root project dir
 
 ### How to update the docs?
 >  `for d in ./*/ ; do (cd "$d" && tcl); done`

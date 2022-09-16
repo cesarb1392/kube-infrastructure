@@ -102,15 +102,6 @@ module "file_manager" {
   depends_on = [module.nfs]
 }
 
-module "dns" {
-  count = local.applications.dns.enabled ? 1 : 0
-
-  source    = "./dns"
-  namespace = local.applications.dns.name
-
-  depends_on = [kubernetes_namespace.this]
-}
-
 module "container_registry" {
   count = local.applications.container_registry.enabled ? 1 : 0
 
