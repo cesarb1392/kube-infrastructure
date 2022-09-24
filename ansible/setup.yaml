@@ -1,0 +1,51 @@
+- hosts: all
+  become: yes
+  tasks:
+    - name: Update packages
+      apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Install packages
+      apt:
+        upgrade: dist
+
+    - name: Install packages
+      apt:
+        name:
+          - tree
+          - micro
+          - zsh
+          - ufw
+        state: latest
+        cache_valid_time: 3600
+
+    - name: Apply UFW rules
+      ansible.builtin.import_tasks: ufw.yaml
+
+- hosts: master
+  become: yes
+  tasks:
+    - community.general.ufw:
+        rule: allow
+        port: 2379:2380
+        proto: tcp
+
+- hosts: node
+  become: yes
+  tasks:
+    - community.general.ufw:
+        rule: allow
+        port: 6443
+        proto: tcp
+
+- hosts: all
+  become: yes
+  tasks:
+    - name: Enable UFW
+      community.general.ufw:
+        state: enabled
+        default: deny
+
+
+

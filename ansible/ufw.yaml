@@ -1,0 +1,48 @@
+# Allow OpenSSH. (Note that as ufw manages its own state, simply removing
+# a rule=allow task can leave those ports exposed. Either use delete=true
+# or a separate state=reset task)
+- community.general.ufw:
+    rule: allow
+    name: OpenSSH
+
+- name: Set logging
+  community.general.ufw:
+    logging: 'on'
+
+# Sometimes it is desirable to let the sender know when traffic is
+# being denied, rather than simply ignoring it. In these cases, use
+# reject instead of deny. In addition, log rejected connections:
+- community.general.ufw:
+    rule: reject
+    port: auth
+    log: true
+
+# ufw supports connection rate limiting, which is useful for protecting
+# against brute-force login attacks. ufw will deny connections if an IP
+# address has attempted to initiate 6 or more connections in the last
+# 30 seconds. See  http://www.debian-administration.org/articles/187
+# for details. Typical usage is:
+- community.general.ufw:
+    rule: limit
+    port: ssh
+    proto: tcp
+
+# K3s => https://rancher.com/docs/k3s/latest/en/installation/installation-requirements/#networking
+- name: allow K3s ports
+  community.general.ufw:
+    rule: allow
+    port: 8472
+    proto: udp
+- community.general.ufw:
+    rule: allow
+    port: 51820
+    proto: udp
+- community.general.ufw:
+    rule: allow
+    port: 51821
+    proto: udp
+- community.general.ufw:
+    rule: allow
+    port: 10250
+    proto: udp
+
