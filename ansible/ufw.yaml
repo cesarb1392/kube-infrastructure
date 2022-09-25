@@ -45,4 +45,9 @@
     rule: allow
     port: 10250
     proto: udp
+- name: enable MetaLB port
+  community.general.ufw:
+    rule: allow
+    port: 7946
+    proto: any
 
