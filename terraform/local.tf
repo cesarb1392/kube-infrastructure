@@ -3,7 +3,7 @@ locals {
     loadbalancer = {
       name          = "loadbalancer"
       address_range = "192.168.178.30-192.168.178.31"
-      enabled       = false
+      enabled       = true
     }
     ingress = {
       name         = "ingress"

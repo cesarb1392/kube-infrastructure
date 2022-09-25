@@ -1,13 +1,15 @@
 locals {
   metalb_config = {
-    config = {
-      address-pools = [
-        {
-          name : "cluster-pool"
-          protocol : "layer2"
-          addresses : [var.address_range]
-        }
-      ]
-    }
+#    https://github.com/metallb/metallb/blob/main/charts/metallb/values.yaml
+#    config = {
+#      address-pools = [
+#        {
+#          name : "default"
+#          autoassign: true
+#          protocol : "layer2"
+#          addresses : ["192.168.178.230-192.168.178.235"]
+#        }
+#      ]
+#    }
   }
 }
