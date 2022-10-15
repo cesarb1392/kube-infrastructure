@@ -1,0 +1,41 @@
+name: tf-docs-and-format
+on:
+  push:
+    path:
+      - "*.tf"
+      - "**/*.tf"
+jobs:
+  tf-docs:
+    runs-on: ubuntu-latest
+    permissions:
+      pull-requests: write
+      contents: write
+    steps:
+      - uses: actions/checkout@v3
+        with:
+          ref: ${{ github.event.pull_request.head.ref }}
+      - name: Run terraform docs
+        uses: terraform-docs/gh-actions@v1.0.0
+        with:
+          working-dir: terraform
+          output-file: README.md
+          output-method: inject
+          git-push: "true"
+
+  tf-format:
+    runs-on: ubuntu-latest
+    name: Check terraform file are formatted correctly
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+      - name: terraform fmt
+        uses: dflook/terraform-fmt@v1
+        with:
+          path: terraform
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v2
+        with:
+          commit-message: terraform fmt
+          title: Reformat terraform files
+          body: Update terraform files to canonical format using `terraform fmt`
+          branch: ${GITHUB_REF#refs/heads/} # ${{ github.event.pull_request.base.ref }}
