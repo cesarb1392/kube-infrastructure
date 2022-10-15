@@ -5,7 +5,19 @@ on:
       - "*.tf"
       - "**/*.tf"
 jobs:
+  tf-validate:
+    runs-on: ubuntu-latest
+    name: Validate terraform configuration
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: terraform validate
+        uses: dflook/terraform-validate@v1
+        with:
+          path: terraform
+
   tf-docs:
+    needs: tf-validate
     runs-on: ubuntu-latest
     permissions:
       pull-requests: write
@@ -23,6 +35,7 @@ jobs:
           git-push: "true"
 
   tf-format:
+    needs: tf-validate
     runs-on: ubuntu-latest
     name: Check terraform file are formatted correctly
     steps:
@@ -32,10 +45,20 @@ jobs:
         uses: dflook/terraform-fmt@v1
         with:
           path: terraform
-      - name: Create Pull Request
-        uses: peter-evans/create-pull-request@v2
+      - uses: stefanzweifel/git-auto-commit-action@v4
         with:
-          commit-message: terraform fmt
-          title: Reformat terraform files
-          body: Update terraform files to canonical format using `terraform fmt`
-          branch: ${GITHUB_REF#refs/heads/} # ${{ github.event.pull_request.base.ref }}
+          commit_message: Reformat terraform files
+          branch: ${GITHUB_REF#refs/heads/}
+          commit_options: '--no-verify --signoff'
+          file_pattern: 'terraform/*.tf'
+          commit_user_name: My GitHub Actions Bot # defaults to "github-actions[bot]"
+          commit_user_email: my-github-actions-bot@example.org # defaults to "github-actions[bot]@users.noreply.github.com"
+          commit_author:  <actions@github.com> # defaults to author of the commit that triggered the run
+          create_branch: false
+    #      - name: Create Pull Request
+    #        uses: peter-evans/create-pull-request@v2
+    #        with:
+    #          commit-message: terraform fmt
+    #          title: Reformat terraform files
+    #          body: Update terraform files to canonical format using `terraform fmt`
+    #          branch: ${GITHUB_REF#refs/heads/} # ${{ github.event.pull_request.base.ref }}
