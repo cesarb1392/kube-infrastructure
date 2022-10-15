@@ -59,7 +59,7 @@ kubectl label nodes <name> kubernetes.io/role=worker
 
 | Name | Version |
 |------|---------|
-| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 2.14.0 |
+| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | >= 2.8.0 |
 
 ## Modules
 
