@@ -3,6 +3,8 @@ module "loadbalancer" {
 
   source    = "./loadbalancer"
   namespace = local.applications.loadbalancer.name
+
+  depends_on = [kubernetes_namespace.this]
 }
 
 module "cert_manager" {
@@ -11,6 +13,8 @@ module "cert_manager" {
   source       = "./cert_manager"
   namespace    = local.applications.cert_manager.name
   CF_API_TOKEN = var.CF_API_TOKEN
+
+  depends_on = [kubernetes_namespace.this]
 }
 
 module "ingress" {

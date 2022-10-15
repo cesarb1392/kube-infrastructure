@@ -1,23 +1,18 @@
-resource "kubernetes_manifest" "certificate" {
-  manifest = {
-    apiVersion = "cert-manager.io/v1"
-    kind       = "Certificate"
-    metadata = {
-      name      = "certificate"
-      namespace = var.namespace
-    }
-    spec = {
-      secretName = "certificate"
-      dnsNames = [
-        "nginx.cesarb.dev"
-      ]
-      commonName = "nginx.cesarb.dev"
-      issuerRef = {
-        kind = "ClusterIssuer"
-        name = "letsencrypt-prod"
-      }
-    }
-  }
+resource "kubectl_manifest" "certificate" {
+  yaml_body = <<YAML
+apiVersion: cert-manager.io/v1
+kind: Certificate
+metadata:
+  name: "certificate"
+  namespace: "${var.namespace}"
+spec:
+ secretName: "certificate"
+ dnsNames: ["nginx.cesarb.dev"]
+ commonName: "nginx.cesarb.dev"
+ issuerRef:
+  kind: "ClusterIssuer"
+  name: "letsencrypt-prod"
+YAML
 }
 
 

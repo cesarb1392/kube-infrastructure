@@ -34,7 +34,7 @@ spec:
             - '*.cesarb.dev'
 YAML
 
-  depends_on = [helm_release.cert_manager]
+  depends_on = [helm_release.cert_manager,kubernetes_secret.api_token]
 }
 
 resource "kubernetes_secret" "api_token" {
