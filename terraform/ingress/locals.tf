@@ -1,16 +1,27 @@
 locals {
   kong_config = {
-#    https://github.com/Kong/charts/blob/main/charts/kong/values.yaml
-    "image": {
-      "repository": "kong",
-      "tag": "3.0"
+    #    https://github.com/Kong/charts/blob/main/charts/kong/values.yaml
+    "image" = {
+      "repository" = "kong",
+      "tag"        = "3.0"
     },
-    "env": {
-      "prefix": "/kong_prefix/",
-      "database": "off"
+    "env" = {
+      "prefix"   = "/kong_prefix/",
+      "database" = "off"
     },
-    "ingressController": {
-      "enabled": true
+    "ingressController" = {
+      "enabled" = true
+      "env" = {
+        "anonymous_reports" = true
+      },
+      "customEnv" = {
+        "TZ" = "Europe/Amsterdam"
+      },
+    }
+    autoscaling = {
+      enabled     = true
+      minReplicas = 1
+      maxReplicas = 5
     }
   }
 
@@ -31,12 +42,11 @@ locals {
     }
     logs = {
       general = {
-        level = "INFO"
+        level = "DEBUG"
       }
       access = {
         enabled = true
       }
     }
   }
-
 }

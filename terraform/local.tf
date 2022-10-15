@@ -1,15 +1,17 @@
 locals {
   applications = {
     loadbalancer = {
-      name          = "loadbalancer"
-      address_range = "192.168.178.30-192.168.178.31"
-      enabled       = true
+      name    = "loadbalancer"
+      enabled = true
+    }
+    cert_manager = {
+      name    = "cert-manager"
+      enabled = true
     }
     ingress = {
-      name         = "ingress"
-      enabled      = true
+      name    = "ingress"
+      enabled = true
     }
-    // portfolio crashes cause traefik CRD are not defined yet
     portfolio = {
       name    = "portfolio"
       enabled = false

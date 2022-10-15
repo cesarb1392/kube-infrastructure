@@ -1,0 +1,21 @@
+- hosts: all
+  become: yes
+  tasks:
+    - name: Update packages
+      apt:
+        update_cache: true
+        cache_valid_time: 3600
+
+    - name: Install packages
+      apt:
+        upgrade: dist
+
+    - ansible.builtin.apt:
+        clean: yes
+
+    - name: Reboot
+      ansible.builtin.reboot:
+        reboot_timeout: 30
+
+
+

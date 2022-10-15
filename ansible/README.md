@@ -9,4 +9,4 @@ K3s cluster is base on [k3s-ansible](https://github.com/k3s-io/k3s-ansible)
 - Set up dependencies
   `ansible-playbook setup.yaml`
 - Set up K3S cluster
-  `ansible-playbook k3s_cluster.yaml`
+  `ansible-playbook k3s_cluster_setup.yaml`

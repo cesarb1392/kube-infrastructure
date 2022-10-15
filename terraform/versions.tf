@@ -1,5 +1,5 @@
 terraform {
-  required_version = ">= 1.0.2"
+  required_version = ">= 1.3.0"
 
   required_providers {
     kubernetes = {
@@ -14,19 +14,27 @@ terraform {
       source  = "hashicorp/helm"
       version = ">= 2.5.0"
     }
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = ">= 3.24.0"
+    }
   }
 }
 
 provider "kubernetes" {
-  config_path = "${path.cwd}/${var.k3s_config}"
+  config_path = var.KUBECONFIG
 }
 
 provider "kubectl" {
-  config_path = "${path.cwd}/${var.k3s_config}"
+  config_path = var.KUBECONFIG
 }
 
 provider "helm" {
   kubernetes {
-    config_path = "${path.cwd}/${var.k3s_config}"
+    config_path = var.KUBECONFIG
   }
+}
+
+provider "cloudflare" {
+  api_token = var.CF_API_TOKEN
 }

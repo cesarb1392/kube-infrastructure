@@ -48,21 +48,27 @@ kubectl label nodes <name> kubernetes.io/role=worker
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.0.2 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
+| <a name="requirement_cloudflare"></a> [cloudflare](#requirement\_cloudflare) | >= 3.24.0 |
+| <a name="requirement_helm"></a> [helm](#requirement\_helm) | >= 2.5.0 |
+| <a name="requirement_kubectl"></a> [kubectl](#requirement\_kubectl) | >= 1.7.0 |
 | <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | >= 2.8.0 |
 
 ## Providers
 
 | Name | Version |
 |------|---------|
-| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | >= 2.8.0 |
+| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 2.14.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
+| <a name="module_cert_manager"></a> [cert\_manager](#module\_cert\_manager) | ./cert_manager | n/a |
 | <a name="module_ingress"></a> [ingress](#module\_ingress) | ./ingress | n/a |
 | <a name="module_loadbalancer"></a> [loadbalancer](#module\_loadbalancer) | ./loadbalancer | n/a |
+| <a name="module_nginx"></a> [nginx](#module\_nginx) | ./nginx | n/a |
+| <a name="module_portfolio"></a> [portfolio](#module\_portfolio) | ./portfolio | n/a |
 
 ## Resources
 
@@ -75,9 +81,7 @@ kubectl label nodes <name> kubernetes.io/role=worker
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
 | <a name="input_CF_API_TOKEN"></a> [CF\_API\_TOKEN](#input\_CF\_API\_TOKEN) | n/a | `string` | n/a | yes |
-| <a name="input_CF_DOMAIN"></a> [CF\_DOMAIN](#input\_CF\_DOMAIN) | n/a | `string` | `""` | no |
-| <a name="input_CF_EMAIL"></a> [CF\_EMAIL](#input\_CF\_EMAIL) | n/a | `string` | n/a | yes |
-| <a name="input_k3s_config"></a> [k3s\_config](#input\_k3s\_config) | The config file used to connect to Kubectl | `string` | `"../ansible/kubeconfig"` | no |
+| <a name="input_KUBECONFIG"></a> [KUBECONFIG](#input\_KUBECONFIG) | n/a | `string` | n/a | yes |
 
 ## Outputs
 

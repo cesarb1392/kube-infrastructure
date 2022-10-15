@@ -3,3 +3,6 @@ variable "namespace" {
   type        = string
 }
 
+variable "CF_API_TOKEN" {
+  type = string
+}

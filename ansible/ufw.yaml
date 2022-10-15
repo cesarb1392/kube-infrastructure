@@ -51,3 +51,7 @@
     port: 7946
     proto: any
 
+#- name: enable all traffic between nodes
+#  community.general.ufw:
+#    rule: allow
+#    src: "{{ hostvars[groups['master'][0]].ansible_host }"

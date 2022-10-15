@@ -22,7 +22,7 @@
   tasks:
     - name: copy kubeconfig to local
       fetch:
-        dest: kubeconfig
+        dest: ~/.kube/kubeconfig
         src: ~{{ ansible_user }}/.kube/config
         owner: "{{ ansible_user }}"
         mode: "u=rw,g=,o="

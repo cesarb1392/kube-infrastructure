@@ -12,30 +12,31 @@ resource "helm_release" "metallb" {
   values = [yamlencode(local.metalb_config)]
 }
 
-resource "kubernetes_manifest" "address_pool" {
-  manifest = {
-    apiVersion = "metallb.io/v1beta1"
-    kind       = "IPAddressPool"
-    metadata   = {
-      name      = "default"
-      namespace = var.namespace
-    }
-    spec = {
-      addresses = ["192.168.178.230-192.168.178.235"]
-    }
-  }
+resource "kubectl_manifest" "address_pool" {
+  yaml_body = <<YAML
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: "default"
+  namespace: "${var.namespace}"
+spec:
+ addresses: [${local.default_address_pool}]
+YAML
+
+  depends_on = [helm_release.metallb]
 }
 
-resource "kubernetes_manifest" "advertisement" {
-  manifest = {
-    apiVersion = "metallb.io/v1beta1"
-    kind       = "L2Advertisement"
-    metadata   = {
-      name      = "default"
-      namespace = var.namespace
-    }
-    spec = {
-      ipAddressPools = ["default"]
-    }
-  }
+resource "kubectl_manifest" "advertisement" {
+  yaml_body = <<YAML
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: "default"
+  namespace: "${var.namespace}"
+spec:
+ ipAddressPools: ["default"]
+YAML
+
+  depends_on = [helm_release.metallb]
 }
+
