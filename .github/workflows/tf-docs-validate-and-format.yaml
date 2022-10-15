@@ -1,4 +1,4 @@
-name: tf-docs-and-format
+name: tf-docs-validate-and-format
 on:
   push:
     path:
