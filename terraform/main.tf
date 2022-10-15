@@ -23,7 +23,7 @@ module "ingress" {
   source    = "./ingress"
   namespace = local.applications.ingress.name
 
-  depends_on = [module.loadbalancer]
+  depends_on = [kubernetes_namespace.this]
 }
 
 module "nginx" {

@@ -2,11 +2,11 @@ locals {
   applications = {
     loadbalancer = {
       name    = "loadbalancer"
-      enabled = true
+      enabled = false
     }
     cert_manager = {
       name    = "cert-manager"
-      enabled = true
+      enabled = false
     }
     ingress = {
       name    = "ingress"

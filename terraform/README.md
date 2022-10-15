@@ -2,6 +2,7 @@
 
 ## todo
 
+- verbose level per component
 - When installing from scratch Traefik CRD are not defined, therefore TF operations failed 
 - improve variables
 - improve tags / labels
