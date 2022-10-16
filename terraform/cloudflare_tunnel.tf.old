@@ -1,0 +1,150 @@
+# cloudflared tunnel create nginx1
+# kubectl create secret generic -n kube-system nginx1-credentials --from-file=credentials.json=/Users/cesarrepresabautista/.cloudflared/66462043-6104-48ca-bda9-d72e5ce3f221.json
+# cloudflared tunnel route dns nginx1 nginx1.cesarb.dev
+# apply
+resource "kubectl_manifest" "cloudflared_nginx1" {
+  yaml_body = <<YAML
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: cloudflared-nginx1
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      app: cloudflared-nginx1
+  replicas: 1 # You could also consider elastic scaling for this deployment
+  template:
+    metadata:
+      labels:
+        app: cloudflared-nginx1
+    spec:
+      containers:
+      - name: cloudflared-nginx1
+        image: cloudflare/cloudflared:2022.10.0-arm64
+        args:
+        - tunnel
+        # Points cloudflared to the config file, which configures what
+        # cloudflared will actually do. This file is created by a ConfigMap
+        # below.
+        - --config
+        - /etc/cloudflared/config/config.yaml
+        - run
+        livenessProbe:
+          httpGet:
+            # Cloudflared has a /ready endpoint which returns 200 if and only if
+            # it has an active connection to the edge.
+            path: /ready
+            port: 2000
+          failureThreshold: 1
+          initialDelaySeconds: 10
+          periodSeconds: 10
+        volumeMounts:
+        - name: config
+          mountPath: /etc/cloudflared/config
+          readOnly: true
+        # Each tunnel has an associated "credentials file" which authorizes machines
+        # to run the tunnel. cloudflared will read this file from its local filesystem,
+        # and it'll be stored in a k8s secret.
+        - name: creds
+          mountPath: /etc/cloudflared/creds
+          readOnly: true
+      volumes:
+      - name: creds
+        secret:
+          # By default, the credentials file will be created under ~/.cloudflared/<tunnel ID>.json
+          # when you run `cloudflared tunnel create`. You can move it into a secret by using:
+          # ```sh
+          # kubectl create secret generic tunnel-credentials \
+          # --from-file=credentials.json=/Users/yourusername/.cloudflared/<tunnel ID>.json
+          # ```
+          secretName: nginx1-credentials
+      # Create a config.yaml file from the ConfigMap below.
+      - name: config
+        configMap:
+          name: cloudflared-nginx1
+          items:
+          - key: config.yaml
+            path: config.yaml
+YAML
+}
+
+resource "kubectl_manifest" "config_nginx1" {
+  yaml_body = <<YAML
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: cloudflared-nginx1
+  namespace: kube-system
+data:
+  config.yaml: |
+    # Name of the tunnel you want to run
+    tunnel: nginx1
+    credentials-file: /etc/cloudflared/creds/credentials.json
+    # Serves the metrics server under /metrics and the readiness server under /ready
+    metrics: 0.0.0.0:2000
+    # Autoupdates applied in a k8s pod will be lost when the pod is removed or restarted, so
+    # autoupdate doesn't make sense in Kubernetes. However, outside of Kubernetes, we strongly
+    # recommend using autoupdate.
+    no-autoupdate: true
+    # The `ingress` block tells cloudflared which local service to route incoming
+    # requests to. For more about ingress rules, see
+    # https://developers.cloudflare.com/cloudflare-one/connections/connect-apps/configuration/ingress
+    #
+    # Remember, these rules route traffic from cloudflared to a local service. To route traffic
+    # from the internet to cloudflared, run `cloudflared tunnel route dns <tunnel> <hostname>`.
+    # E.g. `cloudflared tunnel route dns nginx1 nginx1.cesarb.dev`.
+    ingress:
+    # The first rule proxies traffic to the httpbin sample Service defined in app.yaml
+    - hostname: nginx1.cesarb.dev
+      service: http://web-service:80
+    # This rule sends traffic to the built-in hello-world HTTP server. This can help debug connectivity
+    # issues. If hello.cesarb.dev resolves and nginx1.cesarb.dev does not, then the problem is
+    # in the connection from cloudflared to your local service, not from the internet to cloudflared.
+    - hostname: hello.cesarb.dev
+      service: hello_world
+    # This rule matches any traffic which didn't match a previous rule, and responds with HTTP 404.
+    - service: http_status:404
+YAML
+}
+
+
+resource "kubectl_manifest" "service_nginx1" {
+  yaml_body = <<YAML
+apiVersion: v1
+kind: Service
+metadata:
+  name: web-service
+  namespace: kube-system
+spec:
+  selector:
+    app: nginx1
+  ports:
+    - protocol: TCP
+      port: 80
+  YAML
+}
+resource "kubectl_manifest" "app_nginx1" {
+  yaml_body = <<YAML
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: nginx-deployment
+  namespace: kube-system
+spec:
+  selector:
+    matchLabels:
+      app: nginx1
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: nginx1
+    spec:
+      containers:
+      - name: nginx1
+        image: nginx
+        ports:
+        - containerPort: 80
+  YAML
+}

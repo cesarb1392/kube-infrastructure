@@ -5,14 +5,6 @@ module "loadbalancer" {
   namespace = local.applications.loadbalancer.name
 }
 
-module "cert_manager" {
-  count = local.applications.cert_manager.enabled ? 1 : 0
-
-  source       = "./cert_manager"
-  namespace    = local.applications.cert_manager.name
-  CF_API_TOKEN = var.CF_API_TOKEN
-}
-
 module "ingress" {
   count = local.applications.ingress.enabled ? 1 : 0
 
@@ -27,6 +19,6 @@ module "nginx" {
   source    = "./nginx"
   namespace = local.applications.nginx.name
 
-  depends_on = [module.ingress, module.cert_manager]
+  depends_on = [module.ingress]
 }
 

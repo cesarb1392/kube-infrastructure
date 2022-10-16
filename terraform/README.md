@@ -7,6 +7,7 @@
 - improve tags / labels
 - container registry
 - pipelines (github self hosted runner)
+- [CF Argo Tunnel](https://github.com/cloudflare/argo-tunnel-examples/tree/master/named-tunnel-k8s) 
 
 #### Table of Contents
 
@@ -58,29 +59,39 @@ kubectl label nodes <name> kubernetes.io/role=worker
 
 | Name | Version |
 |------|---------|
+| <a name="provider_cloudflare"></a> [cloudflare](#provider\_cloudflare) | 3.25.0 |
+| <a name="provider_kubectl"></a> [kubectl](#provider\_kubectl) | 1.14.0 |
 | <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 2.14.0 |
+| <a name="provider_random"></a> [random](#provider\_random) | 3.4.3 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_cert_manager"></a> [cert\_manager](#module\_cert\_manager) | ./cert_manager | n/a |
 | <a name="module_ingress"></a> [ingress](#module\_ingress) | ./ingress | n/a |
 | <a name="module_loadbalancer"></a> [loadbalancer](#module\_loadbalancer) | ./loadbalancer | n/a |
 | <a name="module_nginx"></a> [nginx](#module\_nginx) | ./nginx | n/a |
-| <a name="module_portfolio"></a> [portfolio](#module\_portfolio) | ./portfolio | n/a |
 
 ## Resources
 
 | Name | Type |
 |------|------|
+| [cloudflare_argo_tunnel.access_tunnel](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/argo_tunnel) | resource |
+| [cloudflare_record.access_tunnel](https://registry.terraform.io/providers/cloudflare/cloudflare/latest/docs/resources/record) | resource |
+| [kubectl_manifest.cloudflare_tunnel_config_traefik](https://registry.terraform.io/providers/gavinbunney/kubectl/latest/docs/resources/manifest) | resource |
+| [kubernetes_config_map_v1.cloudflare_tunnel_config_traefik](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/config_map_v1) | resource |
+| [kubernetes_deployment_v1.cloudflared_traefik](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/deployment_v1) | resource |
 | [kubernetes_namespace.this](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/namespace) | resource |
+| [kubernetes_secret_v1.tunnel_credentials](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/secret_v1) | resource |
+| [random_id.argo_secret](https://registry.terraform.io/providers/hashicorp/random/latest/docs/resources/id) | resource |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_CF_ACCOUNT_ID"></a> [CF\_ACCOUNT\_ID](#input\_CF\_ACCOUNT\_ID) | n/a | `string` | n/a | yes |
 | <a name="input_CF_API_TOKEN"></a> [CF\_API\_TOKEN](#input\_CF\_API\_TOKEN) | n/a | `string` | n/a | yes |
+| <a name="input_CF_ZONE_ID"></a> [CF\_ZONE\_ID](#input\_CF\_ZONE\_ID) | n/a | `string` | n/a | yes |
 | <a name="input_KUBECONFIG"></a> [KUBECONFIG](#input\_KUBECONFIG) | n/a | `string` | n/a | yes |
 
 ## Outputs

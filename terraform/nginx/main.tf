@@ -1,35 +1,9 @@
-resource "kubectl_manifest" "certificate" {
-  yaml_body = <<YAML
-apiVersion: cert-manager.io/v1
-kind: Certificate
-metadata:
-  name: "certificate"
-  namespace: "${var.namespace}"
-spec:
- secretName: "certificate"
- dnsNames: ["nginx.cesarb.dev"]
- commonName: "nginx.cesarb.dev"
- issuerRef:
-  kind: "ClusterIssuer"
-  name: "letsencrypt-prod"
-YAML
-}
-
 resource "kubernetes_ingress_v1" "nginx" {
   metadata {
     name      = "nginx-ingress"
     namespace = var.namespace
-    annotations = {
-      "certmanager.k8s.io/cluster-issuer" = "letsencrypt-prod"
-      "certmanager.k8s.io/acme-challenge-type"= "dns01"
-    }
   }
   spec {
-#    ingress_class_name = "traefik"
-    tls {
-      hosts       = ["nginx.cesarb.dev"]
-      secret_name = "certificate"
-    }
     rule {
       host = "nginx.cesarb.dev"
       http {
