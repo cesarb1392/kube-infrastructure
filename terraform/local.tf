@@ -6,7 +6,7 @@ locals {
     }
     cert_manager = {
       name    = "cert-manager"
-      enabled = false
+      enabled = true
     }
     ingress = {
       name    = "ingress"
