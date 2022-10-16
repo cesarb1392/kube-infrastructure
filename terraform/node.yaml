@@ -1,0 +1,213 @@
+apiVersion: v1
+kind: Node
+metadata:
+  name: fastbanana1
+#  uid: 28a3aa9b-553f-40be-8e8f-a19beef75385
+#  resourceVersion: '849'
+#  creationTimestamp: '2022-10-16T10:12:40Z'
+  labels:
+#    beta.kubernetes.io/arch: arm64
+#    beta.kubernetes.io/instance-type: k3s
+#    beta.kubernetes.io/os: linux
+#    egress.k3s.io/cluster: 'true'
+#    kubernetes.io/arch: arm64
+#    kubernetes.io/hostname: fastbanana1
+#    kubernetes.io/os: linux
+#    node-role.kubernetes.io/control-plane: 'true'
+#    node-role.kubernetes.io/master: 'true'
+    node-role.kubernetes.io/worker: master
+    node.kubernetes.io/instance-type: k3s
+#  annotations:
+#    flannel.alpha.coreos.com/backend-data: '{"VNI":1,"VtepMAC":"ee:55:3e:ee:37:9d"}'
+#    flannel.alpha.coreos.com/backend-type: vxlan
+#    flannel.alpha.coreos.com/kube-subnet-manager: 'true'
+#    flannel.alpha.coreos.com/public-ip: 192.168.178.20
+#    k3s.io/hostname: fastbanana1
+#    k3s.io/internal-ip: 192.168.178.20
+#    k3s.io/node-args: '["server","--data-dir","/var/lib/rancher/k3s"]'
+#    k3s.io/node-config-hash: OVMYRL4YO4DOX4PHW7YSVPOZXNDW45HPJT6WHTGYPE47EZCVIUXA====
+#    k3s.io/node-env: >-
+#      {"K3S_DATA_DIR":"/var/lib/rancher/k3s/data/7fc0f4b61cc5a61a0f6710e3011e99c8ccbd855b87cb3e814e045897afced30a"}
+#    node.alpha.kubernetes.io/ttl: '0'
+#    volumes.kubernetes.io/controller-managed-attach-detach: 'true'
+#  finalizers:
+#    - wrangler.cattle.io/node
+#  managedFields:
+#    - manager: deploy@fastbanana1
+#      operation: Update
+#      apiVersion: v1
+#      time: '2022-10-16T10:12:43Z'
+#      fieldsType: FieldsV1
+#      fieldsV1:
+#        f:metadata:
+#          f:finalizers:
+#            .: {}
+#            v:"wrangler.cattle.io/node": {}
+#          f:labels:
+#            f:node-role.kubernetes.io/control-plane: {}
+#            f:node-role.kubernetes.io/master: {}
+#    - manager: k3s
+#      operation: Update
+#      apiVersion: v1
+#      time: '2022-10-16T10:13:00Z'
+#      fieldsType: FieldsV1
+#      fieldsV1:
+#        f:metadata:
+#          f:annotations:
+#            .: {}
+#            f:k3s.io/hostname: {}
+#            f:k3s.io/internal-ip: {}
+#            f:k3s.io/node-args: {}
+#            f:k3s.io/node-config-hash: {}
+#            f:k3s.io/node-env: {}
+#            f:node.alpha.kubernetes.io/ttl: {}
+#            f:volumes.kubernetes.io/controller-managed-attach-detach: {}
+#          f:labels:
+#            .: {}
+#            f:beta.kubernetes.io/arch: {}
+#            f:beta.kubernetes.io/instance-type: {}
+#            f:beta.kubernetes.io/os: {}
+#            f:egress.k3s.io/cluster: {}
+#            f:kubernetes.io/arch: {}
+#            f:kubernetes.io/hostname: {}
+#            f:kubernetes.io/os: {}
+#            f:node.kubernetes.io/instance-type: {}
+#        f:spec:
+#          f:podCIDR: {}
+#          f:podCIDRs:
+#            .: {}
+#            v:"10.42.0.0/24": {}
+#          f:providerID: {}
+#    - manager: k3s
+#      operation: Update
+#      apiVersion: v1
+#      time: '2022-10-16T10:14:43Z'
+#      fieldsType: FieldsV1
+#      fieldsV1:
+#        f:metadata:
+#          f:annotations:
+#            f:flannel.alpha.coreos.com/backend-data: {}
+#            f:flannel.alpha.coreos.com/backend-type: {}
+#            f:flannel.alpha.coreos.com/kube-subnet-manager: {}
+#            f:flannel.alpha.coreos.com/public-ip: {}
+#        f:status:
+#          f:allocatable:
+#            f:ephemeral-storage: {}
+#          f:capacity:
+#            f:ephemeral-storage: {}
+#          f:conditions:
+#            k:{"type":"DiskPressure"}:
+#              f:lastHeartbeatTime: {}
+#            k:{"type":"MemoryPressure"}:
+#              f:lastHeartbeatTime: {}
+#            k:{"type":"PIDPressure"}:
+#              f:lastHeartbeatTime: {}
+#            k:{"type":"Ready"}:
+#              f:lastHeartbeatTime: {}
+#              f:lastTransitionTime: {}
+#              f:message: {}
+#              f:reason: {}
+#              f:status: {}
+#          f:images: {}
+#      subresource: status
+#    - manager: kubectl-label
+#      operation: Update
+#      apiVersion: v1
+#      time: '2022-10-16T10:18:49Z'
+#      fieldsType: FieldsV1
+#      fieldsV1:
+#        f:metadata:
+#          f:labels:
+#            f:node-role.kubernetes.io/worker: {}
+#  selfLink: /api/v1/nodes/fastbanana1
+status:
+#  capacity:
+#    cpu: '4'
+#    ephemeral-storage: 61092524Ki
+#    memory: 7999844Ki
+#    pods: '110'
+#  allocatable:
+#    cpu: '4'
+#    ephemeral-storage: '59430807301'
+#    memory: 7999844Ki
+#    pods: '110'
+#  conditions:
+#    - type: MemoryPressure
+#      status: 'False'
+#      lastHeartbeatTime: '2022-10-16T10:14:43Z'
+#      lastTransitionTime: '2022-10-16T10:12:40Z'
+#      reason: KubeletHasSufficientMemory
+#      message: kubelet has sufficient memory available
+#    - type: DiskPressure
+#      status: 'False'
+#      lastHeartbeatTime: '2022-10-16T10:14:43Z'
+#      lastTransitionTime: '2022-10-16T10:12:40Z'
+#      reason: KubeletHasNoDiskPressure
+#      message: kubelet has no disk pressure
+#    - type: PIDPressure
+#      status: 'False'
+#      lastHeartbeatTime: '2022-10-16T10:14:43Z'
+#      lastTransitionTime: '2022-10-16T10:12:40Z'
+#      reason: KubeletHasSufficientPID
+#      message: kubelet has sufficient PID available
+#    - type: Ready
+#      status: 'True'
+#      lastHeartbeatTime: '2022-10-16T10:14:43Z'
+#      lastTransitionTime: '2022-10-16T10:12:50Z'
+#      reason: KubeletReady
+#      message: kubelet is posting ready status
+#  addresses:
+#    - type: InternalIP
+#      address: 192.168.178.20
+#    - type: Hostname
+#      address: fastbanana1
+#  daemonEndpoints:
+#    kubeletEndpoint:
+#      Port: 10250
+#  nodeInfo:
+#    machineID: e41fb46f9e964b458b7ba37718d19578
+#    systemUUID: e41fb46f9e964b458b7ba37718d19578
+#    bootID: c6802130-4ef1-4b82-91c5-7e09d28d44e8
+#    kernelVersion: 5.15.61-v8+
+#    osImage: Debian GNU/Linux 11 (bullseye)
+#    containerRuntimeVersion: containerd://1.6.8-k3s1
+#    kubeletVersion: v1.25.0+k3s1
+#    kubeProxyVersion: v1.25.0+k3s1
+#    operatingSystem: linux
+#    architecture: arm64
+#  images:
+#    - names:
+#        - >-
+#          docker.io/rancher/klipper-helm@sha256:6a8e819402e3fdd5ff9ec576174b6c0013870b9c0627a05fa0ab17374b5cf189
+#        - docker.io/rancher/klipper-helm:v0.7.3-build20220613
+#      sizeBytes: 76760524
+#    - names:
+#        - >-
+#          docker.io/rancher/mirrored-metrics-server@sha256:48ecad4fe641a09fa4459f93c7ad29d4916f6b9cf7e934d548f1d8eff96e2f35
+#        - docker.io/rancher/mirrored-metrics-server:v0.5.2
+#      sizeBytes: 24424221
+#    - names:
+#        - >-
+#          docker.io/rancher/mirrored-coredns-coredns@sha256:35e38f3165a19cb18c65d83334c13d61db6b24905f45640aa8c2d2a6f55ebcb0
+#        - docker.io/rancher/mirrored-coredns-coredns:1.9.1
+#      sizeBytes: 12820801
+#    - names:
+#        - >-
+#          docker.io/rancher/local-path-provisioner@sha256:1da612c913ce0b4ab82e20844baa9dce1f7065e39412d6a0bb4de99c413f21bf
+#        - docker.io/rancher/local-path-provisioner:v0.0.21
+#      sizeBytes: 10364942
+#    - names:
+#        - >-
+#          docker.io/rancher/klipper-lb@sha256:02f8cb41d53fe08b5726a563ce36c3675ad7f2694b65a8477f6a66afac89fef7
+#        - docker.io/rancher/klipper-lb:v0.3.5
+#      sizeBytes: 3240172
+#    - names:
+#        - >-
+#          docker.io/rancher/mirrored-pause@sha256:74c4244427b7312c5b901fe0f67cbc53683d06f4f24c6faee65d4182bf0fa893
+#        - docker.io/rancher/mirrored-pause:3.6
+#      sizeBytes: 253243
+spec:
+  podCIDR: 10.42.0.0/24
+  podCIDRs:
+    - 10.42.0.0/24
+  providerID: k3s://fastbanana1

@@ -2,7 +2,7 @@ locals {
   metalb_config = {
     #    https://github.com/metallb/metallb/blob/main/charts/metallb/values.yaml
     speaker = {
-      logLevel = "warn" # `all`, `debug`, `info`, `warn`, `error` or `none`
+      logLevel = "all" # `all`, `debug`, `info`, `warn`, `error` or `none`
     }
   }
 
