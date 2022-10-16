@@ -1,53 +1,42 @@
-resource "random_id" "argo_secret_traefik" {
-  byte_length = 32
-}
-
-resource "cloudflare_argo_tunnel" "access_tunnel_traefik" {
-  account_id = var.CF_ACCOUNT_ID
-  name       = "tunnel-traefik"
-  secret     = random_id.argo_secret_traefik.b64_std
-}
-
-resource "cloudflare_record" "access_tunnel_traefik" {
-  zone_id = var.CF_ZONE_ID
-  name    = "*"
-  value   = cloudflare_argo_tunnel.access_tunnel_traefik.cname
-  type    = "CNAME"
-  proxied = true
-}
-
-resource "kubernetes_secret_v1" "tunnel_credentials_traefik" {
+resource "kubernetes_secret_v1" "this" {
   metadata {
-    name      = "tunnel-credentials-traefik"
-    namespace = "kube-system"
+    name      = "tunnel-credentials-${var.namespace}"
+    namespace = var.namespace
   }
   data = {
     "credentials.json" = jsonencode({
       "AccountTag"   = var.CF_ACCOUNT_ID,
-      "TunnelSecret" = random_id.argo_secret_traefik.b64_std,
-      "TunnelID"     = cloudflare_argo_tunnel.access_tunnel_traefik.id
+      "TunnelSecret" = random_id.this.b64_std,
+      "TunnelID"     = cloudflare_argo_tunnel.this.id
     })
   }
   type = "Opaque"
 }
 
-resource "kubernetes_deployment_v1" "cloudflared_traefik" {
+resource "kubernetes_deployment_v1" "this" {
   metadata {
-    name      = "cloudflared-traefik"
-    namespace = "kube-system"
+    name      = "cloudflared-${var.namespace}"
+    namespace = var.namespace
+    annotations = {
+      # restart pods when configmap or secret changes
+      config_change = sha1(jsonencode(merge(
+        kubernetes_config_map_v1.this.data,
+        kubernetes_secret_v1.this.data
+      )))
+    }
   }
   spec {
     replicas = "1"
     selector {
-      match_labels = { app = "cloudflared-traefik" }
+      match_labels = { app = "cloudflared-${var.namespace}" }
     }
     template {
       metadata {
-        labels = { app = "cloudflared-traefik" }
+        labels = { app = "cloudflared-${var.namespace}" }
       }
       spec {
         container {
-          name  = "cloudflared-traefik"
+          name  = "cloudflared-${var.namespace}"
           image = "cloudflare/cloudflared:2022.10.0-arm64"
           args  = ["tunnel", "--config", "/etc/cloudflared/config/config.yaml", "run"]
           liveness_probe {
@@ -73,13 +62,13 @@ resource "kubernetes_deployment_v1" "cloudflared_traefik" {
         volume {
           name = "creds"
           secret {
-            secret_name = kubernetes_secret_v1.tunnel_credentials_traefik.metadata.0.name
+            secret_name = kubernetes_secret_v1.this.metadata.0.name
           }
         }
         volume {
           name = "config"
           config_map {
-            name = "cloudflared-traefik"
+            name = "cloudflared-${var.namespace}"
             items {
               key  = "config.yaml"
               path = "config.yaml"
@@ -91,21 +80,21 @@ resource "kubernetes_deployment_v1" "cloudflared_traefik" {
   }
 }
 
-resource "kubernetes_config_map_v1" "cloudflare_tunnel_config_traefik" {
+resource "kubernetes_config_map_v1" "this" {
   metadata {
-    name      = "cloudflared-traefik"
-    namespace = "kube-system"
+    name      = "cloudflared-${var.namespace}"
+    namespace = var.namespace
   }
   data = {
     "config.yaml" = yamlencode({
-      tunnel           = cloudflare_argo_tunnel.access_tunnel_traefik.name
+      tunnel           = cloudflare_argo_tunnel.this.name
       credentials-file = "/etc/cloudflared/creds/credentials.json"
       metrics          = "0.0.0.0:2000"
       no-autoupdate    = true
       ingress = [
         {
-          hostname = "nginx.cesarb.dev"
-          service  = "http://traefik:80"
+          hostname =  "${var.hostname}.${var.CF_ZONE_NAME}"
+          service  = "http://${var.target_service}:${var.ingress_port}"
         },
         { service = "http_status:404" }
       ]

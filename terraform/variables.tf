@@ -11,3 +11,6 @@ variable "CF_ZONE_ID" {
 variable "CF_ACCOUNT_ID" {
   type = string
 }
+variable "CF_ZONE_NAME" {
+  type = string
+}

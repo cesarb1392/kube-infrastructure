@@ -3,6 +3,16 @@ variable "namespace" {
   type        = string
 }
 
+variable "app_name" {
+  description = "app_name"
+  type        = string
+}
+
+variable "app_image" {
+  description = "app_image"
+  type        = string
+}
+
 variable "target_service" {
   description = "target_service"
   type        = string
@@ -10,17 +20,4 @@ variable "target_service" {
 variable "ingress_port" {
   description = "ingress_port"
   type        = string
-}
-variable "hostname" {
-  type = string
-}
-variable "CF_ZONE_ID" {
-  type = string
-}
-variable "CF_ACCOUNT_ID" {
-  type = string
-}
-
-variable "CF_ZONE_NAME" {
-  type = string
 }

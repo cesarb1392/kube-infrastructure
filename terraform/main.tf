@@ -1,24 +1,31 @@
-module "loadbalancer" {
-  count = local.applications.loadbalancer.enabled ? 1 : 0
-
-  source    = "./loadbalancer"
-  namespace = local.applications.loadbalancer.name
-}
-
 module "ingress" {
-  count = local.applications.ingress.enabled ? 1 : 0
+  for_each = local.available_websites
 
   source    = "./ingress"
-  namespace = local.applications.ingress.name
+  namespace = each.key
 
+  target_service = each.value.target_service
+  ingress_port   = each.value.ingress_port
+  hostname       = each.value.hostname
+
+  CF_ACCOUNT_ID = var.CF_ACCOUNT_ID
+  CF_ZONE_ID    = var.CF_ZONE_ID
+  CF_ZONE_NAME  = var.CF_ZONE_NAME
+
+  depends_on = [kubernetes_namespace.this]
 }
 
-module "nginx" {
-  count = local.applications.nginx.enabled ? 1 : 0
+module "website" {
+  for_each = local.available_websites
 
-  source    = "./nginx"
-  namespace = local.applications.nginx.name
+  source         = "./website"
+  namespace      = each.key
+  app_name       = each.key
+  app_image      = each.value.image
+  target_service = each.value.target_service
+  ingress_port   = each.value.ingress_port
 
   depends_on = [module.ingress]
+
 }
 
