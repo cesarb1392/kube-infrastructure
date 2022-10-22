@@ -20,21 +20,3 @@ terraform {
     }
   }
 }
-
-provider "kubernetes" {
-  config_path = var.KUBECONFIG
-}
-
-provider "kubectl" {
-  config_path = var.KUBECONFIG
-}
-
-provider "helm" {
-  kubernetes {
-    config_path = var.KUBECONFIG
-  }
-}
-
-provider "cloudflare" {
-  api_token = var.CF_API_TOKEN
-}

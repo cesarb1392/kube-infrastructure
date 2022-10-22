@@ -2,6 +2,10 @@ variable "namespace" {
   description = "The namespace where is installed"
   type        = string
 }
+variable "app_name" {
+  description = "app_name"
+  type        = string
+}
 
 variable "target_service" {
   description = "target_service"
@@ -11,21 +15,20 @@ variable "ingress_port" {
   description = "ingress_port"
   type        = string
 }
-variable "hostname" {
-  type = string
+
+variable "MINIO_USERS" {
+  description = "omnio users"
+  type = list(
+    object({
+      accessKey = string
+      secretKey = string
+      policy    = string
+  }))
 }
 
-variable "cf_access" {
-  type    = string
-  default = false
-}
-variable "CF_ZONE_ID" {
+variable "MINIO_ROOT_USER" {
   type = string
 }
-variable "CF_ACCOUNT_ID" {
-  type = string
-}
-
-variable "CF_ZONE_NAME" {
+variable "MINIO_ROOT_PASSWORD" {
   type = string
 }

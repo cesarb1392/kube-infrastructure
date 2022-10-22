@@ -20,6 +20,8 @@
         state: latest
         cache_valid_time: 3600
 
+# run sysctl -w net.core.rmem_max=2500000
+
     - name: Apply UFW rules
       ansible.builtin.import_tasks: ufw.yaml
 

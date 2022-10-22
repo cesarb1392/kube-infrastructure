@@ -11,21 +11,3 @@ variable "ingress_port" {
   description = "ingress_port"
   type        = string
 }
-variable "hostname" {
-  type = string
-}
-
-variable "cf_access" {
-  type    = string
-  default = false
-}
-variable "CF_ZONE_ID" {
-  type = string
-}
-variable "CF_ACCOUNT_ID" {
-  type = string
-}
-
-variable "CF_ZONE_NAME" {
-  type = string
-}

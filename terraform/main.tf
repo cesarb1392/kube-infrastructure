@@ -1,12 +1,13 @@
 module "ingress" {
-  for_each = local.available_websites
+  for_each = local.available_ingresses
 
   source    = "./ingress"
   namespace = each.key
 
   target_service = each.value.target_service
   ingress_port   = each.value.ingress_port
-  hostname       = each.value.hostname
+  hostname       = each.key
+  cf_access      = can(each.value.cf_access) ? each.value.cf_access : false
 
   CF_ACCOUNT_ID = var.CF_ACCOUNT_ID
   CF_ZONE_ID    = var.CF_ZONE_ID
@@ -26,6 +27,36 @@ module "website" {
   ingress_port   = each.value.ingress_port
 
   depends_on = [module.ingress]
-
 }
 
+module "minio" {
+  count = local.applications.minio.enabled == true ? 1 : 0
+
+  source = "./minio"
+
+  namespace           = "minio"
+  app_name            = "minio"
+  ingress_port        = local.applications.minio.ingress_port
+  target_service      = local.applications.minio.target_service
+  MINIO_USERS         = var.MINIO_USERS
+  MINIO_ROOT_PASSWORD = var.MINIO_ROOT_PASSWORD
+  MINIO_ROOT_USER     = var.MINIO_ROOT_USER
+}
+
+module "wireguard" {
+  count = local.applications.wireguard.enabled ? 1 : 0
+
+  source         = "./wireguard"
+  namespace      = "wireguard"
+  ingress_port   = local.applications.wireguard.ingress_port
+  target_service = local.applications.wireguard.target_service
+
+  depends_on = [module.ingress]
+}
+
+module "metallb" {
+  count = local.applications.metallb.enabled ? 1 : 0
+
+  source         = "./metallb"
+  namespace      = "metallb"
+}

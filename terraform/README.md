@@ -19,30 +19,13 @@
 
 ## Usage
 
-- Main node
-
-```shell
-export KUBECONFIG_MODE="644" && export INSTALL_EXEC=" --no-deploy servicelb --no-deploy traefik" && curl -sfL https://get.k3s.io | sh -
-sudo cat /var/lib/rancher/k3s/server/node-token
-```
-
-- Assistant node
-
-```shell
-export KUBECONFIG_MODE="644" && export URL="https://192.168.x.x:6443" && export TOKEN="" && curl -sfL https://get.k3s.io | sh -
-```
-
-- Grab the config file from the main node
-
-```shell
-kubectl label nodes <name> kubernetes.io/role=worker
-```
-
 ### Env vars
 - Create and populate the file `terraform.tfvars` on the root project dir
 
-### How to update the docs?
->  `for d in ./*/ ; do (cd "$d" && tcl); done`
+To set up state, run:
+```
+terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secret_key=$SECRET_KEY"
+```
 
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
@@ -66,7 +49,9 @@ kubectl label nodes <name> kubernetes.io/role=worker
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_ingress"></a> [ingress](#module\_ingress) | ./ingress | n/a |
+| <a name="module_minio"></a> [minio](#module\_minio) | ./minio | n/a |
 | <a name="module_website"></a> [website](#module\_website) | ./website | n/a |
+| <a name="module_wireguard"></a> [wireguard](#module\_wireguard) | ./wireguard | n/a |
 
 ## Resources
 
@@ -83,6 +68,9 @@ kubectl label nodes <name> kubernetes.io/role=worker
 | <a name="input_CF_ZONE_ID"></a> [CF\_ZONE\_ID](#input\_CF\_ZONE\_ID) | n/a | `string` | n/a | yes |
 | <a name="input_CF_ZONE_NAME"></a> [CF\_ZONE\_NAME](#input\_CF\_ZONE\_NAME) | n/a | `string` | n/a | yes |
 | <a name="input_KUBECONFIG"></a> [KUBECONFIG](#input\_KUBECONFIG) | n/a | `string` | n/a | yes |
+| <a name="input_MINIO_ROOT_PASSWORD"></a> [MINIO\_ROOT\_PASSWORD](#input\_MINIO\_ROOT\_PASSWORD) | n/a | `string` | n/a | yes |
+| <a name="input_MINIO_ROOT_USER"></a> [MINIO\_ROOT\_USER](#input\_MINIO\_ROOT\_USER) | n/a | `string` | n/a | yes |
+| <a name="input_MINIO_USERS"></a> [MINIO\_USERS](#input\_MINIO\_USERS) | n/a | <pre>list(<br>    object({<br>      accessKey = string<br>      secretKey = string<br>      policy    = string<br>  }))</pre> | n/a | yes |
 
 ## Outputs
 

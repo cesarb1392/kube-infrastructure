@@ -93,7 +93,7 @@ resource "kubernetes_config_map_v1" "this" {
       no-autoupdate    = true
       ingress = [
         {
-          hostname =  "${var.hostname}.${var.CF_ZONE_NAME}"
+          hostname = "${var.hostname}.${var.CF_ZONE_NAME}"
           service  = "http://${var.target_service}:${var.ingress_port}"
         },
         { service = "http_status:404" }
