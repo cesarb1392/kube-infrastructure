@@ -28,27 +28,34 @@ locals {
       ingress        = false
       target_service = "wireguard"
       ingress_port   = 51820
+      log_level      = "debug"
+    }
+
+    privateingress = {
+      enabled        = true
     }
     pihole = {
-      enabled        = false
+      enabled        = true
       target_service = "pihole"
       ingress_port   = 9090
+      log_level      = "debug"
     }
     metallb = {
-      enabled = false
+      enabled   = true
+      log_level = "debug"
     }
   }
 
   available_namespaces = {
-  for k, v in local.applications : k => k if v.enabled
+    for k, v in local.applications : k => k if v.enabled
   }
 
   available_ingresses = {
-  for k, v in local.applications : k => v if try(v.ingress, null) != null && v.enabled
+    for k, v in local.applications : k => v if try(v.ingress, null) != null && v.enabled
   }
 
   available_websites = {
-  for k, v in local.applications : k => v if try(v.image, null) != null && v.enabled
+    for k, v in local.applications : k => v if try(v.image, null) != null && v.enabled
   }
 
 }

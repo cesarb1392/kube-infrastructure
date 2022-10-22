@@ -1,7 +1,11 @@
+##########################
+##### PUBLIC NETWORK #####
+##########################
+
 module "ingress" {
   for_each = local.available_ingresses
 
-  source    = "./ingress"
+  source    = "./public_ingress"
   namespace = each.key
 
   target_service = each.value.target_service
@@ -30,7 +34,7 @@ module "website" {
 }
 
 module "minio" {
-  count = local.applications.minio.enabled == true ? 1 : 0
+  count = local.applications.minio.enabled ? 1 : 0
 
   source = "./minio"
 
@@ -50,13 +54,46 @@ module "wireguard" {
   namespace      = "wireguard"
   ingress_port   = local.applications.wireguard.ingress_port
   target_service = local.applications.wireguard.target_service
+  CF_ZONE_NAME   = var.CF_ZONE_NAME
+  TZ             = var.TZ
 
   depends_on = [module.ingress]
 }
 
+
+##########################
+#### PRIVATE NETWORK #####
+##########################
+
+
 module "metallb" {
   count = local.applications.metallb.enabled ? 1 : 0
 
-  source         = "./metallb"
-  namespace      = "metallb"
+  source    = "./metallb"
+  namespace = "metallb"
+
+  log_level = local.applications.metallb.log_level
+
+  depends_on = [kubernetes_namespace.this]
+}
+
+module "private_ingress" {
+  count = local.applications.privateingress.enabled ? 1 : 0
+
+  source    = "./private_ingress"
+  namespace = "privateingress"
+
+  depends_on = [kubernetes_namespace.this]
+}
+
+module "pihole" {
+  count = local.applications.pihole.enabled ? 1 : 0
+
+  source    = "./pihole"
+  namespace = "pihole"
+
+  log_level = local.applications.pihole.log_level
+  TZ        = var.TZ
+
+  depends_on = [module.ingress, module.metallb]
 }

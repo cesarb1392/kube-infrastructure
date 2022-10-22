@@ -7,11 +7,11 @@ resource "kubernetes_deployment" "pi_hole" {
   spec {
     replicas = 1
     selector {
-      match_labels = { "app" = "pi-hole" }
+      match_labels = { "app" = var.namespace }
     }
     template {
       metadata {
-        labels = { "app" = "pi-hole" }
+        labels = { "app" = var.namespace }
       }
       spec {
         dns_config {
@@ -24,7 +24,7 @@ resource "kubernetes_deployment" "pi_hole" {
           image_pull_policy = "IfNotPresent"
           env {
             name  = "TZ"
-            value = "Europe/Amsterdam"
+            value = var.TZ
           }
           env {
             name  = "WEBPASSWORD"
@@ -46,23 +46,19 @@ resource "kubernetes_deployment" "pi_hole" {
             container_port = 80
             protocol       = "TCP"
           }
-          port {
-            container_port = 443
-            protocol       = "TCP"
-          }
 
-          volume_mount {
-            mount_path = "/etc/pihole"
-            name       = "pi-hole-pvc"
-          }
-          volume_mount {
-            mount_path = "/etc/dnsmasq.d"
-            name       = "pi-hole-pvc"
-          }
-          volume_mount {
-            mount_path = "/etc/addn-hosts"
-            name       = "pi-hole-pvc"
-          }
+          #          volume_mount {
+          #            mount_path = "/etc/pihole"
+          #            name       = "etc"
+          #          }
+          #          volume_mount {
+          #            mount_path = "/etc/dnsmasq.d"
+          #            name       = "dnsmasq"
+          #          }
+          #          volume_mount {
+          #            mount_path = "/etc/addn-hosts"
+          #            name       = "addn-hosts"
+          #          }
           resources {
             limits = {
               memory = "1Gi"
@@ -74,20 +70,27 @@ resource "kubernetes_deployment" "pi_hole" {
             }
           }
         }
-        volume {
-          name = "etc"
-          host_path {
-            path = "/data/pihole/etc"
-            type = "Directory"
-          }
-        }
-        volume {
-          name = "etc"
-          host_path {
-            path = "/data/pihole/dnsmasq.d"
-            type = "Directory"
-          }
-        }
+        #        volume {
+        #          name = "etc"
+        #          host_path {
+        #            path = "/data/pihole/etc"
+        #            type = "Directory"
+        #          }
+        #        }
+        #        volume {
+        #          name = "dnsmasq"
+        #          host_path {
+        #            path = "/data/pihole/dnsmasq.d"
+        #            type = "Directory"
+        #          }
+        #        }
+        #        volume {
+        #          name = "addn-hosts"
+        #          host_path {
+        #            path = "/etc/addn-hosts"
+        #            type = "Directory"
+        #          }
+        #        }
       }
     }
   }
@@ -95,7 +98,7 @@ resource "kubernetes_deployment" "pi_hole" {
 
 resource "kubernetes_service" "pi_hole" {
   metadata {
-    name      = "pihole"
+    name      = var.namespace
     namespace = var.namespace
   }
   spec {
@@ -104,12 +107,6 @@ resource "kubernetes_service" "pi_hole" {
       target_port = 80
       protocol    = "TCP"
       name        = "http"
-    }
-    port {
-      port        = 443
-      target_port = 443
-      protocol    = "TCP"
-      name        = "https"
     }
     port {
       port        = 53
@@ -129,7 +126,38 @@ resource "kubernetes_service" "pi_hole" {
       protocol    = "UDP"
       name        = "dhcp"
     }
-    selector     = { "app" = "pi-hole" }
-    external_ips = ["192.168.2.11"]
+    selector = { "app" = var.namespace }
+  }
+}
+
+resource "kubernetes_ingress_v1" "pi_hole" {
+  metadata {
+    name        = var.namespace
+    namespace   = var.namespace
+    annotations = {
+      "nginx.ingress.kubernetes.io/ssl-redirect"   = false
+#      "nginx.ingress.kubernetes.io/rewrite-target" = "/admin"
+    }
+  }
+  spec {
+    ingress_class_name = "nginx"
+    rule {
+      host = "pihole.192.168.178.230.nip.io"
+      http {
+        path {
+          backend {
+            service {
+              name = kubernetes_service.pi_hole.metadata.0.name
+              port {
+                number = 80
+              }
+            }
+          }
+#          path      = "/admin"
+          path      = "/"
+          path_type = "Prefix"
+        }
+      }
+    }
   }
 }

@@ -48,8 +48,11 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 
 | Name | Source | Version |
 |------|--------|---------|
-| <a name="module_ingress"></a> [ingress](#module\_ingress) | ./ingress | n/a |
+| <a name="module_ingress"></a> [ingress](#module\_ingress) | ./public_ingress | n/a |
+| <a name="module_metallb"></a> [metallb](#module\_metallb) | ./metallb | n/a |
 | <a name="module_minio"></a> [minio](#module\_minio) | ./minio | n/a |
+| <a name="module_pihole"></a> [pihole](#module\_pihole) | ./pihole | n/a |
+| <a name="module_private_ingress"></a> [private\_ingress](#module\_private\_ingress) | ./private_ingress | n/a |
 | <a name="module_website"></a> [website](#module\_website) | ./website | n/a |
 | <a name="module_wireguard"></a> [wireguard](#module\_wireguard) | ./wireguard | n/a |
 
@@ -71,6 +74,7 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 | <a name="input_MINIO_ROOT_PASSWORD"></a> [MINIO\_ROOT\_PASSWORD](#input\_MINIO\_ROOT\_PASSWORD) | n/a | `string` | n/a | yes |
 | <a name="input_MINIO_ROOT_USER"></a> [MINIO\_ROOT\_USER](#input\_MINIO\_ROOT\_USER) | n/a | `string` | n/a | yes |
 | <a name="input_MINIO_USERS"></a> [MINIO\_USERS](#input\_MINIO\_USERS) | n/a | <pre>list(<br>    object({<br>      accessKey = string<br>      secretKey = string<br>      policy    = string<br>  }))</pre> | n/a | yes |
+| <a name="input_TZ"></a> [TZ](#input\_TZ) | n/a | `string` | n/a | yes |
 
 ## Outputs
 

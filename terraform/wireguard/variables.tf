@@ -3,6 +3,10 @@ variable "namespace" {
   type        = string
 }
 
+variable "TZ" {
+  type = string
+}
+
 variable "target_service" {
   description = "target_service"
   type        = string
@@ -10,4 +14,7 @@ variable "target_service" {
 variable "ingress_port" {
   description = "ingress_port"
   type        = string
+}
+variable "CF_ZONE_NAME" {
+  type = string
 }

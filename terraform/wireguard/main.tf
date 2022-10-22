@@ -25,12 +25,12 @@ resource "kubernetes_deployment_v1" "this" {
         labels = { "app" = var.namespace }
       }
       spec {
-#        security_context {
-#          sysctl {
-#            name  = "net.ipv4.conf.all.src_valid_mark"
-#            value = 1
-#          }
-#        }
+        #        security_context {
+        #          sysctl {
+        #            name  = "net.ipv4.conf.all.src_valid_mark"
+        #            value = 1
+        #          }
+        #        }
         container {
           name  = var.namespace
           image = "lscr.io/linuxserver/wireguard:latest"
@@ -65,9 +65,9 @@ resource "kubernetes_secret" "env_vars" {
     {
       PUID       = 1000
       PGID       = 1000
-      TZ         = "Europe/Amsterdam"
-      SERVERURL  = "${var.target_service}.cesarb.dev"
-      SERVERPORT = 51820
+      TZ         = var.TZ
+      SERVERURL  = "${var.target_service}.${var.CF_ZONE_NAME}"
+      SERVERPORT = var.ingress_port
       PEERS      = 1
       PEERDNS    = "auto"
       ALLOWEDIPS = "0.0.0.0/0"

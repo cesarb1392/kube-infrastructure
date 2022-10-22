@@ -1,5 +1,5 @@
 resource "cloudflare_access_application" "this" {
-  count            = var.cf_access ? 1 : 0
+  count = var.cf_access ? 1 : 0
 
   zone_id          = var.CF_ZONE_ID
   name             = var.hostname

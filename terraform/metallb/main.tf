@@ -2,17 +2,15 @@ locals {
   chart_config = {
     #    https://github.com/metallb/metallb/blob/main/charts/metallb/values.yaml
     speaker = {
-      logLevel = "warn" # `all`, `debug`, `info`, `warn`, `error` or `none`
+      logLevel = var.log_level
     }
   }
   default_address_pool = "192.168.178.230-192.168.178.235"
 }
 
 resource "helm_release" "metallb" {
-  name       = "metallb"
-  chart      = "metallb"
-  repository = "https://metallb.github.io/metallb"
-  version    = "v0.13.5" # https://github.com/metallb/metallb/issues/1473
+  name  = "metallb"
+  chart = "https://github.com/metallb/metallb/releases/download/metallb-chart-0.13.7/metallb-0.13.7.tgz?raw=true"
 
   timeout         = 120
   cleanup_on_fail = true
