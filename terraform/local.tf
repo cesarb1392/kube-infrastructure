@@ -32,13 +32,11 @@ locals {
     }
 
     privateingress = {
-      enabled        = true
+      enabled = true
     }
     pihole = {
-      enabled        = true
-      target_service = "pihole"
-      ingress_port   = 9090
-      log_level      = "debug"
+      enabled   = true
+      log_level = "debug"
     }
     metallb = {
       enabled   = true

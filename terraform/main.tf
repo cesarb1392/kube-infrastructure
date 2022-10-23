@@ -91,9 +91,8 @@ module "pihole" {
 
   source    = "./pihole"
   namespace = "pihole"
-
-  log_level = local.applications.pihole.log_level
   TZ        = var.TZ
 
   depends_on = [module.ingress, module.metallb]
+  password   = var.PI_HOLE_PASS
 }

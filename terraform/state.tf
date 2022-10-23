@@ -25,6 +25,7 @@ provider "helm" {
   kubernetes {
     config_path = var.KUBECONFIG
   }
+  debug = true
 }
 
 provider "cloudflare" {

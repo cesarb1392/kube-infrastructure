@@ -33,3 +33,7 @@ variable "MINIO_USERS" {
       policy    = string
   }))
 }
+
+variable "PI_HOLE_PASS" {
+  type = string
+}
