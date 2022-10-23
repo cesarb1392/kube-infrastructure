@@ -37,3 +37,7 @@ variable "MINIO_USERS" {
 variable "PI_HOLE_PASS" {
   type = string
 }
+
+variable "WG_PRIVATE_KEY" {
+  type = string
+}

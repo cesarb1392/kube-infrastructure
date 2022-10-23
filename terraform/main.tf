@@ -50,12 +50,9 @@ module "minio" {
 module "wireguard" {
   count = local.applications.wireguard.enabled ? 1 : 0
 
-  source         = "./wireguard"
-  namespace      = "wireguard"
-  ingress_port   = local.applications.wireguard.ingress_port
-  target_service = local.applications.wireguard.target_service
-  CF_ZONE_NAME   = var.CF_ZONE_NAME
-  TZ             = var.TZ
+  source      = "./wireguard"
+  namespace   = "wireguard"
+  private_key = var.WG_PRIVATE_KEY
 
   depends_on = [module.ingress]
 }

@@ -1,78 +1,42 @@
-resource "kubernetes_service" "this" {
-  metadata {
-    name      = var.target_service
-    namespace = var.namespace
-  }
-  spec {
-    port {
-      port = var.ingress_port
-    }
-    selector = { "app" = var.namespace }
-  }
-}
+# https://github.com/Place1/wg-access-server/blob/master/deploy/helm/wg-access-server/values.yaml
 
-resource "kubernetes_deployment_v1" "this" {
-  metadata {
-    name      = var.namespace
-    namespace = var.namespace
-  }
-  spec {
-    selector {
-      match_labels = { "app" = var.namespace }
-    }
-    template {
-      metadata {
-        labels = { "app" = var.namespace }
+data "template_file" "wireguard" {
+  template = yamlencode({
+    web = {
+      config = {
+        adminUsername = "platano"
+        adminPassword = "banana12345"
       }
-      spec {
-        #        security_context {
-        #          sysctl {
-        #            name  = "net.ipv4.conf.all.src_valid_mark"
-        #            value = 1
-        #          }
-        #        }
-        container {
-          name  = var.namespace
-          image = "lscr.io/linuxserver/wireguard:latest"
-          port {
-            protocol       = "UDP"
-            container_port = var.ingress_port
-          }
-
-          security_context {
-            capabilities {
-              add = ["NET_ADMIN", "SYS_MODULE"]
-            }
-            privileged = true
-          }
-          env_from {
-            secret_ref {
-              name = kubernetes_secret.env_vars.metadata.0.name
-            }
-          }
+      service = {
+        type           = "LoadBalancer"
+        loadBalancerIP = "192.168.178.230"
+        annotations = {
+          "metallb.universe.tf/allow-shared-ip" = "wireguard-wg-access"
         }
       }
     }
-  }
+    wireguard = {
+      config = {
+        privateKey = var.private_key
+      }
+      service = {
+        type           = "LoadBalancer"
+        loadBalancerIP = "192.168.178.230"
+        annotations = {
+          "metallb.universe.tf/allow-shared-ip" = "wireguard-wg-access"
+        }
+      }
+    }
+  })
 }
 
-resource "kubernetes_secret" "env_vars" {
-  metadata {
-    name      = "env-vars"
-    namespace = var.namespace
-  }
-  data = tomap(
-    {
-      PUID       = 1000
-      PGID       = 1000
-      TZ         = var.TZ
-      SERVERURL  = "${var.target_service}.${var.CF_ZONE_NAME}"
-      SERVERPORT = var.ingress_port
-      PEERS      = 1
-      PEERDNS    = "auto"
-      ALLOWEDIPS = "0.0.0.0/0"
-      LOG_CONFS  = true
-    }
-  )
-  type = "Opaque"
+
+resource "helm_release" "wireguard" {
+  name       = var.namespace
+  namespace  = var.namespace
+  chart      = "wg-access-server"
+  repository = "https://place1.github.io/wg-access-server"
+  values     = [data.template_file.wireguard.rendered]
+
 }
+
