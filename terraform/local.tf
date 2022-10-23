@@ -32,7 +32,7 @@ locals {
     }
 
     privateingress = {
-      enabled = true
+      enabled = false
     }
     pihole = {
       enabled   = true

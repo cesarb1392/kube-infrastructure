@@ -36,23 +36,30 @@ resource "helm_release" "this" {
   depends_on = [null_resource.add_chart_locally]
 }
 
-
-
 data "template_file" "pihole_values" {
 #  https://github.com/MoJo2600/pihole-kubernetes/blob/master/charts/pihole/values.yaml
   template = yamlencode({
     dnsmasq = {
       customDnsEntries = ["address=/nas/192.168.178.10"]
     }
-    customCnameEntries = ["cname=foo.nas,nas"]
+    customCnameEntries = []
 
     persistentVolumeClaim = { enabled = false }
 
+    image = {
+      repository = "pihole/pihole"
+      tag= "2022.10"
+      pullPolicy = "IfNotPresent"
+    }
+
+#    dualStack= {
+#      enabled = true
+#    }
 #    ingress = {
 #      enabled          = true,
 #      ingressClassName = "nginx"
 #      path             = "/"
-#      hosts            = ["pihole.192.168.178.231.nip.io"]
+#      hosts            = ["pihole.192.168.178.230.nip.io"]
 #    }
 
     serviceWeb = {
@@ -74,8 +81,8 @@ data "template_file" "pihole_values" {
     podDnsConfig = {
       enabled     = true
       policy      = "None"
-      nameservers = ["127.0.0.1", "1.1.1.1"]
+      nameservers = ["127.0.0.1", "1.1.1.1", "1.0.0.1"]
     }
-    adminPassword = "bananas"
+    adminPassword = var.password
   })
 }
