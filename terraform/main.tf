@@ -53,6 +53,8 @@ module "wireguard" {
   source      = "./wireguard"
   namespace   = "wireguard"
   private_key = var.WG_PRIVATE_KEY
+  password    = var.WG_PASSWORD
+  user        = var.WG_USER
 
   depends_on = [module.ingress]
 }
@@ -88,8 +90,8 @@ module "pihole" {
 
   source    = "./pihole"
   namespace = "pihole"
+  password   = var.PI_HOLE_PASS
   TZ        = var.TZ
 
   depends_on = [module.ingress, module.metallb]
-  password   = var.PI_HOLE_PASS
 }

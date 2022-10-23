@@ -41,3 +41,10 @@ variable "PI_HOLE_PASS" {
 variable "WG_PRIVATE_KEY" {
   type = string
 }
+
+variable "WG_USER" {
+  type = string
+}
+variable "WG_PASSWORD" {
+  type = string
+}
