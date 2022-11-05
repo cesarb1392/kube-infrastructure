@@ -1,9 +1,9 @@
 locals {
   applications = {
     nginx = {
-      enabled        = true
-      cf_access      = true
-      public_ingress = true
+      enabled        = false
+      cf_access      = false
+      public_ingress = false
       image          = "nginx"
       target_service = "nginx-svc"
       ingress_port   = 80
@@ -16,27 +16,30 @@ locals {
       ingress_port   = 80
     }
     minio = {
-      enabled        = true
-      public_ingress = true
+      enabled        = false
+      public_ingress = false
       cf_access      = false
       target_service = "minio"
       ingress_port   = 9000
     }
     wireguard = {
-      enabled   = true
-      log_level = "debug"
+      enabled = false
     }
 
     privateingress = {
       enabled = false
     }
     pihole = {
-      enabled   = true
-      log_level = "debug"
+      enabled = false
     }
     metallb = {
-      enabled   = true
+      enabled   = false
       log_level = "debug"
+    }
+
+    monitoring = {
+      enabled = false
+
     }
   }
 

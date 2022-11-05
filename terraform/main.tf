@@ -1,7 +1,3 @@
-##########################
-##### PUBLIC NETWORK #####
-##########################
-
 module "ingress" {
   for_each = local.available_ingresses
 
@@ -56,13 +52,8 @@ module "wireguard" {
   password    = var.WG_PASSWORD
   user        = var.WG_USER
 
-  depends_on = [module.ingress]
+  depends_on = [module.metallb]
 }
-
-
-##########################
-#### PRIVATE NETWORK #####
-##########################
 
 
 module "metallb" {
@@ -90,8 +81,18 @@ module "pihole" {
 
   source    = "./pihole"
   namespace = "pihole"
-  password   = var.PI_HOLE_PASS
+  password  = var.PI_HOLE_PASS
   TZ        = var.TZ
 
   depends_on = [module.ingress, module.metallb]
+}
+
+module "monitoring" {
+  count = local.applications.monitoring.enabled ? 1 : 0
+
+  source    = "./monitoring"
+  namespace = "monitoring"
+  TZ        = var.TZ
+
+  depends_on = [module.metallb]
 }

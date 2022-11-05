@@ -11,6 +11,7 @@ locals {
 resource "helm_release" "metallb" {
   name  = "metallb"
   chart = "https://github.com/metallb/metallb/releases/download/metallb-chart-0.13.7/metallb-0.13.7.tgz?raw=true"
+  #  version = "0.13.7"
 
   timeout         = 120
   cleanup_on_fail = true

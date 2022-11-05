@@ -4,9 +4,14 @@ resource "helm_release" "minio_storage" {
   namespace = var.namespace
   name      = "minio"
   chart     = "https://github.com/minio/minio/blob/master/helm-releases/minio-4.0.9.tgz?raw=true"
+  #  version = "4.0.9"
+  values = [data.template_file.this.rendered]
+}
 
-  values = [
-    yamlencode({
+
+data "template_file" "this" {
+  template = yamlencode(
+    {
       mode         = "standalone"
       replicas     = 1
       rootUser     = var.MINIO_ROOT_USER
@@ -34,6 +39,6 @@ resource "helm_release" "minio_storage" {
         }
       }
       users = var.MINIO_USERS
-    })
-  ]
+    }
+  )
 }

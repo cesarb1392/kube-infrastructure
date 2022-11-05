@@ -51,6 +51,7 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 | <a name="module_ingress"></a> [ingress](#module\_ingress) | ./public_ingress | n/a |
 | <a name="module_metallb"></a> [metallb](#module\_metallb) | ./metallb | n/a |
 | <a name="module_minio"></a> [minio](#module\_minio) | ./minio | n/a |
+| <a name="module_monitoring"></a> [monitoring](#module\_monitoring) | ./monitoring | n/a |
 | <a name="module_pihole"></a> [pihole](#module\_pihole) | ./pihole | n/a |
 | <a name="module_private_ingress"></a> [private\_ingress](#module\_private\_ingress) | ./private_ingress | n/a |
 | <a name="module_website"></a> [website](#module\_website) | ./website | n/a |

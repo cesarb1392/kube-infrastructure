@@ -9,6 +9,7 @@ resource "helm_release" "this" {
   name      = "pihole"
   chart     = "mojo2600/pihole"
   namespace = var.namespace
+  #  version = "2.9.3"
 
   timeout         = 120
   cleanup_on_fail = true

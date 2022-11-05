@@ -4,8 +4,8 @@ data "template_file" "wireguard" {
   template = yamlencode({
     web = {
       config = {
-        adminUsername = "platano"
-        adminPassword = "banana12345"
+        adminUsername = var.user
+        adminPassword = var.password
       }
       service = {
         type           = "LoadBalancer"
@@ -27,6 +27,16 @@ data "template_file" "wireguard" {
         }
       }
     }
+    resources = {
+      limits = {
+        cpu    = "250m"
+        memory = "250Mi"
+      }
+      requests = {
+        cpu    = "100m"
+        memory = "128Mi"
+      }
+    }
   })
 }
 
@@ -37,6 +47,6 @@ resource "helm_release" "wireguard" {
   chart      = "wg-access-server"
   repository = "https://place1.github.io/wg-access-server"
   values     = [data.template_file.wireguard.rendered]
-
+  #  version = "0.4.6"
 }
 

@@ -1,6 +1,13 @@
 - hosts: all
   become: yes
   tasks:
+    - name: Check system information
+      shell:
+        "lsb_release -a"
+      register: os_info
+    - debug:
+        msg: "{{os_info.stdout_lines}}"
+
     - name: Update packages
       apt:
         update_cache: true
@@ -20,10 +27,23 @@
         state: latest
         cache_valid_time: 3600
 
-# run sysctl -w net.core.rmem_max=2500000
-
     - name: Apply UFW rules
       ansible.builtin.import_tasks: ufw.yaml
+
+    - name: Increase size of the buffer that receives UDP packets
+      ansible.posix.sysctl:
+        name: net.core.rmem_max
+        value: '2500000'
+        sysctl_set: yes
+        reload: yes
+
+    - name: Under voltage?
+      ansible.builtin.script: ./scripts/undervoltage.sh
+      args:
+        executable: bash
+      register: undervoltage
+    - debug: msg="{{ undervoltage.stdout.split('\n') }}"
+    - debug: msg="{{ undervoltage.stderr.split('\n') }}"
 
 - hosts: master
   become: yes
