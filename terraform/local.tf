@@ -23,23 +23,34 @@ locals {
       ingress_port   = 9000
     }
     wireguard = {
-      enabled = false
+      enabled = true
+      host_ip = "192.168.178.233"
     }
 
     privateingress = {
       enabled = false
     }
     pihole = {
-      enabled = false
+      enabled = true
+      host_ip = "192.168.178.232"
     }
     metallb = {
-      enabled   = false
-      log_level = "debug"
+      enabled      = true
+      log_level    = "debug"
+      address_pool = "192.168.178.230-192.168.178.235"
     }
 
     monitoring = {
-      enabled = false
+      enabled = true
+    }
 
+    loadtest = {
+      enabled    = true
+      target_url = "https://${var.CF_ZONE_NAME}"
+    }
+
+    github_runner = {
+      enabled = true
     }
   }
 

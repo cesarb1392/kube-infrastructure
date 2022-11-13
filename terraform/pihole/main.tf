@@ -55,18 +55,8 @@ data "template_file" "pihole_values" {
       pullPolicy = "IfNotPresent"
     }
 
-    #    dualStack= {
-    #      enabled = true
-    #    }
-    #    ingress = {
-    #      enabled          = true,
-    #      ingressClassName = "nginx"
-    #      path             = "/"
-    #      hosts            = ["pihole.192.168.178.230.nip.io"]
-    #    }
-
     serviceWeb = {
-      loadBalancerIP = "192.168.178.231"
+      loadBalancerIP = var.host_ip
       type           = "LoadBalancer"
       annotations = {
         "metallb.universe.tf/allow-shared-ip" = "pihole-svc"
@@ -74,7 +64,7 @@ data "template_file" "pihole_values" {
     }
 
     serviceDns = {
-      loadBalancerIP = "192.168.178.231"
+      loadBalancerIP = var.host_ip
       annotations = {
         "metallb.universe.tf/allow-shared-ip" = "pihole-svc"
       }

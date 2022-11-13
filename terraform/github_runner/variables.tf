@@ -3,18 +3,15 @@ variable "namespace" {
   type        = string
 }
 
-variable "private_key" {
-  description = "private_key"
-  type        = string
-}
-
-variable "user" {
+variable "ACCESS_TOKEN" {
   type = string
 }
-variable "password" {
+variable "REPO_URL" {
   type = string
 }
-
-variable "host_ip" {
+variable "RUNNER_WORKDIR" {
+  type = string
+}
+variable "RUNNER_NAME" {
   type = string
 }

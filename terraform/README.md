@@ -32,7 +32,7 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 
 | Name | Version |
 |------|---------|
-| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | >= 1.3.0 |
+| <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.3.0, < 2.0.0 |
 | <a name="requirement_cloudflare"></a> [cloudflare](#requirement\_cloudflare) | >= 3.24.0 |
 | <a name="requirement_helm"></a> [helm](#requirement\_helm) | >= 2.5.0 |
 | <a name="requirement_kubectl"></a> [kubectl](#requirement\_kubectl) | >= 1.7.0 |
@@ -42,13 +42,15 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 
 | Name | Version |
 |------|---------|
-| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 2.14.0 |
+| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 2.15.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
+| <a name="module_github_runner"></a> [github\_runner](#module\_github\_runner) | ./github_runner | n/a |
 | <a name="module_ingress"></a> [ingress](#module\_ingress) | ./public_ingress | n/a |
+| <a name="module_loadtest"></a> [loadtest](#module\_loadtest) | ./load_test | n/a |
 | <a name="module_metallb"></a> [metallb](#module\_metallb) | ./metallb | n/a |
 | <a name="module_minio"></a> [minio](#module\_minio) | ./minio | n/a |
 | <a name="module_monitoring"></a> [monitoring](#module\_monitoring) | ./monitoring | n/a |
@@ -71,6 +73,7 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 | <a name="input_CF_API_TOKEN"></a> [CF\_API\_TOKEN](#input\_CF\_API\_TOKEN) | n/a | `string` | n/a | yes |
 | <a name="input_CF_ZONE_ID"></a> [CF\_ZONE\_ID](#input\_CF\_ZONE\_ID) | n/a | `string` | n/a | yes |
 | <a name="input_CF_ZONE_NAME"></a> [CF\_ZONE\_NAME](#input\_CF\_ZONE\_NAME) | n/a | `string` | n/a | yes |
+| <a name="input_GH_ACCESS_TOKEN"></a> [GH\_ACCESS\_TOKEN](#input\_GH\_ACCESS\_TOKEN) | n/a | `string` | n/a | yes |
 | <a name="input_KUBECONFIG"></a> [KUBECONFIG](#input\_KUBECONFIG) | n/a | `string` | n/a | yes |
 | <a name="input_MINIO_ROOT_PASSWORD"></a> [MINIO\_ROOT\_PASSWORD](#input\_MINIO\_ROOT\_PASSWORD) | n/a | `string` | n/a | yes |
 | <a name="input_MINIO_ROOT_USER"></a> [MINIO\_ROOT\_USER](#input\_MINIO\_ROOT\_USER) | n/a | `string` | n/a | yes |

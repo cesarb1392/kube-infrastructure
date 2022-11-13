@@ -21,3 +21,7 @@ variable "secondary_dns" {
 variable "password" {
   description = "Passwrod of the Web Interface"
 }
+
+variable "host_ip" {
+  type = string
+}

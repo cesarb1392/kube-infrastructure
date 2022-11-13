@@ -53,6 +53,7 @@ module "wireguard" {
   user        = var.WG_USER
 
   depends_on = [module.metallb]
+  host_ip    = local.applications.wireguard.host_ip
 }
 
 
@@ -64,14 +65,15 @@ module "metallb" {
 
   log_level = local.applications.metallb.log_level
 
-  depends_on = [kubernetes_namespace.this]
+  depends_on   = [kubernetes_namespace.this]
+  address_pool = local.applications.metallb.address_pool
 }
 
 module "private_ingress" {
   count = local.applications.privateingress.enabled ? 1 : 0
 
   source    = "./private_ingress"
-  namespace = "privateingress"
+  namespace = "private-ingress"
 
   depends_on = [kubernetes_namespace.this]
 }
@@ -85,6 +87,7 @@ module "pihole" {
   TZ        = var.TZ
 
   depends_on = [module.ingress, module.metallb]
+  host_ip    = local.applications.pihole.host_ip
 }
 
 module "monitoring" {
@@ -95,4 +98,24 @@ module "monitoring" {
   TZ        = var.TZ
 
   depends_on = [module.metallb]
+}
+
+module "loadtest" {
+  count = local.applications.loadtest.enabled ? 1 : 0
+
+  source     = "./load_test"
+  namespace  = "loadtest"
+  target_url = local.applications.loadtest.target_url
+}
+
+module "github_runner" {
+  count = local.applications.github_runner.enabled ? 1 : 0
+
+  source    = "./github_runner"
+  namespace = "github-runner"
+
+  ACCESS_TOKEN   = var.GH_ACCESS_TOKEN
+  REPO_URL       = "https://github.com/cesarb1392/myAwesomeCV"
+  RUNNER_NAME    = "bananaRunner"
+  RUNNER_WORKDIR = "/tmp/myAwesomeCV"
 }

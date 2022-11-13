@@ -2,10 +2,10 @@ resource "kubernetes_namespace" "this" {
   for_each = local.available_namespaces
 
   metadata {
-    name = each.value
+    name = replace(each.value, "_", "-")
     labels = {
-      namespace   = each.value
-      application = each.value
+      namespace   = replace(each.value, "_", "-")
+      application = replace(each.value, "_", "-")
       managed-by  = "Terraform"
     }
   }

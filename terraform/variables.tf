@@ -48,3 +48,7 @@ variable "WG_USER" {
 variable "WG_PASSWORD" {
   type = string
 }
+
+variable "GH_ACCESS_TOKEN" {
+  type = string
+}
