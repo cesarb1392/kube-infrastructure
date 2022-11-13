@@ -2,7 +2,7 @@
 
 ## todo
 
-- When installing from scratch Traefik CRD are not defined, therefore TF operations failed 
+- Automate ansible with local-provisioner
 - improve variables
 - improve tags / labels
 - container registry

@@ -40,16 +40,24 @@ data "template_file" "wireguard" {
         }
       }
     }
-    #    resources = {
-    #      limits = {
-    #        cpu    = "250m"
-    #        memory = "250Mi"
-    #      }
-    #      requests = {
-    #        cpu    = "100m"
-    #        memory = "128Mi"
-    #      }
-    #    }
+    persistence = {
+      enabled = true
+    }
+
+    nodeSelector = {
+      "kubernetes.io/hostname" = "fastbanana1"
+    }
+
+    resources = {
+      limits = {
+        cpu    = "0.75"
+        memory = "512Mi"
+      }
+      requests = {
+        cpu    = "100m"
+        memory = "128Mi"
+      }
+    }
   })
 }
 

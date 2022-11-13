@@ -20,4 +20,3 @@ repos:
           - --args=--non-recursive
           - --args=--policy-type=k8s
           - --args=--iac-type=terraform
-          - --args=--iac-dir=./terraform

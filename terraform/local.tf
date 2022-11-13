@@ -41,7 +41,7 @@ locals {
     }
 
     monitoring = {
-      enabled = true
+      enabled = false
     }
 
     loadtest = {

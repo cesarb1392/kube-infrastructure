@@ -4,7 +4,7 @@ resource "kubernetes_deployment_v1" "this" {
     namespace = var.namespace
   }
   spec {
-    replicas = "1"
+    replicas = 0
     selector {
       match_labels = { "app" = "loadtest" }
     }
