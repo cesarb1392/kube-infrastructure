@@ -27,8 +27,9 @@ resource "kubernetes_deployment_v1" "this" {
       }
       spec {
         container {
-          name  = var.app_name
-          image = var.app_image
+          name              = var.app_name
+          image             = var.app_image
+          image_pull_policy = "IfNotPresent"
           port {
             container_port = var.ingress_port
           }

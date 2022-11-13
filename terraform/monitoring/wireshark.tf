@@ -19,8 +19,10 @@ resource "kubernetes_deployment_v1" "wireshark" {
           run_as_user  = "0"
         }
         container {
-          name  = "wireshark"
-          image = "linuxserver/wireshark:latest"
+          name              = "wireshark"
+          image             = "linuxserver/wireshark:latest"
+          image_pull_policy = "IfNotPresent"
+
           security_context {
             capabilities {
               add = ["NET_ADMIN"]

@@ -36,9 +36,11 @@ resource "kubernetes_deployment_v1" "this" {
       }
       spec {
         container {
-          name  = "cloudflared-${var.namespace}"
-          image = "cloudflare/cloudflared:2022.10.0-arm64"
-          args  = ["tunnel", "--config", "/etc/cloudflared/config/config.yaml", "run"]
+          name              = "cloudflared-${var.namespace}"
+          image             = "cloudflare/cloudflared:2022.10.0-arm64"
+          args              = ["tunnel", "--config", "/etc/cloudflared/config/config.yaml", "run"]
+          image_pull_policy = "IfNotPresent"
+
           liveness_probe {
             http_get {
               path = "/ready"

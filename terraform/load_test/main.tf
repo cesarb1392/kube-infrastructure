@@ -14,9 +14,10 @@ resource "kubernetes_deployment_v1" "this" {
       }
       spec {
         container {
-          name  = "loadtest"
-          image = "24hoursmedia/k6-xarch"
-          args  = ["run", "--discard-response-bodies", "--vus=10", "--stage=1m:1000", "--stage=3s:0", "--quiet", "--linger", "/tmp/loadtest-config/index.js"]
+          name              = "loadtest"
+          image             = "24hoursmedia/k6-xarch"
+          args              = ["run", "--discard-response-bodies", "--vus=10", "--stage=1m:1000", "--stage=3s:0", "--quiet", "--linger", "/tmp/loadtest-config/index.js"]
+          image_pull_policy = "IfNotPresent"
 
           resources {
             requests = {

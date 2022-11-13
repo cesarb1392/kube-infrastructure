@@ -1,28 +1,32 @@
-resource "kubernetes_secret" "env_vars" {
+resource "kubernetes_secret" "this" {
+  for_each = var.repositories
+
   metadata {
-    name      = "env-vars"
+    name      = each.key
     namespace = var.namespace
   }
   data = {
     ACCESS_TOKEN   = var.ACCESS_TOKEN
-    REPO_URL       = var.REPO_URL
-    RUNNER_WORKDIR = var.RUNNER_WORKDIR
-    RUNNER_NAME    = var.RUNNER_NAME
+    REPO_URL       = each.value.url
+    RUNNER_WORKDIR = "/tmp/${each.key}"
+    RUNNER_NAME    = each.key
   }
 }
 
 resource "kubernetes_deployment_v1" "this" {
+  for_each = var.repositories
+
   metadata {
-    name      = "${var.namespace}-deployment"
+    name      = each.key
     namespace = var.namespace
   }
   spec {
     selector {
-      match_labels = { "app" : var.namespace }
+      match_labels = { "app" : each.key }
     }
     template {
       metadata {
-        labels = { "app" : var.namespace }
+        labels = { "app" : each.key }
       }
       spec {
         affinity {
@@ -39,14 +43,14 @@ resource "kubernetes_deployment_v1" "this" {
           }
         }
         container {
-          name  = var.namespace
-          image = "myoung34/github-runner:latest"
-
+          name              = each.key
+          image             = "myoung34/github-runner:latest"
+          image_pull_policy = "IfNotPresent"
           env {
             name = "ACCESS_TOKEN"
             value_from {
               secret_key_ref {
-                name     = kubernetes_secret.env_vars.metadata.0.name
+                name     = kubernetes_secret.this[each.key].metadata.0.name
                 key      = "ACCESS_TOKEN"
                 optional = false
               }
@@ -56,7 +60,7 @@ resource "kubernetes_deployment_v1" "this" {
             name = "REPO_URL"
             value_from {
               secret_key_ref {
-                name     = kubernetes_secret.env_vars.metadata.0.name
+                name     = kubernetes_secret.this[each.key].metadata.0.name
                 key      = "REPO_URL"
                 optional = false
               }
@@ -66,7 +70,7 @@ resource "kubernetes_deployment_v1" "this" {
             name = "RUNNER_WORKDIR"
             value_from {
               secret_key_ref {
-                name     = kubernetes_secret.env_vars.metadata.0.name
+                name     = kubernetes_secret.this[each.key].metadata.0.name
                 key      = "RUNNER_WORKDIR"
                 optional = false
               }
@@ -76,7 +80,7 @@ resource "kubernetes_deployment_v1" "this" {
             name = "RUNNER_NAME"
             value_from {
               secret_key_ref {
-                name     = kubernetes_secret.env_vars.metadata.0.name
+                name     = kubernetes_secret.this[each.key].metadata.0.name
                 key      = "RUNNER_NAME"
                 optional = false
               }

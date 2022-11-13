@@ -114,8 +114,7 @@ module "github_runner" {
   source    = "./github_runner"
   namespace = "github-runner"
 
-  ACCESS_TOKEN   = var.GH_ACCESS_TOKEN
-  REPO_URL       = "https://github.com/cesarb1392/myAwesomeCV"
-  RUNNER_NAME    = "bananaRunner"
-  RUNNER_WORKDIR = "/tmp/myAwesomeCV"
+  ACCESS_TOKEN = var.GH_ACCESS_TOKEN
+  RUNNER_NAME  = "bananaRunner"
+  repositories = local.applications.github_runner.repos
 }

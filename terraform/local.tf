@@ -11,8 +11,17 @@ locals {
     portfolio = {
       enabled        = true
       public_ingress = true
+      runner         = true
       image          = "monkeybanana13/portfolio"
       target_service = "portfolio-svc"
+      ingress_port   = 80
+    }
+    sharesecrets = {
+      enabled        = true
+      public_ingress = true
+      runner         = true
+      image          = "monkeybanana13/share-a-secret"
+      target_service = "sharesecrets-svc"
       ingress_port   = 80
     }
     minio = {
@@ -51,6 +60,14 @@ locals {
 
     github_runner = {
       enabled = true
+      repos = {
+        myawesomecv = {
+          url = "https://github.com/cesarb1392/myAwesomeCV"
+        },
+        shareasecret = {
+          url = "https://github.com/cesarb1392/shareAsecret"
+        }
+      }
     }
   }
 
@@ -65,5 +82,6 @@ locals {
   available_websites = {
     for k, v in local.applications : k => v if try(v.image, null) != null && v.enabled
   }
+
 
 }

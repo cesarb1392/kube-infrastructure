@@ -6,12 +6,12 @@ variable "namespace" {
 variable "ACCESS_TOKEN" {
   type = string
 }
-variable "REPO_URL" {
-  type = string
+variable "repositories" {
+  type = map(object({
+    url = string
+  }))
 }
-variable "RUNNER_WORKDIR" {
-  type = string
-}
+
 variable "RUNNER_NAME" {
   type = string
 }
