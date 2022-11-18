@@ -3,22 +3,20 @@ variable "namespace" {
   type        = string
 }
 
-variable "private_key" {
-  description = "private_key"
-  type        = string
+variable "ingress_port" {
+  type = number
 }
 
-variable "user" {
+variable "SERVER_ADMIN_EMAIL" {
   type = string
 }
-variable "password" {
-  type = string
-}
-
-variable "host_ip" {
+variable "DOMAIN" {
   type = string
 }
 
+variable "VAULTWARDEN_ADMIN_TOKEN" {
+  type = string
+}
 variable "persistent_volume_claim_name" {
   type = string
 }

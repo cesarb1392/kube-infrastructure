@@ -26,7 +26,7 @@ resource "kubernetes_deployment_v1" "this" {
     }
   }
   spec {
-    replicas = "1"
+    replicas = 1
     selector {
       match_labels = { app = "cloudflared-${var.namespace}" }
     }

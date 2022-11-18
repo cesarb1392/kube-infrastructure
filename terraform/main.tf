@@ -9,9 +9,10 @@ module "ingress" {
   hostname       = each.key
   cf_access      = can(each.value.cf_access) ? each.value.cf_access : false
 
-  CF_ACCOUNT_ID = var.CF_ACCOUNT_ID
-  CF_ZONE_ID    = var.CF_ZONE_ID
-  CF_ZONE_NAME  = var.CF_ZONE_NAME
+  CF_ACCOUNT_ID        = var.CF_ACCOUNT_ID
+  CF_ZONE_ID           = var.CF_ZONE_ID
+  CF_ZONE_NAME         = var.CF_ZONE_NAME
+  CF_ACCESS_EMAIL_LIST = var.CF_ACCESS_EMAIL_LIST
 
   depends_on = [kubernetes_namespace.this]
 }
@@ -28,34 +29,6 @@ module "website" {
 
   depends_on = [module.ingress]
 }
-
-module "minio" {
-  count = local.applications.minio.enabled ? 1 : 0
-
-  source = "./minio"
-
-  namespace           = "minio"
-  app_name            = "minio"
-  ingress_port        = local.applications.minio.ingress_port
-  target_service      = local.applications.minio.target_service
-  MINIO_USERS         = var.MINIO_USERS
-  MINIO_ROOT_PASSWORD = var.MINIO_ROOT_PASSWORD
-  MINIO_ROOT_USER     = var.MINIO_ROOT_USER
-}
-
-module "wireguard" {
-  count = local.applications.wireguard.enabled ? 1 : 0
-
-  source      = "./wireguard"
-  namespace   = "wireguard"
-  private_key = var.WG_PRIVATE_KEY
-  password    = var.WG_PASSWORD
-  user        = var.WG_USER
-
-  depends_on = [module.metallb]
-  host_ip    = local.applications.wireguard.host_ip
-}
-
 
 module "metallb" {
   count = local.applications.metallb.enabled ? 1 : 0
@@ -117,4 +90,66 @@ module "github_runner" {
   ACCESS_TOKEN = var.GH_ACCESS_TOKEN
   RUNNER_NAME  = "bananaRunner"
   repositories = local.applications.github_runner.repos
+}
+
+module "minio" {
+  count = local.applications.minio.enabled ? 1 : 0
+
+  source = "./minio"
+
+  namespace                    = "minio"
+  app_name                     = "minio"
+  ingress_port                 = local.applications.minio.ingress_port
+  target_service               = local.applications.minio.target_service
+  MINIO_USERS                  = var.MINIO_USERS
+  MINIO_ROOT_PASSWORD          = var.MINIO_ROOT_PASSWORD
+  MINIO_ROOT_USER              = var.MINIO_ROOT_USER
+  persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["minio"].metadata.0.name
+
+  depends_on = []
+}
+
+module "wireguard" {
+  count = local.applications.wireguard.enabled ? 1 : 0
+
+  source                       = "./wireguard"
+  namespace                    = "wireguard"
+  private_key                  = var.WG_PRIVATE_KEY
+  password                     = var.WG_PASSWORD
+  user                         = var.WG_USER
+  host_ip                      = local.applications.wireguard.host_ip
+  persistent_volume_claim_name = "wireguard-pvc" # kubernetes_persistent_volume_claim.this["wireguard"].metadata.0.name
+
+  depends_on = [module.metallb]
+}
+
+module "vaultwarden" {
+  count = local.applications.vaultwarden.enabled ? 1 : 0
+
+  source                       = "./vaultwarden"
+  namespace                    = "vaultwarden"
+  ingress_port                 = local.applications.vaultwarden.ingress_port
+  SERVER_ADMIN_EMAIL           = var.CF_ACCESS_EMAIL_LIST.0
+  DOMAIN                       = var.CF_ZONE_NAME
+  VAULTWARDEN_ADMIN_TOKEN      = var.VAULTWARDEN_ADMIN_TOKEN
+  persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["vaultwarden"].metadata.0.name
+
+  depends_on = [module.ingress]
+}
+
+module "torrente" {
+  count = local.applications.torrente.enabled ? 1 : 0
+
+  source = "./torrente"
+
+  namespace                    = "torrente"
+  OPENVPN_PASSWORD             = var.OPENVPN_PASSWORD
+  OPENVPN_USERNAME             = var.OPENVPN_USERNAME
+  puid                         = 65534
+  pgid                         = 65534
+  timezone                     = var.TZ
+  persistent_volume_claim_name = "torrente-pvc" # kubernetes_persistent_volume_claim.this["torrente"].metadata.0.name
+  host_ip                      = local.applications.torrente.host_ip
+
+  depends_on = []
 }

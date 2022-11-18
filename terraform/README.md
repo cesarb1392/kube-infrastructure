@@ -56,6 +56,8 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 | <a name="module_monitoring"></a> [monitoring](#module\_monitoring) | ./monitoring | n/a |
 | <a name="module_pihole"></a> [pihole](#module\_pihole) | ./pihole | n/a |
 | <a name="module_private_ingress"></a> [private\_ingress](#module\_private\_ingress) | ./private_ingress | n/a |
+| <a name="module_torrente"></a> [torrente](#module\_torrente) | ./torrente | n/a |
+| <a name="module_vaultwarden"></a> [vaultwarden](#module\_vaultwarden) | ./vaultwarden | n/a |
 | <a name="module_website"></a> [website](#module\_website) | ./website | n/a |
 | <a name="module_wireguard"></a> [wireguard](#module\_wireguard) | ./wireguard | n/a |
 
@@ -64,11 +66,14 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 | Name | Type |
 |------|------|
 | [kubernetes_namespace.this](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/namespace) | resource |
+| [kubernetes_persistent_volume.this](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/persistent_volume) | resource |
+| [kubernetes_persistent_volume_claim.this](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/persistent_volume_claim) | resource |
 
 ## Inputs
 
 | Name | Description | Type | Default | Required |
 |------|-------------|------|---------|:--------:|
+| <a name="input_CF_ACCESS_EMAIL_LIST"></a> [CF\_ACCESS\_EMAIL\_LIST](#input\_CF\_ACCESS\_EMAIL\_LIST) | n/a | `list(string)` | n/a | yes |
 | <a name="input_CF_ACCOUNT_ID"></a> [CF\_ACCOUNT\_ID](#input\_CF\_ACCOUNT\_ID) | n/a | `string` | n/a | yes |
 | <a name="input_CF_API_TOKEN"></a> [CF\_API\_TOKEN](#input\_CF\_API\_TOKEN) | n/a | `string` | n/a | yes |
 | <a name="input_CF_ZONE_ID"></a> [CF\_ZONE\_ID](#input\_CF\_ZONE\_ID) | n/a | `string` | n/a | yes |
@@ -78,8 +83,11 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 | <a name="input_MINIO_ROOT_PASSWORD"></a> [MINIO\_ROOT\_PASSWORD](#input\_MINIO\_ROOT\_PASSWORD) | n/a | `string` | n/a | yes |
 | <a name="input_MINIO_ROOT_USER"></a> [MINIO\_ROOT\_USER](#input\_MINIO\_ROOT\_USER) | n/a | `string` | n/a | yes |
 | <a name="input_MINIO_USERS"></a> [MINIO\_USERS](#input\_MINIO\_USERS) | n/a | <pre>list(<br>    object({<br>      accessKey = string<br>      secretKey = string<br>      policy    = string<br>  }))</pre> | n/a | yes |
+| <a name="input_OPENVPN_PASSWORD"></a> [OPENVPN\_PASSWORD](#input\_OPENVPN\_PASSWORD) | The username to connect to Grafana UI. | `string` | n/a | yes |
+| <a name="input_OPENVPN_USERNAME"></a> [OPENVPN\_USERNAME](#input\_OPENVPN\_USERNAME) | The username to connect to Grafana UI. | `string` | n/a | yes |
 | <a name="input_PI_HOLE_PASS"></a> [PI\_HOLE\_PASS](#input\_PI\_HOLE\_PASS) | n/a | `string` | n/a | yes |
 | <a name="input_TZ"></a> [TZ](#input\_TZ) | n/a | `string` | n/a | yes |
+| <a name="input_VAULTWARDEN_ADMIN_TOKEN"></a> [VAULTWARDEN\_ADMIN\_TOKEN](#input\_VAULTWARDEN\_ADMIN\_TOKEN) | n/a | `string` | n/a | yes |
 | <a name="input_WG_PASSWORD"></a> [WG\_PASSWORD](#input\_WG\_PASSWORD) | n/a | `string` | n/a | yes |
 | <a name="input_WG_PRIVATE_KEY"></a> [WG\_PRIVATE\_KEY](#input\_WG\_PRIVATE\_KEY) | n/a | `string` | n/a | yes |
 | <a name="input_WG_USER"></a> [WG\_USER](#input\_WG\_USER) | n/a | `string` | n/a | yes |

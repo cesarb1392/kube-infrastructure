@@ -27,3 +27,4 @@
         owner: "{{ ansible_user }}"
         mode: "u=rw,g=,o="
         flat: yes
+

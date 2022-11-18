@@ -4,7 +4,7 @@ resource "kubernetes_deployment_v1" "wireshark" {
     namespace = var.namespace
   }
   spec {
-    replicas = "1"
+    replicas = 1
     selector {
       match_labels = { "app" = "wireshark" }
     }

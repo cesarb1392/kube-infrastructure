@@ -15,6 +15,10 @@ variable "hostname" {
   type = string
 }
 
+variable "CF_ACCESS_EMAIL_LIST" {
+  type = list(string)
+}
+
 variable "cf_access" {
   type    = string
   default = false

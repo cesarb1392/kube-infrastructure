@@ -1,5 +1,3 @@
-# https://github.com/Place1/wg-access-server/blob/master/deploy/helm/wg-access-server/values.yaml
-
 data "template_file" "wireguard" {
   template = yamlencode({
     # wg-access-server config
@@ -41,11 +39,12 @@ data "template_file" "wireguard" {
       }
     }
     persistence = {
-      enabled = true
+      enabled       = true
+      existingClaim = var.persistent_volume_claim_name
     }
 
     nodeSelector = {
-      "kubernetes.io/hostname" = "fastbanana1"
+      "kubernetes.io/hostname" = "fastbanana2"
     }
 
     resources = {
@@ -62,12 +61,25 @@ data "template_file" "wireguard" {
 }
 
 
-resource "helm_release" "wireguard" {
-  name       = var.namespace
-  namespace  = var.namespace
-  chart      = "wg-access-server"
-  repository = "https://place1.github.io/wg-access-server"
-  values     = [data.template_file.wireguard.rendered]
-  version    = "0.4.6"
+
+resource "null_resource" "add_chart_locally" {
+  provisioner "local-exec" {
+    command     = "helm repo add wg-access-server https://cesarb1392.github.io/helm_charts/"
+    interpreter = ["sh", "-c"]
+  }
 }
 
+resource "helm_release" "this" {
+  name      = "wg-access-server"
+  chart     = "wg-access-server/wg-access-server"
+  namespace = var.namespace
+  version   = "1.0.0"
+
+  timeout         = 120
+  cleanup_on_fail = true
+  force_update    = true
+
+  values = [data.template_file.wireguard.rendered]
+
+  depends_on = [null_resource.add_chart_locally]
+}

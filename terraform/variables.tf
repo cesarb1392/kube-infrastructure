@@ -9,6 +9,9 @@ variable "KUBECONFIG" {
 variable "TZ" {
   type = string
 }
+variable "CF_ACCESS_EMAIL_LIST" {
+  type = list(string)
+}
 variable "CF_ZONE_ID" {
   type = string
 }
@@ -51,4 +54,15 @@ variable "WG_PASSWORD" {
 
 variable "GH_ACCESS_TOKEN" {
   type = string
+}
+variable "VAULTWARDEN_ADMIN_TOKEN" {
+  type = string
+}
+variable "OPENVPN_USERNAME" {
+  description = "The username to connect to Grafana UI."
+  type        = string
+}
+variable "OPENVPN_PASSWORD" {
+  description = "The username to connect to Grafana UI."
+  type        = string
 }

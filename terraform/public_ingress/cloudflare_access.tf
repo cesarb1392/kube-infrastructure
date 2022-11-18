@@ -15,7 +15,7 @@ resource "cloudflare_access_policy" "this" {
   name           = "Banana Access"
   decision       = "allow"
   include {
-    email = ["contact@cesarb.dev"]
+    email = var.CF_ACCESS_EMAIL_LIST
   }
   precedence = 1
 }

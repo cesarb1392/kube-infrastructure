@@ -4,8 +4,7 @@ resource "helm_release" "minio_storage" {
   namespace = var.namespace
   name      = "minio"
   chart     = "https://github.com/minio/minio/blob/master/helm-releases/minio-4.0.9.tgz?raw=true"
-  #  version = "4.0.9"
-  values = [data.template_file.this.rendered]
+  values    = [data.template_file.this.rendered]
 }
 
 
@@ -17,7 +16,7 @@ data "template_file" "this" {
       rootUser     = var.MINIO_ROOT_USER
       rootPassword = var.MINIO_ROOT_PASSWORD
       persistence = {
-        size = "5Gi"
+        existingClaim = var.persistent_volume_claim_name
       }
       service = {
         type = "ClusterIP"

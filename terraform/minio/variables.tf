@@ -32,3 +32,7 @@ variable "MINIO_ROOT_USER" {
 variable "MINIO_ROOT_PASSWORD" {
   type = string
 }
+
+variable "persistent_volume_claim_name" {
+  type = string
+}

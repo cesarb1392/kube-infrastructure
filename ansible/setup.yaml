@@ -8,10 +8,15 @@
     - debug:
         msg: "{{os_info.stdout_lines}}"
 
-    - name: Update packages
-      apt:
-        update_cache: true
-        cache_valid_time: 3600
+    - name: Update all packages to their latest version
+      ansible.builtin.apt:
+        name: "*"
+        state: latest
+
+    - name: Upgrade the OS (apt-get dist-upgrade)
+      ansible.builtin.apt:
+        upgrade: dist
+        update_cache: yes
 
     - name: Install packages
       apt:
@@ -24,9 +29,13 @@
           - micro
           - zsh
           - ufw
+          - net-tools
         state: latest
         cache_valid_time: 3600
 
+#  configure zsh here!!
+
+# sudo update-alternatives --config iptables
     - name: Apply UFW rules
       ansible.builtin.import_tasks: ufw.yaml
 
@@ -43,7 +52,18 @@
         executable: bash
       register: undervoltage
     - debug: msg="{{ undervoltage.stdout.split('\n') }}"
-    - debug: msg="{{ undervoltage.stderr.split('\n') }}"
+
+    - name: Remove useless packages from the cache
+      ansible.builtin.apt:
+        autoclean: yes
+
+    - name: Remove dependencies that are no longer required
+      ansible.builtin.apt:
+        autoremove: yes
+
+    - name: Run the equivalent of "apt-get clean" as a separate step
+      apt:
+        clean: yes
 
 - hosts: master
   become: yes
@@ -60,6 +80,9 @@
         rule: allow
         port: 6443
         proto: tcp
+    - name: Reboot
+      ansible.builtin.reboot:
+        reboot_timeout: 60
 
 - hosts: all
   become: yes
