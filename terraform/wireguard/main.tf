@@ -6,7 +6,7 @@ data "template_file" "wireguard" {
         externalHost = var.host_ip
         privateKey   = var.private_key
       }
-      loglevel = "debug"
+      loglevel = var.log_level
       storage  = "sqlite3:///data/db.sqlite3"
       dns = {
         upstream = ["1.1.1.1"]
@@ -22,7 +22,7 @@ data "template_file" "wireguard" {
         type           = "LoadBalancer"
         loadBalancerIP = var.host_ip
         annotations = {
-          "metallb.universe.tf/allow-shared-ip" = "wireguard-wg-access"
+          "metallb.universe.tf/allow-shared-ip" = "${var.namespace}-wg-access"
         }
       }
     }
@@ -34,16 +34,16 @@ data "template_file" "wireguard" {
         type           = "LoadBalancer"
         loadBalancerIP = var.host_ip
         annotations = {
-          "metallb.universe.tf/allow-shared-ip" = "wireguard-wg-access"
+          "metallb.universe.tf/allow-shared-ip" = "${var.namespace}-wg-access"
         }
       }
     }
     persistence = {
-      existingClaim = var.persistent_volume_claim_name
+      existingClaim = "${var.namespace}-pvc" # kubernetes_persistent_volume_claim.this.metadata.0.name
     }
 
     nodeSelector = {
-      "kubernetes.io/hostname" = "fastbanana2"
+      "kubernetes.io/hostname" = "fastbanana1"
     }
 
     resources = {
@@ -60,7 +60,7 @@ data "template_file" "wireguard" {
 }
 
 resource "helm_release" "this" {
-  name      = "wireguard"
+  name      = var.namespace
   chart     = "https://github.com/cesarb1392/helm_charts/releases/download/wireguard-1.4.0/wireguard-1.4.0.tgz?raw=true"
   namespace = var.namespace
 
@@ -69,4 +69,53 @@ resource "helm_release" "this" {
   force_update    = true
 
   values = [data.template_file.wireguard.rendered]
+}
+
+
+resource "kubernetes_persistent_volume" "this" {
+  metadata {
+    name = "${var.namespace}-pv"
+  }
+  spec {
+    persistent_volume_reclaim_policy = "Delete"
+    storage_class_name               = "local-path"
+    access_modes                     = ["ReadWriteOnce"]
+    capacity = {
+      storage = "100Mi"
+    }
+    persistent_volume_source {
+      host_path {
+        path = "/tmp/${var.namespace}"
+      }
+    }
+    node_affinity {
+      required {
+        node_selector_term {
+          match_expressions {
+            key      = "kubernetes.io/hostname"
+            operator = "In"
+            values   = ["fastbanana1"]
+          }
+        }
+      }
+    }
+  }
+}
+
+
+resource "kubernetes_persistent_volume_claim" "this" {
+  metadata {
+    name      = "${var.namespace}-pvc"
+    namespace = var.namespace
+  }
+  spec {
+    access_modes       = ["ReadWriteOnce"]
+    storage_class_name = "local-path"
+    resources {
+      requests = {
+        storage = "100Mi"
+      }
+    }
+  }
+  depends_on = [kubernetes_persistent_volume.this]
 }

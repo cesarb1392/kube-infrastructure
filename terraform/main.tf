@@ -122,7 +122,7 @@ module "wireguard" {
   password                     = var.WG_PASSWORD
   user                         = var.WG_USER
   host_ip                      = local.applications.wireguard.host_ip
-  persistent_volume_claim_name = "wireguard-pvc" # kubernetes_persistent_volume_claim.this["wireguard"].metadata.0.name
+  log_level   = local.applications.wireguard.log_level
 
   depends_on = [kubernetes_namespace.this, module.metallb]
 }

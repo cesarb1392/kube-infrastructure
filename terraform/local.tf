@@ -34,9 +34,8 @@ locals {
     }
     wireguard = {
       enabled  = true
-      no_limit = true
+      log_level = "warn"
       host_ip  = "192.168.178.233"
-      storage  = "512Mi"
     }
     privateingress = {
       enabled = false
@@ -97,10 +96,6 @@ locals {
 
   available_storage = {
     for k, v in local.applications : k => v if try(v.storage, null) != null && v.enabled
-  }
-
-  limit_usage = {
-    for k, v in local.applications : k => v if try(v.no_limit, null) == null && v.enabled
   }
 
 }

@@ -19,6 +19,6 @@ variable "host_ip" {
   type = string
 }
 
-variable "persistent_volume_claim_name" {
+variable "log_level" {
   type = string
 }

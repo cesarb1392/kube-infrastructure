@@ -13,11 +13,12 @@ resource "kubernetes_namespace" "this" {
 
 
 resource "kubernetes_limit_range" "default" {
-  for_each = local.limit_usage
+  for_each = kubernetes_namespace.this
 
   metadata {
-    name      = "${each.key}-limit"
-    namespace = each.key
+    labels    = each.value.metadata.0.labels
+    name      = "${each.value.metadata.0.name}-limit"
+    namespace = each.value.metadata.0.name
   }
 
   spec {
