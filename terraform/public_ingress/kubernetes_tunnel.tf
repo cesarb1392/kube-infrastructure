@@ -13,6 +13,30 @@ resource "kubernetes_secret_v1" "this" {
   type = "Opaque"
 }
 
+
+resource "kubernetes_config_map_v1" "this" {
+  metadata {
+    name      = "cloudflared-${var.namespace}"
+    namespace = var.namespace
+  }
+  data = {
+    "config.yaml" = yamlencode({
+      tunnel           = cloudflare_argo_tunnel.this.name
+      credentials-file = "/etc/cloudflared/creds/credentials.json"
+      metrics          = "0.0.0.0:2000"
+      no-autoupdate    = false
+      ingress = [
+        {
+          hostname = "${var.hostname}.${var.CF_ZONE_NAME}"
+          service  = "http://${var.target_service}:${var.ingress_port}"
+        },
+        { service = "http_status:404" }
+      ]
+    })
+  }
+}
+
+
 resource "kubernetes_deployment_v1" "this" {
   metadata {
     name      = "cloudflared-${var.namespace}"
@@ -79,27 +103,5 @@ resource "kubernetes_deployment_v1" "this" {
         }
       }
     }
-  }
-}
-
-resource "kubernetes_config_map_v1" "this" {
-  metadata {
-    name      = "cloudflared-${var.namespace}"
-    namespace = var.namespace
-  }
-  data = {
-    "config.yaml" = yamlencode({
-      tunnel           = cloudflare_argo_tunnel.this.name
-      credentials-file = "/etc/cloudflared/creds/credentials.json"
-      metrics          = "0.0.0.0:2000"
-      no-autoupdate    = true
-      ingress = [
-        {
-          hostname = "${var.hostname}.${var.CF_ZONE_NAME}"
-          service  = "http://${var.target_service}:${var.ingress_port}"
-        },
-        { service = "http_status:404" }
-      ]
-    })
   }
 }

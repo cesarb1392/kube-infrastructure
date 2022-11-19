@@ -1,5 +1,5 @@
 locals {
-  app_name = "vaultwarden"
+  app_name = var.namespace
   env_vars = {
     #    https://github.com/dani-garcia/vaultwarden/blob/d7b0d6f9f538e2b5ca36feb104bcc81e0d59059d/.env.template#L142
     SERVER_ADMIN_EMAIL  = var.SERVER_ADMIN_EMAIL
@@ -7,7 +7,7 @@ locals {
     DOMAIN              = "https://${local.app_name}.${var.DOMAIN}"
     SHOW_PASSWORD_HINT  = false
     INVITATIONS_ALLOWED = false
-    SIGNUPS_ALLOWED     = true
+    SIGNUPS_ALLOWED     = false
     WEB_VAULT_ENABLED   = true
     WEBSOCKET_ENABLED   = true ## websocket notifications
     ADMIN_TOKEN         = var.VAULTWARDEN_ADMIN_TOKEN
@@ -106,7 +106,7 @@ resource "kubernetes_secret" "this" {
   }
   data = {
     "env_vars" = join("\n", [
-      for k, v in local.env_vars : "${k}=\"${v}\""
+      for k, v in local.env_vars : "${k}=${v}"
     ])
   }
   type = "Opaque"

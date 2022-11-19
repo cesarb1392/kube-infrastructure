@@ -2,15 +2,56 @@ resource "kubernetes_namespace" "this" {
   for_each = local.available_namespaces
 
   metadata {
-    name = replace(each.value, "_", "-")
+    name = each.value
     labels = {
-      namespace   = replace(each.value, "_", "-")
-      application = replace(each.value, "_", "-")
+      namespace   = each.value
+      application = each.value
       managed-by  = "Terraform"
     }
   }
 }
 
-output "modules_enabled" {
-  value = keys(local.available_namespaces)
+
+resource "kubernetes_limit_range" "default" {
+  for_each = local.limit_usage
+
+  metadata {
+    name      = "${each.key}-limit"
+    namespace = each.key
+  }
+
+  spec {
+    limit {
+      type = "Container"
+      min = {
+        cpu    = "25m"
+        memory = "32Mi"
+      }
+      max = {
+        cpu    = "1"
+        memory = "1Gi"
+      }
+      default = {
+        cpu    = "250m"
+        memory = "256Mi"
+      }
+      default_request = {
+        cpu    = "100m"
+        memory = "128Mi"
+      }
+    }
+    limit {
+      type = "Pod"
+      min = {
+        cpu    = "25m"
+        memory = "32Mi"
+      }
+      max = {
+        cpu    = "1"
+        memory = "1Gi"
+      }
+    }
+  }
+
+  depends_on = [kubernetes_namespace.this]
 }

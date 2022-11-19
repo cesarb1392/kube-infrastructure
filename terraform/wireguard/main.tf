@@ -39,7 +39,6 @@ data "template_file" "wireguard" {
       }
     }
     persistence = {
-      enabled       = true
       existingClaim = var.persistent_volume_claim_name
     }
 
@@ -60,26 +59,14 @@ data "template_file" "wireguard" {
   })
 }
 
-
-
-resource "null_resource" "add_chart_locally" {
-  provisioner "local-exec" {
-    command     = "helm repo add wg-access-server https://cesarb1392.github.io/helm_charts/"
-    interpreter = ["sh", "-c"]
-  }
-}
-
 resource "helm_release" "this" {
-  name      = "wg-access-server"
-  chart     = "wg-access-server/wg-access-server"
+  name      = "wireguard"
+  chart     = "https://github.com/cesarb1392/helm_charts/releases/download/wireguard-1.4.0/wireguard-1.4.0.tgz?raw=true"
   namespace = var.namespace
-  version   = "1.0.0"
 
   timeout         = 120
   cleanup_on_fail = true
   force_update    = true
 
   values = [data.template_file.wireguard.rendered]
-
-  depends_on = [null_resource.add_chart_locally]
 }

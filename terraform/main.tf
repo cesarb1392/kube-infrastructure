@@ -33,13 +33,12 @@ module "website" {
 module "metallb" {
   count = local.applications.metallb.enabled ? 1 : 0
 
-  source    = "./metallb"
-  namespace = "metallb"
-
-  log_level = local.applications.metallb.log_level
-
-  depends_on   = [kubernetes_namespace.this]
+  source       = "./metallb"
+  namespace    = "metallb"
+  log_level    = local.applications.metallb.log_level
   address_pool = local.applications.metallb.address_pool
+
+  depends_on = [kubernetes_namespace.this]
 }
 
 module "private_ingress" {
@@ -58,9 +57,10 @@ module "pihole" {
   namespace = "pihole"
   password  = var.PI_HOLE_PASS
   TZ        = var.TZ
+  host_ip   = local.applications.pihole.host_ip
 
   depends_on = [module.ingress, module.metallb]
-  host_ip    = local.applications.pihole.host_ip
+
 }
 
 module "monitoring" {
@@ -79,17 +79,21 @@ module "loadtest" {
   source     = "./load_test"
   namespace  = "loadtest"
   target_url = local.applications.loadtest.target_url
+
+  depends_on = [kubernetes_namespace.this]
 }
 
 module "github_runner" {
-  count = local.applications.github_runner.enabled ? 1 : 0
+  count = local.applications.githubrunner.enabled ? 1 : 0
 
   source    = "./github_runner"
-  namespace = "github-runner"
+  namespace = "githubrunner"
 
   ACCESS_TOKEN = var.GH_ACCESS_TOKEN
   RUNNER_NAME  = "bananaRunner"
-  repositories = local.applications.github_runner.repos
+  repositories = local.applications.githubrunner.repos
+
+  depends_on = [kubernetes_namespace.this]
 }
 
 module "minio" {
@@ -106,7 +110,7 @@ module "minio" {
   MINIO_ROOT_USER              = var.MINIO_ROOT_USER
   persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["minio"].metadata.0.name
 
-  depends_on = []
+  depends_on = [kubernetes_namespace.this]
 }
 
 module "wireguard" {
@@ -120,7 +124,7 @@ module "wireguard" {
   host_ip                      = local.applications.wireguard.host_ip
   persistent_volume_claim_name = "wireguard-pvc" # kubernetes_persistent_volume_claim.this["wireguard"].metadata.0.name
 
-  depends_on = [module.metallb]
+  depends_on = [kubernetes_namespace.this, module.metallb]
 }
 
 module "vaultwarden" {
@@ -132,9 +136,9 @@ module "vaultwarden" {
   SERVER_ADMIN_EMAIL           = var.CF_ACCESS_EMAIL_LIST.0
   DOMAIN                       = var.CF_ZONE_NAME
   VAULTWARDEN_ADMIN_TOKEN      = var.VAULTWARDEN_ADMIN_TOKEN
-  persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["vaultwarden"].metadata.0.name
+  persistent_volume_claim_name = "vaultwarden-pvc" # kubernetes_persistent_volume_claim.this["vaultwarden"].metadata.0.name
 
-  depends_on = [module.ingress]
+  depends_on = [kubernetes_namespace.this, module.ingress]
 }
 
 module "torrente" {
@@ -148,8 +152,8 @@ module "torrente" {
   puid                         = 65534
   pgid                         = 65534
   timezone                     = var.TZ
-  persistent_volume_claim_name = "torrente-pvc" # kubernetes_persistent_volume_claim.this["torrente"].metadata.0.name
+  persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["torrente"].metadata.0.name
   host_ip                      = local.applications.torrente.host_ip
 
-  depends_on = []
+  depends_on = [kubernetes_namespace.this]
 }

@@ -25,6 +25,19 @@ resource "kubernetes_deployment_v1" "transmission_deployment" {
         }
       }
       spec {
+        affinity {
+          node_affinity {
+            required_during_scheduling_ignored_during_execution {
+              node_selector_term {
+                match_expressions {
+                  key      = "kubernetes.io/hostname"
+                  operator = "In"
+                  values   = ["fastbanana2"]
+                }
+              }
+            }
+          }
+        }
         restart_policy = "Always"
         container {
           name  = join("", [var.namespace, "-transmission-pod"])
@@ -32,26 +45,26 @@ resource "kubernetes_deployment_v1" "transmission_deployment" {
           port {
             container_port = local.ports.transmission.internal
           }
-          liveness_probe {
-            failure_threshold     = 3
-            initial_delay_seconds = 10
-            period_seconds        = 2
-            success_threshold     = 1
-            tcp_socket {
-              port = local.ports.transmission.internal
-            }
-            timeout_seconds = 2
-          }
-          readiness_probe {
-            failure_threshold     = 3
-            initial_delay_seconds = 10
-            period_seconds        = 2
-            success_threshold     = 2
-            tcp_socket {
-              port = local.ports.transmission.internal
-            }
-            timeout_seconds = 2
-          }
+          #          liveness_probe {
+          #            failure_threshold     = 3
+          #            initial_delay_seconds = 10
+          #            period_seconds        = 2
+          #            success_threshold     = 1
+          #            tcp_socket {
+          #              port = local.ports.transmission.internal
+          #            }
+          #            timeout_seconds = 2
+          #          }
+          #          readiness_probe {
+          #            failure_threshold     = 3
+          #            initial_delay_seconds = 10
+          #            period_seconds        = 2
+          #            success_threshold     = 2
+          #            tcp_socket {
+          #              port = local.ports.transmission.internal
+          #            }
+          #            timeout_seconds = 2
+          #          }
 
           env_from {
             config_map_ref {
@@ -77,11 +90,6 @@ resource "kubernetes_deployment_v1" "transmission_deployment" {
               }
             }
           }
-          resources {
-            limits = {
-              memory = "200Mi"
-            }
-          }
           security_context {
             privileged                 = true
             allow_privilege_escalation = true
@@ -93,10 +101,6 @@ resource "kubernetes_deployment_v1" "transmission_deployment" {
             mount_path = "/data"
             name       = "data"
           }
-          #          volume_mount {
-          #            mount_path = "/dev/net/tun"
-          #            name       = "tunnel"
-          #          }
           volume_mount {
             mount_path = "/etc/localtime"
             name       = "localtime"
@@ -109,12 +113,6 @@ resource "kubernetes_deployment_v1" "transmission_deployment" {
             claim_name = var.persistent_volume_claim_name
           }
         }
-        #        volume {
-        #          name = "tunnel"
-        #          host_path {
-        #            path = "/dev/net/tun"
-        #          }
-        #        }
         volume {
           name = "localtime"
           host_path {
@@ -124,7 +122,6 @@ resource "kubernetes_deployment_v1" "transmission_deployment" {
       }
     }
   }
-
 }
 
 resource "kubernetes_deployment_v1" "jackett_deployment" {
@@ -153,7 +150,19 @@ resource "kubernetes_deployment_v1" "jackett_deployment" {
         }
       }
       spec {
-        #        restart_policy = "Always"
+        affinity {
+          node_affinity {
+            required_during_scheduling_ignored_during_execution {
+              node_selector_term {
+                match_expressions {
+                  key      = "kubernetes.io/hostname"
+                  operator = "In"
+                  values   = ["fastbanana2"]
+                }
+              }
+            }
+          }
+        }
         container {
           name  = join("", [var.namespace, "-jackett-pod"])
           image = "linuxserver/jackett"
@@ -167,7 +176,7 @@ resource "kubernetes_deployment_v1" "jackett_deployment" {
           #            period_seconds        = 2
           #            success_threshold     = 1
           #            tcp_socket {
-          #              port = local.ports.jackett
+          #              port = local.ports.jackett.internal
           #            }
           #            timeout_seconds = 5
           #          }
@@ -177,7 +186,7 @@ resource "kubernetes_deployment_v1" "jackett_deployment" {
           #            period_seconds        = 2
           #            success_threshold     = 2
           #            tcp_socket {
-          #              port = local.ports.jackett
+          #              port = local.ports.jackett.internal
           #            }
           #            timeout_seconds = 5
           #          }
@@ -251,7 +260,19 @@ resource "kubernetes_deployment_v1" "radarr_deployment" {
         }
       }
       spec {
-        #        restart_policy = "Always"
+        affinity {
+          node_affinity {
+            required_during_scheduling_ignored_during_execution {
+              node_selector_term {
+                match_expressions {
+                  key      = "kubernetes.io/hostname"
+                  operator = "In"
+                  values   = ["fastbanana2"]
+                }
+              }
+            }
+          }
+        }
         container {
           name  = join("", [var.namespace, "-radarr-pod"])
           image = "linuxserver/radarr"
@@ -259,26 +280,26 @@ resource "kubernetes_deployment_v1" "radarr_deployment" {
             name           = "http"
             container_port = 7878
           }
-          liveness_probe {
-            failure_threshold     = 3
-            initial_delay_seconds = 10
-            period_seconds        = 2
-            success_threshold     = 1
-            tcp_socket {
-              port = 7878
-            }
-            timeout_seconds = 2
-          }
-          readiness_probe {
-            failure_threshold     = 3
-            initial_delay_seconds = 10
-            period_seconds        = 2
-            success_threshold     = 2
-            tcp_socket {
-              port = 7878
-            }
-            timeout_seconds = 2
-          }
+          #          liveness_probe {
+          #            failure_threshold     = 3
+          #            initial_delay_seconds = 10
+          #            period_seconds        = 2
+          #            success_threshold     = 1
+          #            tcp_socket {
+          #              port = 7878
+          #            }
+          #            timeout_seconds = 2
+          #          }
+          #          readiness_probe {
+          #            failure_threshold     = 3
+          #            initial_delay_seconds = 10
+          #            period_seconds        = 2
+          #            success_threshold     = 2
+          #            tcp_socket {
+          #              port = 7878
+          #            }
+          #            timeout_seconds = 2
+          #          }
           env {
             name  = "TZ"
             value = var.timezone
@@ -291,11 +312,11 @@ resource "kubernetes_deployment_v1" "radarr_deployment" {
             name  = "PGID"
             value = var.pgid
           }
-          #          resources {
-          #            limits = {
-          #              memory = "200Mi"
-          #            }
-          #          }
+          resources {
+            limits = {
+              memory = "200Mi"
+            }
+          }
           volume_mount {
             mount_path = "/config"
             name       = "data"
@@ -345,7 +366,19 @@ resource "kubernetes_deployment_v1" "sonarr_deployment" {
         }
       }
       spec {
-        #        restart_policy = "Always"
+        affinity {
+          node_affinity {
+            required_during_scheduling_ignored_during_execution {
+              node_selector_term {
+                match_expressions {
+                  key      = "kubernetes.io/hostname"
+                  operator = "In"
+                  values   = ["fastbanana2"]
+                }
+              }
+            }
+          }
+        }
         container {
           name  = join("", [var.namespace, "-sonarr-pod"])
           image = "linuxserver/sonarr"
@@ -385,11 +418,11 @@ resource "kubernetes_deployment_v1" "sonarr_deployment" {
             name  = "PGID"
             value = var.pgid
           }
-          #          resources {
-          #            limits = {
-          #              memory = "200Mi"
-          #            }
-          #          }
+          resources {
+            limits = {
+              memory = "200Mi"
+            }
+          }
           volume_mount {
             mount_path = "/config"
             name       = "data"
@@ -410,5 +443,4 @@ resource "kubernetes_deployment_v1" "sonarr_deployment" {
       }
     }
   }
-
 }

@@ -33,9 +33,10 @@ locals {
       storage        = "1Gi"
     }
     wireguard = {
-      enabled = false
-      host_ip = "192.168.178.233"
-      storage = "250Mi"
+      enabled  = true
+      no_limit = true
+      host_ip  = "192.168.178.233"
+      storage  = "512Mi"
     }
     privateingress = {
       enabled = false
@@ -57,15 +58,15 @@ locals {
       target_url = "https://${var.CF_ZONE_NAME}"
     }
     vaultwarden = {
-      enabled        = false
+      enabled        = true
       cf_access      = true
       public_ingress = true
       target_service = "vaultwarden-svc"
       ingress_port   = 80
       storage        = "1Gi"
     }
-    github_runner = {
-      enabled = false
+    githubrunner = {
+      enabled = true
       repos = {
         myawesomecv = {
           url = "https://github.com/cesarb1392/myAwesomeCV"
@@ -78,7 +79,7 @@ locals {
     torrente = {
       enabled = true
       host_ip = "192.168.178.234"
-      storage = "15Gi"
+      storage = "100Gi"
     }
   }
 
@@ -96,6 +97,10 @@ locals {
 
   available_storage = {
     for k, v in local.applications : k => v if try(v.storage, null) != null && v.enabled
+  }
+
+  limit_usage = {
+    for k, v in local.applications : k => v if try(v.no_limit, null) == null && v.enabled
   }
 
 }
