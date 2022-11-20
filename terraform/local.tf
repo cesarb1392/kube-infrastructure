@@ -33,9 +33,10 @@ locals {
       storage        = "500Mi"
     }
     wireguard = {
-      enabled   = false
-      log_level = "warn"
+      enabled   = true
+      log_level = "info"
       host_ip   = "192.168.178.233"
+      storage   = "512Mi"
     }
     privateingress = {
       enabled = false
@@ -47,10 +48,10 @@ locals {
     metallb = {
       enabled      = true
       log_level    = "debug"
-      address_pool = "192.168.178.230-192.168.178.235"
+      address_pool = "192.168.178.230-192.168.178.240"
     }
     monitoring = {
-      enabled = false
+      enabled = true
     }
     loadtest = {
       enabled    = false
