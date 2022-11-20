@@ -90,7 +90,7 @@ resource "kubernetes_deployment_v1" "transmission_deployment" {
         volume {
           name = "data"
           persistent_volume_claim {
-            claim_name = kubernetes_persistent_volume_claim.this.metadata.0.name
+            claim_name = var.persistent_volume_claim_name
           }
         }
         volume {
@@ -185,7 +185,7 @@ resource "kubernetes_deployment_v1" "jackett_deployment" {
         volume {
           name = "data"
           persistent_volume_claim {
-            claim_name = kubernetes_persistent_volume_claim.this.metadata.0.name
+            claim_name = var.persistent_volume_claim_name
           }
         }
       }
@@ -293,7 +293,7 @@ resource "kubernetes_deployment_v1" "radarr_deployment" {
         volume {
           name = "data"
           persistent_volume_claim {
-            claim_name = kubernetes_persistent_volume_claim.this.metadata.0.name
+            claim_name = var.persistent_volume_claim_name
           }
         }
       }
@@ -382,7 +382,7 @@ resource "kubernetes_deployment_v1" "sonarr_deployment" {
         volume {
           name = "data"
           persistent_volume_claim {
-            claim_name = kubernetes_persistent_volume_claim.this.metadata.0.name
+            claim_name = var.persistent_volume_claim_name
           }
         }
       }

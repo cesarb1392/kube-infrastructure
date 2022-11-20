@@ -80,6 +80,7 @@ locals {
     torrente = {
       enabled = true
       host_ip = "192.168.178.234"
+      storage = "25Gi"
     }
   }
 

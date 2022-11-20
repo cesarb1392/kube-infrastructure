@@ -144,13 +144,14 @@ module "torrente" {
 
   source = "./torrente"
 
-  namespace        = "torrente"
-  OPENVPN_PASSWORD = var.OPENVPN_PASSWORD
-  OPENVPN_USERNAME = var.OPENVPN_USERNAME
-  puid             = 65534
-  pgid             = 65534
-  timezone         = var.TZ
-  host_ip          = local.applications.torrente.host_ip
+  namespace                    = "torrente"
+  OPENVPN_PASSWORD             = var.OPENVPN_PASSWORD
+  OPENVPN_USERNAME             = var.OPENVPN_USERNAME
+  puid                         = 65534
+  pgid                         = 65534
+  timezone                     = var.TZ
+  host_ip                      = local.applications.torrente.host_ip
+  persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["torrente"].metadata.0.name
 
   depends_on = [kubernetes_namespace.this]
 }
