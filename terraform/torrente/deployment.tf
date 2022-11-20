@@ -45,26 +45,6 @@ resource "kubernetes_deployment_v1" "transmission_deployment" {
           port {
             container_port = local.ports.transmission.internal
           }
-          #          liveness_probe {
-          #            failure_threshold     = 3
-          #            initial_delay_seconds = 10
-          #            period_seconds        = 2
-          #            success_threshold     = 1
-          #            tcp_socket {
-          #              port = local.ports.transmission.internal
-          #            }
-          #            timeout_seconds = 2
-          #          }
-          #          readiness_probe {
-          #            failure_threshold     = 3
-          #            initial_delay_seconds = 10
-          #            period_seconds        = 2
-          #            success_threshold     = 2
-          #            tcp_socket {
-          #              port = local.ports.transmission.internal
-          #            }
-          #            timeout_seconds = 2
-          #          }
 
           env_from {
             config_map_ref {
@@ -110,7 +90,7 @@ resource "kubernetes_deployment_v1" "transmission_deployment" {
         volume {
           name = "data"
           persistent_volume_claim {
-            claim_name = var.persistent_volume_claim_name
+            claim_name = kubernetes_persistent_volume_claim.this.metadata.0.name
           }
         }
         volume {
@@ -170,26 +150,6 @@ resource "kubernetes_deployment_v1" "jackett_deployment" {
             name           = "http"
             container_port = local.ports.jackett.internal
           }
-          #          liveness_probe {
-          #            failure_threshold     = 5
-          #            initial_delay_seconds = 10
-          #            period_seconds        = 2
-          #            success_threshold     = 1
-          #            tcp_socket {
-          #              port = local.ports.jackett.internal
-          #            }
-          #            timeout_seconds = 5
-          #          }
-          #          readiness_probe {
-          #            failure_threshold     = 3
-          #            initial_delay_seconds = 10
-          #            period_seconds        = 2
-          #            success_threshold     = 2
-          #            tcp_socket {
-          #              port = local.ports.jackett.internal
-          #            }
-          #            timeout_seconds = 5
-          #          }
           env {
             name  = "TZ"
             value = var.timezone
@@ -225,7 +185,7 @@ resource "kubernetes_deployment_v1" "jackett_deployment" {
         volume {
           name = "data"
           persistent_volume_claim {
-            claim_name = var.persistent_volume_claim_name
+            claim_name = kubernetes_persistent_volume_claim.this.metadata.0.name
           }
         }
       }
@@ -235,6 +195,8 @@ resource "kubernetes_deployment_v1" "jackett_deployment" {
 }
 
 resource "kubernetes_deployment_v1" "radarr_deployment" {
+  count = 0
+
   metadata {
     name      = join("", [var.namespace, "-radarr-deployment"])
     namespace = var.namespace
@@ -331,7 +293,7 @@ resource "kubernetes_deployment_v1" "radarr_deployment" {
         volume {
           name = "data"
           persistent_volume_claim {
-            claim_name = var.persistent_volume_claim_name
+            claim_name = kubernetes_persistent_volume_claim.this.metadata.0.name
           }
         }
       }
@@ -341,6 +303,8 @@ resource "kubernetes_deployment_v1" "radarr_deployment" {
 }
 
 resource "kubernetes_deployment_v1" "sonarr_deployment" {
+  count = 0
+
   metadata {
     name      = join("", [var.namespace, "-sonarr-deployment"])
     namespace = var.namespace
@@ -386,26 +350,7 @@ resource "kubernetes_deployment_v1" "sonarr_deployment" {
             name           = "http"
             container_port = 8989
           }
-          #          liveness_probe {
-          #            failure_threshold     = 3
-          #            initial_delay_seconds = 10
-          #            period_seconds        = 2
-          #            success_threshold     = 1
-          #            tcp_socket {
-          #              port = 8989
-          #            }
-          #            timeout_seconds = 2
-          #          }
-          #          readiness_probe {
-          #            failure_threshold     = 3
-          #            initial_delay_seconds = 10
-          #            period_seconds        = 2
-          #            success_threshold     = 2
-          #            tcp_socket {
-          #              port = 8989
-          #            }
-          #            timeout_seconds = 2
-          #          }
+
           env {
             name  = "TZ"
             value = var.timezone
@@ -437,7 +382,7 @@ resource "kubernetes_deployment_v1" "sonarr_deployment" {
         volume {
           name = "data"
           persistent_volume_claim {
-            claim_name = var.persistent_volume_claim_name
+            claim_name = kubernetes_persistent_volume_claim.this.metadata.0.name
           }
         }
       }

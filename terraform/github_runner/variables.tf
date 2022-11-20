@@ -4,14 +4,11 @@ variable "namespace" {
 }
 
 variable "ACCESS_TOKEN" {
-  type = string
+  type      = string
+  sensitive = true
 }
 variable "repositories" {
   type = map(object({
     url = string
   }))
-}
-
-variable "RUNNER_NAME" {
-  type = string
 }

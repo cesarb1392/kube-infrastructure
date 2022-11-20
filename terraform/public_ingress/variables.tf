@@ -16,7 +16,8 @@ variable "hostname" {
 }
 
 variable "CF_ACCESS_EMAIL_LIST" {
-  type = list(string)
+  type      = list(string)
+  sensitive = true
 }
 
 variable "cf_access" {
@@ -24,12 +25,15 @@ variable "cf_access" {
   default = false
 }
 variable "CF_ZONE_ID" {
-  type = string
+  type      = string
+  sensitive = true
 }
 variable "CF_ACCOUNT_ID" {
-  type = string
+  type      = string
+  sensitive = true
 }
 
 variable "CF_ZONE_NAME" {
-  type = string
+  type      = string
+  sensitive = true
 }

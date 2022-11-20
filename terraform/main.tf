@@ -90,7 +90,6 @@ module "github_runner" {
   namespace = "githubrunner"
 
   ACCESS_TOKEN = var.GH_ACCESS_TOKEN
-  RUNNER_NAME  = "bananaRunner"
   repositories = local.applications.githubrunner.repos
 
   depends_on = [kubernetes_namespace.this]
@@ -109,8 +108,6 @@ module "minio" {
   MINIO_ROOT_PASSWORD          = var.MINIO_ROOT_PASSWORD
   MINIO_ROOT_USER              = var.MINIO_ROOT_USER
   persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["minio"].metadata.0.name
-
-  depends_on = [kubernetes_namespace.this]
 }
 
 module "wireguard" {
@@ -122,9 +119,9 @@ module "wireguard" {
   password                     = var.WG_PASSWORD
   user                         = var.WG_USER
   host_ip                      = local.applications.wireguard.host_ip
-  log_level   = local.applications.wireguard.log_level
-
-  depends_on = [kubernetes_namespace.this, module.metallb]
+  log_level                    = local.applications.wireguard.log_level
+  persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["wireguard"].metadata.0.name
+  depends_on                   = [module.metallb]
 }
 
 module "vaultwarden" {
@@ -136,7 +133,8 @@ module "vaultwarden" {
   SERVER_ADMIN_EMAIL           = var.CF_ACCESS_EMAIL_LIST.0
   DOMAIN                       = var.CF_ZONE_NAME
   VAULTWARDEN_ADMIN_TOKEN      = var.VAULTWARDEN_ADMIN_TOKEN
-  persistent_volume_claim_name = "vaultwarden-pvc" # kubernetes_persistent_volume_claim.this["vaultwarden"].metadata.0.name
+  persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["vaultwarden"].metadata.0.name
+  log_level                    = local.applications.vaultwarden.log_level
 
   depends_on = [kubernetes_namespace.this, module.ingress]
 }
@@ -146,14 +144,13 @@ module "torrente" {
 
   source = "./torrente"
 
-  namespace                    = "torrente"
-  OPENVPN_PASSWORD             = var.OPENVPN_PASSWORD
-  OPENVPN_USERNAME             = var.OPENVPN_USERNAME
-  puid                         = 65534
-  pgid                         = 65534
-  timezone                     = var.TZ
-  persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["torrente"].metadata.0.name
-  host_ip                      = local.applications.torrente.host_ip
+  namespace        = "torrente"
+  OPENVPN_PASSWORD = var.OPENVPN_PASSWORD
+  OPENVPN_USERNAME = var.OPENVPN_USERNAME
+  puid             = 65534
+  pgid             = 65534
+  timezone         = var.TZ
+  host_ip          = local.applications.torrente.host_ip
 
   depends_on = [kubernetes_namespace.this]
 }

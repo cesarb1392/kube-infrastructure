@@ -12,7 +12,7 @@ locals {
     WEBSOCKET_ENABLED   = true ## websocket notifications
     ADMIN_TOKEN         = var.VAULTWARDEN_ADMIN_TOKEN
     DISABLE_ADMIN_TOKEN = false
-    LOG_LEVEL           = "info"
+    LOG_LEVEL           = var.log_level
   }
 }
 

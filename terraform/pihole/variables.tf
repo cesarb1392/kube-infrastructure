@@ -5,7 +5,8 @@ variable "namespace" {
 
 
 variable "TZ" {
-  type = string
+  type      = string
+  sensitive = true
 }
 
 variable "primary_dns" {
@@ -20,6 +21,7 @@ variable "secondary_dns" {
 
 variable "password" {
   description = "Passwrod of the Web Interface"
+  sensitive   = true
 }
 
 variable "host_ip" {

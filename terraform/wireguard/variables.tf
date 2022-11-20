@@ -6,13 +6,15 @@ variable "namespace" {
 variable "private_key" {
   description = "private_key"
   type        = string
+  sensitive   = true
 }
 
 variable "user" {
   type = string
 }
 variable "password" {
-  type = string
+  type      = string
+  sensitive = true
 }
 
 variable "host_ip" {
@@ -20,5 +22,9 @@ variable "host_ip" {
 }
 
 variable "log_level" {
+  type = string
+}
+
+variable "persistent_volume_claim_name" {
   type = string
 }

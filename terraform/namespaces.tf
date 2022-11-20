@@ -11,7 +11,6 @@ resource "kubernetes_namespace" "this" {
   }
 }
 
-
 resource "kubernetes_limit_range" "default" {
   for_each = kubernetes_namespace.this
 
@@ -53,6 +52,4 @@ resource "kubernetes_limit_range" "default" {
       }
     }
   }
-
-  depends_on = [kubernetes_namespace.this]
 }

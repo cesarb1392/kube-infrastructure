@@ -8,15 +8,22 @@ variable "ingress_port" {
 }
 
 variable "SERVER_ADMIN_EMAIL" {
-  type = string
+  type      = string
+  sensitive = true
 }
 variable "DOMAIN" {
-  type = string
+  type      = string
+  sensitive = true
 }
 
 variable "VAULTWARDEN_ADMIN_TOKEN" {
-  type = string
+  type      = string
+  sensitive = true
 }
 variable "persistent_volume_claim_name" {
+  type = string
+}
+
+variable "log_level" {
   type = string
 }

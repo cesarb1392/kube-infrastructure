@@ -7,7 +7,7 @@
 - improve tags / labels
 - container registry
 - pipelines (github self hosted runner)
-- [CF Argo Tunnel](https://github.com/cloudflare/argo-tunnel-examples/tree/master/named-tunnel-k8s) 
+- [ssd issues](https://www.reddit.com/r/debian/comments/k2gzy4/ext4fs_failed_to_convert_unwritten_extents_to/)
 
 #### Table of Contents
 
@@ -42,7 +42,7 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 
 | Name | Version |
 |------|---------|
-| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 2.15.0 |
+| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 2.16.0 |
 
 ## Modules
 
@@ -67,7 +67,6 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 |------|------|
 | [kubernetes_limit_range.default](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/limit_range) | resource |
 | [kubernetes_namespace.this](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/namespace) | resource |
-| [kubernetes_persistent_volume.this](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/persistent_volume) | resource |
 | [kubernetes_persistent_volume_claim.this](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/persistent_volume_claim) | resource |
 
 ## Inputs

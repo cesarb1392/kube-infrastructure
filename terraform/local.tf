@@ -9,8 +9,8 @@ locals {
       ingress_port   = 80
     }
     portfolio = {
-      enabled        = true
-      public_ingress = true
+      enabled        = false
+      public_ingress = false
       runner         = false
       image          = "monkeybanana13/portfolio" # defining images creates default deployment
       target_service = "portfolio-svc"
@@ -27,15 +27,15 @@ locals {
     minio = {
       enabled        = true
       public_ingress = true
-      cf_access      = false
+      #      cf_access      = false
       target_service = "minio"
       ingress_port   = 9000
-      storage        = "1Gi"
+      storage        = "500Mi"
     }
     wireguard = {
-      enabled  = true
+      enabled   = false
       log_level = "warn"
-      host_ip  = "192.168.178.233"
+      host_ip   = "192.168.178.233"
     }
     privateingress = {
       enabled = false
@@ -45,7 +45,7 @@ locals {
       host_ip = "192.168.178.232"
     }
     metallb = {
-      enabled      = true
+      enabled      = false
       log_level    = "debug"
       address_pool = "192.168.178.230-192.168.178.235"
     }
@@ -57,15 +57,17 @@ locals {
       target_url = "https://${var.CF_ZONE_NAME}"
     }
     vaultwarden = {
-      enabled        = true
-      cf_access      = true
-      public_ingress = true
+      enabled        = false
+      cf_access      = false
+      public_ingress = false
       target_service = "vaultwarden-svc"
       ingress_port   = 80
       storage        = "1Gi"
+      log_level      = "info"
     }
     githubrunner = {
-      enabled = true
+      enabled     = false
+      runner_name = "bananaRunner"
       repos = {
         myawesomecv = {
           url = "https://github.com/cesarb1392/myAwesomeCV"
@@ -76,9 +78,8 @@ locals {
       }
     }
     torrente = {
-      enabled = true
+      enabled = false
       host_ip = "192.168.178.234"
-      storage = "100Gi"
     }
   }
 
@@ -87,7 +88,8 @@ locals {
   }
 
   available_ingresses = {
-    for k, v in local.applications : k => v if try(v.public_ingress, null) != null && v.enabled
+    for k, v in local.applications : k => v
+    if try(v.public_ingress, null) != null && try(v.public_ingress, null) != false && v.enabled
   }
 
   available_websites = {

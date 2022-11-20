@@ -30,6 +30,7 @@
           - zsh
           - ufw
           - net-tools
+          - htop
         state: latest
         cache_valid_time: 3600
 

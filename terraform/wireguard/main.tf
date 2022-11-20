@@ -39,7 +39,7 @@ data "template_file" "wireguard" {
       }
     }
     persistence = {
-      existingClaim = "${var.namespace}-pvc" # kubernetes_persistent_volume_claim.this.metadata.0.name
+      existingClaim = var.persistent_volume_claim_name
     }
 
     nodeSelector = {
@@ -71,51 +71,3 @@ resource "helm_release" "this" {
   values = [data.template_file.wireguard.rendered]
 }
 
-
-resource "kubernetes_persistent_volume" "this" {
-  metadata {
-    name = "${var.namespace}-pv"
-  }
-  spec {
-    persistent_volume_reclaim_policy = "Delete"
-    storage_class_name               = "local-path"
-    access_modes                     = ["ReadWriteOnce"]
-    capacity = {
-      storage = "100Mi"
-    }
-    persistent_volume_source {
-      host_path {
-        path = "/tmp/${var.namespace}"
-      }
-    }
-    node_affinity {
-      required {
-        node_selector_term {
-          match_expressions {
-            key      = "kubernetes.io/hostname"
-            operator = "In"
-            values   = ["fastbanana1"]
-          }
-        }
-      }
-    }
-  }
-}
-
-
-resource "kubernetes_persistent_volume_claim" "this" {
-  metadata {
-    name      = "${var.namespace}-pvc"
-    namespace = var.namespace
-  }
-  spec {
-    access_modes       = ["ReadWriteOnce"]
-    storage_class_name = "local-path"
-    resources {
-      requests = {
-        storage = "100Mi"
-      }
-    }
-  }
-  depends_on = [kubernetes_persistent_volume.this]
-}
