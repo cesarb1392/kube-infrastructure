@@ -4,15 +4,19 @@ resource "helm_release" "minio_storage" {
   namespace = var.namespace
   name      = "minio"
   chart     = "https://github.com/minio/minio/blob/master/helm-releases/minio-4.0.9.tgz?raw=true"
+  values    = [data.template_file.this.rendered]
+}
 
-  values = [
-    yamlencode({
+
+data "template_file" "this" {
+  template = yamlencode(
+    {
       mode         = "standalone"
       replicas     = 1
       rootUser     = var.MINIO_ROOT_USER
       rootPassword = var.MINIO_ROOT_PASSWORD
       persistence = {
-        size = "5Gi"
+        existingClaim = var.persistent_volume_claim_name
       }
       service = {
         type = "ClusterIP"
@@ -20,7 +24,7 @@ resource "helm_release" "minio_storage" {
       }
       consoleService = {
         type = "ClusterIP"
-        port = 80 # web ui
+        port = 9091 # web ui
       }
 
       resources = {
@@ -30,10 +34,77 @@ resource "helm_release" "minio_storage" {
         }
         limits = {
           memory = "1Gi"
-          cpu    = 2
+          cpu    = 1
         }
       }
       users = var.MINIO_USERS
-    })
-  ]
+    }
+  )
 }
+
+#
+## https://min.io/docs/minio/kubernetes/upstream/index.html?ref=docs-redirect
+## https://github.com/minio/minio/blob/master/helm/minio/values.yaml
+#resource "helm_release" "this" {
+#  namespace = var.namespace
+#  name      = "minio"
+#  chart     = "https://github.com/minio/minio/blob/master/helm-releases/minio-4.0.9.tgz?raw=true"
+#  values    = [data.template_file.this.rendered]
+#
+#  set_sensitive {
+#    name  = "rootUser"
+#    value = var.MINIO_ROOT_USER
+#  }
+#  set_sensitive {
+#    name  = "rootPassword"
+#    value = var.MINIO_ROOT_PASSWORD
+#  }
+#}
+#
+#data "template_file" "this" {
+#  template = yamlencode(
+#    {
+#      mode     = "standalone"
+#      replicas = 1
+#      persistence = {
+#        existingClaim = var.persistent_volume_claim_name
+#      }
+#      service = {
+#        type = "ClusterIP"
+#        port = var.ingress_port
+#      }
+#      consoleService = {
+#        type = "ClusterIP"
+#        port = 80 # web ui
+#      }
+#
+#      resources = {
+#        requests = {
+#          memory = "128Mi"
+#          cpu    = 0.5
+#        }
+#        limits = {
+#          memory = "512Mi"
+#          cpu    = 1
+#        }
+#      }
+#      users = var.MINIO_USERS
+#      #      users = [
+#      #        {
+#      #          accessKey      = var.MINIO_USERS.0.accessKey
+#      #          existingSecret = "users" #kubernetes_secret.this.data.existingSecretKeyUser0
+#      #          existingSecretKey = "users"
+#      #          policy         = var.MINIO_USERS.0.policy
+#      #        }
+#      #      ]
+#    }
+#  )
+#}
+#
+##resource "kubernetes_secret" "this" {
+##  metadata {
+##    name      = "users"
+##    namespace = var.namespace
+##  }
+##  data = { users = var.MINIO_USERS.0.secretKey }
+##}

@@ -3,11 +3,27 @@ variable "namespace" {
   type        = string
 }
 
+
 variable "TZ" {
-  type = string
+  type      = string
+  sensitive = true
 }
 
-variable "log_level" {
-  description = "log level: `all`, `debug`, `info`, `warn`, `error` or `none`"
-  type        = string
+variable "primary_dns" {
+  description = "Primary DNS"
+  default     = "1.1.1.1"
+}
+
+variable "secondary_dns" {
+  description = "Secondary DNS"
+  default     = "4.4.4.4"
+}
+
+variable "password" {
+  description = "Passwrod of the Web Interface"
+  sensitive   = true
+}
+
+variable "host_ip" {
+  type = string
 }

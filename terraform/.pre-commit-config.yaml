@@ -1,0 +1,22 @@
+#https://github.com/antonbabenko/pre-commit-terraform#how-to-install
+
+# brew install pre-commit terraform-docs tflint tfsec checkov terrascan infracost tfupdate minamijoyo/hcledit/hcledit jq
+#DIR=~/.git-tf-precommit-hook
+#git config --global init.templateDir ${DIR}
+#pre-commit init-templatedir -t pre-commit ${DIR}
+
+repos:
+  - repo: https://github.com/antonbabenko/pre-commit-terraform
+    rev: v1.76.0
+    hooks:
+      - id: terraform_docs
+      - id: terraform_tfsec
+      - id: terraform_fmt
+        args:
+          - --args=-diff
+          - --args=-write=true
+      - id: terrascan
+        args:
+          - --args=--non-recursive
+          - --args=--policy-type=k8s
+          - --args=--iac-type=terraform

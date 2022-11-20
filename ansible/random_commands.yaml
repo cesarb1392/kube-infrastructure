@@ -1,0 +1,10 @@
+- hosts: all
+  become: yes
+  tasks:
+    - name: Run command
+      shell: |
+        df -h
+      
+      register: command
+    - debug: msg="{{ command.stdout.split('\n') }}"
+#    - debug: msg="{{ command.stderr.split('\n') }}"

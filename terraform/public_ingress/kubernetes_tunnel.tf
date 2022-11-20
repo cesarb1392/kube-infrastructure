@@ -13,6 +13,30 @@ resource "kubernetes_secret_v1" "this" {
   type = "Opaque"
 }
 
+
+resource "kubernetes_config_map_v1" "this" {
+  metadata {
+    name      = "cloudflared-${var.namespace}"
+    namespace = var.namespace
+  }
+  data = {
+    "config.yaml" = yamlencode({
+      tunnel           = cloudflare_argo_tunnel.this.name
+      credentials-file = "/etc/cloudflared/creds/credentials.json"
+      metrics          = "0.0.0.0:2000"
+      no-autoupdate    = false
+      ingress = [
+        {
+          hostname = "${var.hostname}.${var.CF_ZONE_NAME}"
+          service  = "http://${var.target_service}:${var.ingress_port}"
+        },
+        { service = "http_status:404" }
+      ]
+    })
+  }
+}
+
+
 resource "kubernetes_deployment_v1" "this" {
   metadata {
     name      = "cloudflared-${var.namespace}"
@@ -26,7 +50,7 @@ resource "kubernetes_deployment_v1" "this" {
     }
   }
   spec {
-    replicas = "1"
+    replicas = 1
     selector {
       match_labels = { app = "cloudflared-${var.namespace}" }
     }
@@ -36,9 +60,11 @@ resource "kubernetes_deployment_v1" "this" {
       }
       spec {
         container {
-          name  = "cloudflared-${var.namespace}"
-          image = "cloudflare/cloudflared:2022.10.0-arm64"
-          args  = ["tunnel", "--config", "/etc/cloudflared/config/config.yaml", "run"]
+          name              = "cloudflared-${var.namespace}"
+          image             = "cloudflare/cloudflared:2022.10.0-arm64"
+          args              = ["tunnel", "--config", "/etc/cloudflared/config/config.yaml", "run"]
+          image_pull_policy = "IfNotPresent"
+
           liveness_probe {
             http_get {
               path = "/ready"
@@ -77,27 +103,5 @@ resource "kubernetes_deployment_v1" "this" {
         }
       }
     }
-  }
-}
-
-resource "kubernetes_config_map_v1" "this" {
-  metadata {
-    name      = "cloudflared-${var.namespace}"
-    namespace = var.namespace
-  }
-  data = {
-    "config.yaml" = yamlencode({
-      tunnel           = cloudflare_argo_tunnel.this.name
-      credentials-file = "/etc/cloudflared/creds/credentials.json"
-      metrics          = "0.0.0.0:2000"
-      no-autoupdate    = true
-      ingress = [
-        {
-          hostname = "${var.hostname}.${var.CF_ZONE_NAME}"
-          service  = "http://${var.target_service}:${var.ingress_port}"
-        },
-        { service = "http_status:404" }
-      ]
-    })
   }
 }

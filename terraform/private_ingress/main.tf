@@ -1,8 +1,3 @@
-#data "helm_repository" "stable" {
-#  name = "stable"
-#  url  = "https://kubernetes-charts.storage.googleapis.com"
-#}
-
 resource "helm_release" "nginx_ingress" {
   name       = "ingress-nginx"
   repository = "https://kubernetes.github.io/ingress-nginx"

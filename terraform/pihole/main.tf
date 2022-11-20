@@ -1,163 +1,81 @@
-resource "kubernetes_deployment" "pi_hole" {
-  metadata {
-    namespace = var.namespace
-    name      = var.namespace
-  }
-
-  spec {
-    replicas = 1
-    selector {
-      match_labels = { "app" = var.namespace }
-    }
-    template {
-      metadata {
-        labels = { "app" = var.namespace }
-      }
-      spec {
-        dns_config {
-          nameservers = ["1.1.1.1"]
-        }
-
-        container {
-          name              = var.namespace
-          image             = "pihole/pihole"
-          image_pull_policy = "IfNotPresent"
-          env {
-            name  = "TZ"
-            value = var.TZ
-          }
-          env {
-            name  = "WEBPASSWORD"
-            value = "var.PIHOLE_PASSWORD"
-          }
-          port {
-            container_port = 53
-            protocol       = "TCP"
-          }
-          port {
-            container_port = 53
-            protocol       = "UDP"
-          }
-          port {
-            container_port = 67
-            protocol       = "UDP"
-          }
-          port {
-            container_port = 80
-            protocol       = "TCP"
-          }
-
-          #          volume_mount {
-          #            mount_path = "/etc/pihole"
-          #            name       = "etc"
-          #          }
-          #          volume_mount {
-          #            mount_path = "/etc/dnsmasq.d"
-          #            name       = "dnsmasq"
-          #          }
-          #          volume_mount {
-          #            mount_path = "/etc/addn-hosts"
-          #            name       = "addn-hosts"
-          #          }
-          resources {
-            limits = {
-              memory = "1Gi"
-              cpu    = 1
-            }
-            requests = {
-              memory = "128Mi"
-              cpu    = "100m"
-            }
-          }
-        }
-        #        volume {
-        #          name = "etc"
-        #          host_path {
-        #            path = "/data/pihole/etc"
-        #            type = "Directory"
-        #          }
-        #        }
-        #        volume {
-        #          name = "dnsmasq"
-        #          host_path {
-        #            path = "/data/pihole/dnsmasq.d"
-        #            type = "Directory"
-        #          }
-        #        }
-        #        volume {
-        #          name = "addn-hosts"
-        #          host_path {
-        #            path = "/etc/addn-hosts"
-        #            type = "Directory"
-        #          }
-        #        }
-      }
-    }
+resource "null_resource" "add_chart_locally" {
+  provisioner "local-exec" {
+    command     = "helm repo add mojo2600 https://mojo2600.github.io/pihole-kubernetes/"
+    interpreter = ["sh", "-c"]
   }
 }
 
-resource "kubernetes_service" "pi_hole" {
-  metadata {
-    name      = var.namespace
-    namespace = var.namespace
-  }
-  spec {
-    port {
-      port        = 80
-      target_port = 80
-      protocol    = "TCP"
-      name        = "http"
-    }
-    port {
-      port        = 53
-      target_port = 53
-      protocol    = "TCP"
-      name        = "dns-tcp"
-    }
-    port {
-      port        = 53
-      target_port = 53
-      protocol    = "UDP"
-      name        = "dns-udp"
-    }
-    port {
-      port        = 67
-      target_port = 67
-      protocol    = "UDP"
-      name        = "dhcp"
-    }
-    selector = { "app" = var.namespace }
-  }
+resource "helm_release" "this" {
+  name      = "pihole"
+  chart     = "mojo2600/pihole"
+  namespace = var.namespace
+  #  version = "2.9.3"
+
+  timeout         = 120
+  cleanup_on_fail = true
+  force_update    = true
+
+  values = [data.template_file.pihole_values.rendered]
+
+  depends_on = [null_resource.add_chart_locally]
 }
 
-resource "kubernetes_ingress_v1" "pi_hole" {
-  metadata {
-    name        = var.namespace
-    namespace   = var.namespace
-    annotations = {
-      "nginx.ingress.kubernetes.io/ssl-redirect"   = false
-#      "nginx.ingress.kubernetes.io/rewrite-target" = "/admin"
-    }
-  }
-  spec {
-    ingress_class_name = "nginx"
-    rule {
-      host = "pihole.192.168.178.230.nip.io"
-      http {
-        path {
-          backend {
-            service {
-              name = kubernetes_service.pi_hole.metadata.0.name
-              port {
-                number = 80
-              }
-            }
-          }
-#          path      = "/admin"
-          path      = "/"
-          path_type = "Prefix"
-        }
+data "template_file" "pihole_values" {
+  #  https://github.com/MoJo2600/pihole-kubernetes/blob/master/charts/pihole/values.yaml
+  template = yamlencode({
+    replicaCount = 1
+    # maximum number of Pods that can be created over the desired number of `ReplicaSet` during updating.
+    maxSurge = 1
+    # maximum number of Pods that can be unavailable during updating
+    maxUnavailable = 1
+
+    resources = {
+      limits = {
+        cpu    = "500m"
+        memory = "500Mi"
+      }
+      requests = {
+        cpu    = "100m"
+        memory = "128Mi"
       }
     }
-  }
+    dnsmasq = {
+      customDnsEntries = []
+    }
+    customCnameEntries = []
+
+    persistentVolumeClaim = {
+      enabled = false
+      size    = "500Mi"
+    }
+
+    image = {
+      repository = "pihole/pihole"
+      tag        = "2022.10"
+      pullPolicy = "IfNotPresent"
+    }
+
+    serviceWeb = {
+      loadBalancerIP = var.host_ip
+      type           = "LoadBalancer"
+      annotations = {
+        "metallb.universe.tf/allow-shared-ip" = "pihole-svc"
+      }
+    }
+
+    serviceDns = {
+      loadBalancerIP = var.host_ip
+      annotations = {
+        "metallb.universe.tf/allow-shared-ip" = "pihole-svc"
+      }
+      type = "LoadBalancer"
+    }
+
+    podDnsConfig = {
+      enabled     = true
+      policy      = "None"
+      nameservers = ["127.0.0.1", "1.1.1.1", "1.0.0.1"]
+    }
+    adminPassword = var.password
+  })
 }

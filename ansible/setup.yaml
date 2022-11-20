@@ -1,10 +1,22 @@
 - hosts: all
   become: yes
   tasks:
-    - name: Update packages
-      apt:
-        update_cache: true
-        cache_valid_time: 3600
+    - name: Check system information
+      shell:
+        "lsb_release -a"
+      register: os_info
+    - debug:
+        msg: "{{os_info.stdout_lines}}"
+
+    - name: Update all packages to their latest version
+      ansible.builtin.apt:
+        name: "*"
+        state: latest
+
+    - name: Upgrade the OS (apt-get dist-upgrade)
+      ansible.builtin.apt:
+        upgrade: dist
+        update_cache: yes
 
     - name: Install packages
       apt:
@@ -17,13 +29,42 @@
           - micro
           - zsh
           - ufw
+          - net-tools
+          - htop
         state: latest
         cache_valid_time: 3600
 
-# run sysctl -w net.core.rmem_max=2500000
+#  configure zsh here!!
 
+# sudo update-alternatives --config iptables
     - name: Apply UFW rules
       ansible.builtin.import_tasks: ufw.yaml
+
+    - name: Increase size of the buffer that receives UDP packets
+      ansible.posix.sysctl:
+        name: net.core.rmem_max
+        value: '2500000'
+        sysctl_set: yes
+        reload: yes
+
+    - name: Under voltage?
+      ansible.builtin.script: ./scripts/undervoltage.sh
+      args:
+        executable: bash
+      register: undervoltage
+    - debug: msg="{{ undervoltage.stdout.split('\n') }}"
+
+    - name: Remove useless packages from the cache
+      ansible.builtin.apt:
+        autoclean: yes
+
+    - name: Remove dependencies that are no longer required
+      ansible.builtin.apt:
+        autoremove: yes
+
+    - name: Run the equivalent of "apt-get clean" as a separate step
+      apt:
+        clean: yes
 
 - hosts: master
   become: yes
@@ -40,6 +81,9 @@
         rule: allow
         port: 6443
         proto: tcp
+    - name: Reboot
+      ansible.builtin.reboot:
+        reboot_timeout: 60
 
 - hosts: all
   become: yes

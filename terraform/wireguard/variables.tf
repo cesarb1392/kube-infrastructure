@@ -3,18 +3,28 @@ variable "namespace" {
   type        = string
 }
 
-variable "TZ" {
+variable "private_key" {
+  description = "private_key"
+  type        = string
+  sensitive   = true
+}
+
+variable "user" {
+  type = string
+}
+variable "password" {
+  type      = string
+  sensitive = true
+}
+
+variable "host_ip" {
   type = string
 }
 
-variable "target_service" {
-  description = "target_service"
-  type        = string
+variable "log_level" {
+  type = string
 }
-variable "ingress_port" {
-  description = "ingress_port"
-  type        = string
-}
-variable "CF_ZONE_NAME" {
+
+variable "persistent_volume_claim_name" {
   type = string
 }

@@ -1,78 +1,73 @@
-resource "kubernetes_service" "this" {
-  metadata {
-    name      = var.target_service
-    namespace = var.namespace
-  }
-  spec {
-    port {
-      port = var.ingress_port
-    }
-    selector = { "app" = var.namespace }
-  }
-}
-
-resource "kubernetes_deployment_v1" "this" {
-  metadata {
-    name      = var.namespace
-    namespace = var.namespace
-  }
-  spec {
-    selector {
-      match_labels = { "app" = var.namespace }
-    }
-    template {
-      metadata {
-        labels = { "app" = var.namespace }
+data "template_file" "wireguard" {
+  template = yamlencode({
+    # wg-access-server config
+    config = {
+      wireguard = {
+        externalHost = var.host_ip
+        privateKey   = var.private_key
       }
-      spec {
-        #        security_context {
-        #          sysctl {
-        #            name  = "net.ipv4.conf.all.src_valid_mark"
-        #            value = 1
-        #          }
-        #        }
-        container {
-          name  = var.namespace
-          image = "lscr.io/linuxserver/wireguard:latest"
-          port {
-            protocol       = "UDP"
-            container_port = var.ingress_port
-          }
+      loglevel = var.log_level
+      storage  = "sqlite3:///data/db.sqlite3"
+      dns = {
+        upstream = ["1.1.1.1"]
+      }
 
-          security_context {
-            capabilities {
-              add = ["NET_ADMIN", "SYS_MODULE"]
-            }
-            privileged = true
-          }
-          env_from {
-            secret_ref {
-              name = kubernetes_secret.env_vars.metadata.0.name
-            }
-          }
+    }
+    web = {
+      config = {
+        adminUsername = var.user
+        adminPassword = var.password
+      }
+      service = {
+        type           = "LoadBalancer"
+        loadBalancerIP = var.host_ip
+        annotations = {
+          "metallb.universe.tf/allow-shared-ip" = "${var.namespace}-wg-access"
         }
       }
     }
-  }
+    wireguard = {
+      config = {
+        privateKey = var.private_key
+      }
+      service = {
+        type           = "LoadBalancer"
+        loadBalancerIP = var.host_ip
+        annotations = {
+          "metallb.universe.tf/allow-shared-ip" = "${var.namespace}-wg-access"
+        }
+      }
+    }
+    persistence = {
+      existingClaim = var.persistent_volume_claim_name
+    }
+
+    nodeSelector = {
+      "kubernetes.io/hostname" = "fastbanana1"
+    }
+
+    resources = {
+      limits = {
+        cpu    = "0.75"
+        memory = "512Mi"
+      }
+      requests = {
+        cpu    = "100m"
+        memory = "128Mi"
+      }
+    }
+  })
 }
 
-resource "kubernetes_secret" "env_vars" {
-  metadata {
-    name      = "env-vars"
-    namespace = var.namespace
-  }
-  data = tomap(
-    {
-      PUID       = 1000
-      PGID       = 1000
-      TZ         = var.TZ
-      SERVERURL  = "${var.target_service}.${var.CF_ZONE_NAME}"
-      SERVERPORT = var.ingress_port
-      PEERS      = 1
-      PEERDNS    = "auto"
-      ALLOWEDIPS = "0.0.0.0/0"
-      LOG_CONFS  = true
-    }
-  )
-  type = "Opaque"
+resource "helm_release" "this" {
+  name      = var.namespace
+  chart     = "https://github.com/cesarb1392/helm_charts/releases/download/wireguard-1.4.0/wireguard-1.4.0.tgz?raw=true"
+  namespace = var.namespace
+
+  timeout         = 120
+  cleanup_on_fail = true
+  force_update    = true
+
+  values = [data.template_file.wireguard.rendered]
 }
+

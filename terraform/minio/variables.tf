@@ -17,18 +17,25 @@ variable "ingress_port" {
 }
 
 variable "MINIO_USERS" {
-  description = "omnio users"
+  description = "minio api users"
   type = list(
     object({
       accessKey = string
       secretKey = string
       policy    = string
   }))
+  sensitive = true
 }
 
 variable "MINIO_ROOT_USER" {
-  type = string
+  type      = string
+  sensitive = true
 }
 variable "MINIO_ROOT_PASSWORD" {
+  type      = string
+  sensitive = true
+}
+
+variable "persistent_volume_claim_name" {
   type = string
 }
