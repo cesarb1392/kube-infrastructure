@@ -27,16 +27,16 @@ data "template_file" "this" {
         port = 80 # web ui
       }
 
-#      resources = {
-#        requests = {
-#          memory = "500Mi"
-#          cpu    = 1
-#        }
-#        limits = {
-#          memory = "1Gi"
-#          cpu    = 2
-#        }
-#      }
+      resources = {
+        requests = {
+          memory = "500Mi"
+          cpu    = 1
+        }
+        limits = {
+          memory = "1Gi"
+          cpu    = 1
+        }
+      }
       users = var.MINIO_USERS
     }
   )
