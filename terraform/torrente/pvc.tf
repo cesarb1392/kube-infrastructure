@@ -1,3 +1,7 @@
+locals {
+  storage = "100Gi"
+}
+
 resource "kubernetes_persistent_volume" "this" {
   metadata {
     name = "${var.namespace}-pv"
@@ -7,7 +11,7 @@ resource "kubernetes_persistent_volume" "this" {
     storage_class_name               = "local-path"
     access_modes                     = ["ReadWriteOnce"]
     capacity = {
-      storage = "100Gi"
+      storage = local.storage
     }
     persistent_volume_source {
       host_path {
@@ -30,6 +34,8 @@ resource "kubernetes_persistent_volume" "this" {
 
 
 resource "kubernetes_persistent_volume_claim" "this" {
+  wait_until_bound = false
+
   metadata {
     name      = "${var.namespace}-pvc"
     namespace = var.namespace
@@ -39,7 +45,7 @@ resource "kubernetes_persistent_volume_claim" "this" {
     storage_class_name = "local-path"
     resources {
       requests = {
-        storage = "100Gi"
+        storage = local.storage
       }
     }
   }

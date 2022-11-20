@@ -24,7 +24,7 @@ data "template_file" "this" {
       }
       consoleService = {
         type = "ClusterIP"
-        port = 80 # web ui
+        port = 9091 # web ui
       }
 
       resources = {

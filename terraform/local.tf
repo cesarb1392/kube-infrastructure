@@ -1,17 +1,17 @@
 locals {
   applications = {
     nginx = {
-      enabled        = false
-      cf_access      = false
-      public_ingress = false
+      enabled        = true
+      cf_access      = true
+      public_ingress = true
       image          = "nginx"
       target_service = "nginx-svc"
       ingress_port   = 80
     }
     portfolio = {
-      enabled        = false
-      public_ingress = false
-      runner         = false
+      enabled        = true
+      public_ingress = true
+      runner         = true
       image          = "monkeybanana13/portfolio" # defining images creates default deployment
       target_service = "portfolio-svc"
       ingress_port   = 80
@@ -45,7 +45,7 @@ locals {
       host_ip = "192.168.178.232"
     }
     metallb = {
-      enabled      = false
+      enabled      = true
       log_level    = "debug"
       address_pool = "192.168.178.230-192.168.178.235"
     }
@@ -57,16 +57,16 @@ locals {
       target_url = "https://${var.CF_ZONE_NAME}"
     }
     vaultwarden = {
-      enabled        = false
-      cf_access      = false
-      public_ingress = false
+      enabled        = true
+      cf_access      = true
+      public_ingress = true
       target_service = "vaultwarden-svc"
       ingress_port   = 80
       storage        = "1Gi"
       log_level      = "info"
     }
     githubrunner = {
-      enabled     = false
+      enabled     = true
       runner_name = "bananaRunner"
       repos = {
         myawesomecv = {
@@ -78,7 +78,7 @@ locals {
       }
     }
     torrente = {
-      enabled = false
+      enabled = true
       host_ip = "192.168.178.234"
     }
   }
