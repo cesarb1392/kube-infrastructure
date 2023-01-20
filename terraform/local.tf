@@ -1,7 +1,7 @@
 locals {
   applications = {
     nginx = {
-      enabled        = true
+      enabled        = false
       cf_access      = true
       public_ingress = true
       image          = "nginx"
@@ -25,7 +25,7 @@ locals {
       ingress_port   = 80
     }
     minio = {
-      enabled        = true
+      enabled        = false
       public_ingress = true
       #      cf_access      = false
       target_service = "minio"
@@ -44,6 +44,7 @@ locals {
     pihole = {
       enabled = false
       host_ip = "192.168.178.232"
+      storage = "512Mi"
     }
     metallb = {
       enabled      = true
@@ -52,6 +53,13 @@ locals {
     }
     monitoring = {
       enabled = true
+      available = {
+        grafana    = true
+        graphite   = false
+        prometheus = true
+        smokeping  = true
+        wireshark  = false
+      }
     }
     loadtest = {
       enabled    = false
@@ -79,7 +87,7 @@ locals {
       }
     }
     torrente = {
-      enabled = true
+      enabled = false
       host_ip = "192.168.178.234"
       storage = "25Gi"
     }

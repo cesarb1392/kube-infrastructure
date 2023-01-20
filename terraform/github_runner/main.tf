@@ -36,7 +36,7 @@ resource "kubernetes_deployment_v1" "this" {
                 match_expressions {
                   key      = "kubernetes.io/hostname"
                   operator = "In"
-                  values   = ["fastbanana2"]
+                  values   = ["slowbanana"]
                 }
               }
             }

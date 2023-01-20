@@ -43,7 +43,7 @@ data "template_file" "wireguard" {
     }
 
     nodeSelector = {
-      "kubernetes.io/hostname" = "fastbanana1"
+      "kubernetes.io/hostname" = "fastbanana"
     }
 
     resources = {

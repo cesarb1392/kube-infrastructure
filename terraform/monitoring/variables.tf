@@ -5,3 +5,16 @@ variable "namespace" {
 variable "TZ" {
   type = string
 }
+
+variable "available" {
+  type = map(bool)
+}
+variable "puid" {
+  description = ""
+  type        = string
+}
+
+variable "pgid" {
+  description = ""
+  type        = string
+}

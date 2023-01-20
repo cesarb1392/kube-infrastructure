@@ -1,4 +1,6 @@
 resource "kubernetes_deployment_v1" "wireshark" {
+  count = var.available.wireshark ? 1 : 0
+
   metadata {
     name      = "wireshark"
     namespace = var.namespace
@@ -41,12 +43,12 @@ resource "kubernetes_deployment_v1" "wireshark" {
           }
           env {
             name  = "PUID"
-            value = "1000"
+            value = var.puid
           }
 
           env {
             name  = "PGID"
-            value = "1000"
+            value = var.pgid
           }
 
         }

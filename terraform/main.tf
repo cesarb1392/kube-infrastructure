@@ -69,6 +69,9 @@ module "monitoring" {
   source    = "./monitoring"
   namespace = "monitoring"
   TZ        = var.TZ
+  available = local.applications.monitoring.available
+  puid      = var.PUID
+  pgid      = var.PGID
 
   depends_on = [module.metallb]
 }
@@ -147,8 +150,8 @@ module "torrente" {
   namespace                    = "torrente"
   OPENVPN_PASSWORD             = var.OPENVPN_PASSWORD
   OPENVPN_USERNAME             = var.OPENVPN_USERNAME
-  puid                         = 65534
-  pgid                         = 65534
+  puid                         = var.PUID
+  pgid                         = var.PGID
   timezone                     = var.TZ
   host_ip                      = local.applications.torrente.host_ip
   persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["torrente"].metadata.0.name

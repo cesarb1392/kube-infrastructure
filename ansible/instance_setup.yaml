@@ -1,0 +1,146 @@
+#  https://pythops.com/post/setup-your-linux-workstation-with-ansible.html
+- hosts: all
+  tasks:
+    - name: Add ssh keys
+      ansible.posix.authorized_key:
+        user: banana
+        state: present
+        key: "{{ lookup('file', '~/.ssh/pi/id_rsa.pub') }}"
+
+    - name: Check system information
+      shell:
+        "lsb_release -a"
+      register: os_info
+    - debug:
+        msg: "{{os_info.stdout_lines}}"
+
+    - name: Update all packages to their latest version
+      become: yes
+      ansible.builtin.apt:
+        name: "*"
+        state: latest
+
+    - name: Upgrade the OS (apt-get dist-upgrade)
+      become: yes
+      ansible.builtin.apt:
+        upgrade: dist
+        update_cache: yes
+
+    - name: Install packages
+      become: yes
+      apt:
+        upgrade: dist
+
+    - name: Install packages
+      become: yes
+      apt:
+        name:
+          - tree
+          - micro
+          - zsh
+          - git
+          - ufw
+          - net-tools
+          - htop
+        state: latest
+        cache_valid_time: 3600
+
+    - name: Reboot
+      become: yes
+      ansible.builtin.reboot:
+        reboot_timeout: 200
+
+    - name: Apply UFW rules
+      become: yes
+      community.general.ufw:
+        rule: allow
+        port: ssh
+        proto: tcp
+
+    - name: Enable UFW
+      become: yes
+      community.general.ufw:
+        state: enabled
+        default: deny
+
+    - name: Under voltage?
+      ansible.builtin.script: ./scripts/undervoltage.sh
+      args:
+        executable: bash
+      register: undervoltage
+    - debug: msg="{{ undervoltage.stdout.split('\n') }}"
+
+    - name: Install oh my zsh
+      git:
+        repo: https://github.com/ohmyzsh/ohmyzsh.git
+        dest: ~/.oh-my-zsh
+        depth: 1
+
+    - name: Copy zshrc
+      copy:
+        src: "./roles/files/zshrc"
+        dest: ~/.zshrc
+        mode: 0644
+
+    - name: Install spaceship prompt
+      git:
+        repo: https://github.com/spaceship-prompt/spaceship-prompt.git
+        dest: ~/.oh-my-zsh/custom/themes/spaceship-prompt
+        depth: 1
+
+    - name: Enable spaceship theme
+      file:
+        src: ~/.oh-my-zsh/custom/themes/spaceship-prompt/spaceship.zsh-theme
+        dest: ~/.oh-my-zsh/custom/themes/spaceship.zsh-theme
+        state: link
+
+    - name: Install zsh-syntax-highlighting
+      git:
+        repo: https://github.com/zsh-users/zsh-syntax-highlighting.git
+        dest: ~/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+        depth: 1
+
+    - name: Install zsh-autosuggestions
+      git:
+        repo: https://github.com/zsh-users/zsh-autosuggestions.git
+        dest: ~/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+        depth: 1
+    - name: Install zsh-completions
+      git:
+        repo: https://github.com/zsh-users/zsh-completions.git
+        dest: ~/.oh-my-zsh/custom/plugins/zsh-completions
+        depth: 1
+
+    #chsh -s /bin/zsh && . ~/.zshrc
+    - name: Change shell to zsh
+      become: yes
+      user:
+        name: "banana"
+        shell: /bin/zsh
+
+    - name: Remove useless packages from the cache
+      become: yes
+      ansible.builtin.apt:
+        autoclean: yes
+
+    - name: Remove dependencies that are no longer required
+      become: yes
+      ansible.builtin.apt:
+        autoremove: yes
+
+    - name: Run the equivalent of "apt-get clean" as a separate step
+      become: yes
+      apt:
+        clean: yes
+
+    - name: Install Docker
+      ansible.builtin.command:
+        cmd:
+          - curl -fsSL https://get.docker.com -o get-docker.sh
+          - sudo sh get-docker.sh
+          - sudo usermod -aG docker "banana"
+
+    - name: Reboot
+      become: yes
+      ansible.builtin.reboot:
+        reboot_timeout: 200

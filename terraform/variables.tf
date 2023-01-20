@@ -89,3 +89,13 @@ variable "OPENVPN_PASSWORD" {
   sensitive   = true
 
 }
+
+variable "PUID" {
+  description = ""
+  type        = string
+}
+
+variable "PGID" {
+  description = ""
+  type        = string
+}
