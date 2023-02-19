@@ -2,17 +2,20 @@ locals {
   app_name = var.namespace
   env_vars = {
     #    https://github.com/dani-garcia/vaultwarden/blob/d7b0d6f9f538e2b5ca36feb104bcc81e0d59059d/.env.template#L142
-    SERVER_ADMIN_EMAIL  = var.SERVER_ADMIN_EMAIL
-    ORG_CREATION_USERS  = var.SERVER_ADMIN_EMAIL
-    DOMAIN              = "https://${local.app_name}.${var.DOMAIN}"
-    SHOW_PASSWORD_HINT  = false
-    INVITATIONS_ALLOWED = false
-    SIGNUPS_ALLOWED     = false
-    WEB_VAULT_ENABLED   = true
-    WEBSOCKET_ENABLED   = true ## websocket notifications
-    ADMIN_TOKEN         = var.VAULTWARDEN_ADMIN_TOKEN
-    DISABLE_ADMIN_TOKEN = false
-    LOG_LEVEL           = var.log_level
+    SERVER_ADMIN_EMAIL        = var.SERVER_ADMIN_EMAIL
+    ORG_CREATION_USERS        = var.SERVER_ADMIN_EMAIL
+    DOMAIN                    = "https://${local.app_name}.${var.DOMAIN}"
+    SHOW_PASSWORD_HINT        = false
+    INVITATIONS_ALLOWED       = false
+    SIGNUPS_ALLOWED           = false
+    SHOW_PASSWORD_HINT        = true
+    SIGNUPS_DOMAINS_WHITELIST = trim(var.SERVER_ADMIN_EMAIL, "contact@")
+    WEB_VAULT_ENABLED         = true
+    WEBSOCKET_ENABLED         = true ## websocket notifications
+    ADMIN_TOKEN               = var.VAULTWARDEN_ADMIN_TOKEN
+    DISABLE_ADMIN_TOKEN       = false
+    LOG_LEVEL                 = var.log_level # "trace", "debug", "info", "warn", "error" and "off"
+    EXTENDED_LOGGING          = true
   }
 }
 

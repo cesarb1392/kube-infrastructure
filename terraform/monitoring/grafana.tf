@@ -1,24 +1,27 @@
 locals {
+  #  https://github.com/grafana/helm-charts/blob/main/charts/grafana/values.yaml
   grafana_values = {
-    "admin" = {
-      #      "existingSecret" = kubernetes_secret_v1.admin_password.metadata[0].name
-      "userKey"     = "admin-user"
-      "passwordKey" = "admin-password"
-    }
+    adminUser     = "admin"
+    adminPassword = "admin"
+    #    "admin" = {
+    #      "existingSecret" = kubernetes_secret_v1.admin_password.metadata[0].name
+    #      "userKey"     = "banana"
+    #      "passwordKey" = "password"
+    #    }
 
     "datasources" = {
       "datasources.yaml" = {
         "apiVersion" = 1
         "datasources" = [{
-          "name"      = "Mimir"
+          "name"      = "Prometheus"
           "type"      = "prometheus"
-          "url"       = "http://mimir/prometheus" # Served by the ExternalName service, which crosses over to the Prometheus namespace
+          "url"       = "http://prometheus-server.monitoring.svc.cluster.local"
           "access"    = "proxy"
           "isDefault" = true
           }, {
           "name"      = "Loki"
           "type"      = "loki"
-          "url"       = "http://loki:3100" # Served by the ExternalName service, which crosses over to the Loki namespace
+          "url"       = "http://loki-read.monitoring.svc.cluster.local:3100"
           "access"    = "proxy"
           "isDefault" = false
         }]
@@ -42,9 +45,16 @@ locals {
       "force_migration" = "true"
     }
 
-    "persistence" = {
-      "enabled" = true
-      #      "existingClaim" = kubernetes_persistent_volume_claim_v1.grafana.metadata[0].name
+    #    "persistence" = {
+    #      "enabled" = true
+    #      #      "existingClaim" = kubernetes_persistent_volume_claim_v1.grafana.metadata[0].name
+    #    }
+    service = {
+      type           = "LoadBalancer"
+      loadBalancerIP = var.grafana_host_ip
+      annotations = {
+        "metallb.universe.tf/allow-shared-ip" = "${var.namespace}-grafana"
+      }
     }
 
     "podAnnotations" = {
@@ -57,8 +67,6 @@ locals {
       # This works because the kubernetes-pods job in the default Prometheus config uses a relabel action
       "job" : "grafana"
     }
-
-
 
     "rbac" = {
       "create"     = true

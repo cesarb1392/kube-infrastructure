@@ -1,4 +1,4 @@
-module "ingress" {
+module "ingress" { # replace by public_ingress
   for_each = local.available_ingresses
 
   source    = "./public_ingress"
@@ -66,12 +66,14 @@ module "pihole" {
 module "monitoring" {
   count = local.applications.monitoring.enabled ? 1 : 0
 
-  source    = "./monitoring"
-  namespace = "monitoring"
-  TZ        = var.TZ
-  available = local.applications.monitoring.available
-  puid      = var.PUID
-  pgid      = var.PGID
+  source          = "./monitoring"
+  namespace       = "monitoring"
+  TZ              = var.TZ
+  available       = local.applications.monitoring.available
+  puid            = var.PUID
+  pgid            = var.PGID
+  grafana_host_ip = local.applications.monitoring.grafana_host_ip
+  #  prometheus_pvc_name = kubernetes_persistent_volume_claim.this["monitoring"].metadata.0.name
 
   depends_on = [module.metallb]
 }

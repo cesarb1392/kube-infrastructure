@@ -18,3 +18,10 @@ variable "pgid" {
   description = ""
   type        = string
 }
+
+variable "grafana_host_ip" {
+  type = string
+}
+#variable "prometheus_pvc_name" {
+#  type = string
+#}

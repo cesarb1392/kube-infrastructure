@@ -70,3 +70,5 @@
     #  community.general.ufw:
     #    rule: allow
     #    src: "{{ hostvars[groups['master'][0]].ansible_host }"
+
+## promethus stack, master 10251,10249,10250 https://fabianlee.org/2022/07/02/prometheus-installing-kube-prometheus-stack-on-k3s-cluster/

@@ -25,7 +25,7 @@ locals {
       ingress_port   = 80
     }
     minio = {
-      enabled        = false
+      enabled        = true
       public_ingress = true
       #      cf_access      = false
       target_service = "minio"
@@ -52,14 +52,17 @@ locals {
       address_pool = "192.168.178.230-192.168.178.240"
     }
     monitoring = {
-      enabled = true
+      enabled = false
       available = {
         grafana    = true
         graphite   = false
+        promtail   = false
+        loki       = false
         prometheus = true
-        smokeping  = true
+        smokeping  = false
         wireshark  = false
       }
+      grafana_host_ip = "192.168.178.235"
     }
     loadtest = {
       enabled    = false
@@ -75,7 +78,7 @@ locals {
       log_level      = "info"
     }
     githubrunner = {
-      enabled     = true
+      enabled     = false
       runner_name = "bananaRunner"
       repos = {
         myawesomecv = {
