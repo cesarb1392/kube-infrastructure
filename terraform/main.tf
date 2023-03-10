@@ -160,3 +160,14 @@ module "torrente" {
 
   depends_on = [kubernetes_namespace.this]
 }
+
+
+module "picamera" {
+  count = local.applications.picamera.enabled ? 1 : 0
+
+  source       = "./picamera"
+  namespace    = "picamera"
+  ingress_port = local.applications.picamera.ingress_port
+
+  depends_on = [kubernetes_namespace.this, module.ingress]
+}

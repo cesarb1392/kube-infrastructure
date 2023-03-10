@@ -70,7 +70,7 @@ locals {
     }
     vaultwarden = {
       enabled        = true
-      cf_access      = true
+      cf_access      = false # otherwise the mobile app doesn't work
       public_ingress = true
       target_service = "vaultwarden-svc"
       ingress_port   = 80
@@ -78,7 +78,7 @@ locals {
       log_level      = "info"
     }
     githubrunner = {
-      enabled     = false
+      enabled     = true
       runner_name = "bananaRunner"
       repos = {
         myawesomecv = {
@@ -93,6 +93,13 @@ locals {
       enabled = false
       host_ip = "192.168.178.234"
       storage = "25Gi"
+    }
+    picamera = {
+      enabled        = true
+      cf_access      = true
+      public_ingress = true
+      target_service = "picamera-svc"
+      ingress_port   = 80
     }
   }
 

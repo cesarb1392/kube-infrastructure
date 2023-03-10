@@ -8,15 +8,16 @@ locals {
     SHOW_PASSWORD_HINT        = false
     INVITATIONS_ALLOWED       = false
     SIGNUPS_ALLOWED           = false
-    SHOW_PASSWORD_HINT        = true
+    SHOW_PASSWORD_HINT        = false
     SIGNUPS_DOMAINS_WHITELIST = trim(var.SERVER_ADMIN_EMAIL, "contact@")
     WEB_VAULT_ENABLED         = true
     WEBSOCKET_ENABLED         = true ## websocket notifications
     ADMIN_TOKEN               = var.VAULTWARDEN_ADMIN_TOKEN
-    DISABLE_ADMIN_TOKEN       = false
+    DISABLE_ADMIN_TOKEN       = true
     LOG_LEVEL                 = var.log_level # "trace", "debug", "info", "warn", "error" and "off"
     EXTENDED_LOGGING          = true
   }
+  env_vars_hash = sha1(jsonencode(kubernetes_secret.this.data))
 }
 
 resource "kubernetes_deployment" "this" {
@@ -25,7 +26,7 @@ resource "kubernetes_deployment" "this" {
     namespace = var.namespace
   }
   spec {
-    replicas = 1
+    replicas = 2
     selector {
       match_labels = { "app" = local.app_name }
     }
@@ -53,6 +54,11 @@ resource "kubernetes_deployment" "this" {
           image_pull_policy = "IfNotPresent"
           port {
             container_port = kubernetes_service.this.spec.0.port.0.port
+          }
+
+          env {
+            name  = "ENV_VARS_HASH"
+            value = local.env_vars_hash
           }
 
           liveness_probe {

@@ -44,8 +44,12 @@ resource "kubernetes_deployment_v1" "this" {
         }
         container {
           name              = each.key
-          image             = "myoung34/github-runner:latest"
+          image             = "myoung34/github-runner@sha256:755c68ec1cb8ca60c4f6816a8718d89829ce3fb5bc13c8c7778791ea48218df6"
           image_pull_policy = "IfNotPresent"
+          env {
+            name  = "EPHEMERAL"
+            value = "true"
+          }
           env {
             name = "ACCESS_TOKEN"
             value_from {

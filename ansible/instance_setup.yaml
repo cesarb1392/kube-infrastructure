@@ -1,4 +1,3 @@
-#  https://pythops.com/post/setup-your-linux-workstation-with-ansible.html
 - hosts: all
   tasks:
     - name: Add ssh keys
@@ -24,7 +23,7 @@
       become: yes
       ansible.builtin.apt:
         upgrade: dist
-        update_cache: yes
+        update_cache: no
 
     - name: Install packages
       become: yes
@@ -42,8 +41,11 @@
           - ufw
           - net-tools
           - htop
+          - autoconf
+          - ffmpeg
+          - v4l-utils # camera
         state: latest
-        cache_valid_time: 3600
+        cache_valid_time: 600
 
     - name: Reboot
       become: yes
@@ -57,12 +59,6 @@
         port: ssh
         proto: tcp
 
-    - name: Enable UFW
-      become: yes
-      community.general.ufw:
-        state: enabled
-        default: deny
-
     - name: Under voltage?
       ansible.builtin.script: ./scripts/undervoltage.sh
       args:
@@ -70,17 +66,24 @@
       register: undervoltage
     - debug: msg="{{ undervoltage.stdout.split('\n') }}"
 
-    - name: Install oh my zsh
-      git:
-        repo: https://github.com/ohmyzsh/ohmyzsh.git
-        dest: ~/.oh-my-zsh
-        depth: 1
-
-    - name: Copy zshrc
-      copy:
-        src: "./roles/files/zshrc"
-        dest: ~/.zshrc
-        mode: 0644
+    # ansible-galaxy install gantsign.oh-my-zsh
+    - name: run role for each user
+      include_role:
+        name: gantsign.oh-my-zsh
+      vars:
+        users:
+          - username: "banana"
+            update_mode: auto
+            update_frequency: 10
+            oh_my_zsh:
+              theme: robbyrussell # spaceship-prompt
+              plugins:
+                - git
+                - zsh-syntax-highlighting
+                - zsh-autosuggestions
+                - zsh-completions
+#                - spaceship-prompt
+                - docker
 
     - name: Install spaceship prompt
       git:
@@ -111,7 +114,6 @@
         dest: ~/.oh-my-zsh/custom/plugins/zsh-completions
         depth: 1
 
-    #chsh -s /bin/zsh && . ~/.zshrc
     - name: Change shell to zsh
       become: yes
       user:
@@ -133,12 +135,12 @@
       apt:
         clean: yes
 
-    - name: Install Docker
-      ansible.builtin.command:
-        cmd:
-          - curl -fsSL https://get.docker.com -o get-docker.sh
-          - sudo sh get-docker.sh
-          - sudo usermod -aG docker "banana"
+#    - name: Install Docker
+#      ansible.builtin.command:
+#        cmd:
+#          - curl -fsSL https://get.docker.com -o get-docker.sh
+#          - sudo sh get-docker.sh
+#          - sudo usermod -aG docker "banana"
 
     - name: Reboot
       become: yes

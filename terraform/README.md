@@ -33,7 +33,7 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 | Name | Version |
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | ~> 1.3.0, < 2.0.0 |
-| <a name="requirement_cloudflare"></a> [cloudflare](#requirement\_cloudflare) | >= 3.24.0 |
+| <a name="requirement_cloudflare"></a> [cloudflare](#requirement\_cloudflare) | ~> 3.24.0 |
 | <a name="requirement_helm"></a> [helm](#requirement\_helm) | >= 2.5.0 |
 | <a name="requirement_kubectl"></a> [kubectl](#requirement\_kubectl) | >= 1.7.0 |
 | <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | >= 2.8.0 |
@@ -42,7 +42,7 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 
 | Name | Version |
 |------|---------|
-| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 2.16.0 |
+| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 2.18.1 |
 
 ## Modules
 
@@ -54,6 +54,7 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 | <a name="module_metallb"></a> [metallb](#module\_metallb) | ./metallb | n/a |
 | <a name="module_minio"></a> [minio](#module\_minio) | ./minio | n/a |
 | <a name="module_monitoring"></a> [monitoring](#module\_monitoring) | ./monitoring | n/a |
+| <a name="module_picamera"></a> [picamera](#module\_picamera) | ./picamera | n/a |
 | <a name="module_pihole"></a> [pihole](#module\_pihole) | ./pihole | n/a |
 | <a name="module_private_ingress"></a> [private\_ingress](#module\_private\_ingress) | ./private_ingress | n/a |
 | <a name="module_torrente"></a> [torrente](#module\_torrente) | ./torrente | n/a |
