@@ -1,4 +1,4 @@
-- hosts: all
+- hosts: single
   tasks:
     - name: Add ssh keys
       ansible.posix.authorized_key:
@@ -76,13 +76,12 @@
             update_mode: auto
             update_frequency: 10
             oh_my_zsh:
-              theme: robbyrussell # spaceship-prompt
+              theme: spaceship # robbyrussell # spaceship
               plugins:
                 - git
                 - zsh-syntax-highlighting
                 - zsh-autosuggestions
                 - zsh-completions
-#                - spaceship-prompt
                 - docker
 
     - name: Install spaceship prompt
@@ -135,14 +134,14 @@
       apt:
         clean: yes
 
+    - name: Reboot
+      become: yes
+      ansible.builtin.reboot:
+        reboot_timeout: 200
+
 #    - name: Install Docker
 #      ansible.builtin.command:
 #        cmd:
 #          - curl -fsSL https://get.docker.com -o get-docker.sh
 #          - sudo sh get-docker.sh
 #          - sudo usermod -aG docker "banana"
-
-    - name: Reboot
-      become: yes
-      ansible.builtin.reboot:
-        reboot_timeout: 200

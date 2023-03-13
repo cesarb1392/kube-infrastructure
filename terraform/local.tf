@@ -1,13 +1,5 @@
 locals {
   applications = {
-    nginx = {
-      enabled        = false
-      cf_access      = true
-      public_ingress = true
-      image          = "nginx"
-      target_service = "nginx-svc"
-      ingress_port   = 80
-    }
     portfolio = {
       enabled        = true
       public_ingress = true
@@ -27,7 +19,6 @@ locals {
     minio = {
       enabled        = true
       public_ingress = true
-      #      cf_access      = false
       target_service = "minio"
       ingress_port   = 9000
       storage        = "500Mi"
@@ -52,9 +43,9 @@ locals {
       address_pool = "192.168.178.230-192.168.178.240"
     }
     monitoring = {
-      enabled = false
+      enabled = true
       available = {
-        grafana    = true
+        grafana    = false
         graphite   = false
         promtail   = false
         loki       = false
@@ -95,7 +86,7 @@ locals {
       storage = "25Gi"
     }
     picamera = {
-      enabled        = true
+      enabled        = false
       cf_access      = true
       public_ingress = true
       target_service = "picamera-svc"

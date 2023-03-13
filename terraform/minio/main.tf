@@ -4,7 +4,9 @@ resource "helm_release" "minio_storage" {
   namespace = var.namespace
   name      = "minio"
   chart     = "https://github.com/minio/minio/blob/master/helm-releases/minio-4.0.9.tgz?raw=true"
-  values    = [data.template_file.this.rendered]
+  version   = "RELEASE.2022-08-02T23-59-16Z"
+
+  values = [data.template_file.this.rendered]
 }
 
 

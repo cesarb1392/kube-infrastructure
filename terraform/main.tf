@@ -161,7 +161,6 @@ module "torrente" {
   depends_on = [kubernetes_namespace.this]
 }
 
-
 module "picamera" {
   count = local.applications.picamera.enabled ? 1 : 0
 

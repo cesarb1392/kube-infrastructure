@@ -63,6 +63,7 @@ resource "helm_release" "this" {
   name      = var.namespace
   chart     = "https://github.com/cesarb1392/helm_charts/releases/download/wireguard-1.4.0/wireguard-1.4.0.tgz?raw=true"
   namespace = var.namespace
+  version   = "v0.4.6"
 
   timeout         = 120
   cleanup_on_fail = true
