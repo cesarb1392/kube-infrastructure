@@ -3,7 +3,7 @@ data "template_file" "wireguard" {
     # wg-access-server config
     config = {
       wireguard = {
-        externalHost = var.host_ip
+        externalHost = var.lan_ip
         privateKey   = var.private_key
       }
       loglevel = var.log_level
@@ -20,7 +20,7 @@ data "template_file" "wireguard" {
       }
       service = {
         type           = "LoadBalancer"
-        loadBalancerIP = var.host_ip
+        loadBalancerIP = var.lan_ip
         annotations = {
           "metallb.universe.tf/allow-shared-ip" = "${var.namespace}-wg-access"
         }
@@ -32,7 +32,7 @@ data "template_file" "wireguard" {
       }
       service = {
         type           = "LoadBalancer"
-        loadBalancerIP = var.host_ip
+        loadBalancerIP = var.lan_ip
         annotations = {
           "metallb.universe.tf/allow-shared-ip" = "${var.namespace}-wg-access"
         }

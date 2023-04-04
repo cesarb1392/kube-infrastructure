@@ -10,7 +10,7 @@ resource "kubernetes_service_v1" "transmission_service" {
     }
   }
   spec {
-    load_balancer_ip = var.host_ip
+    load_balancer_ip = var.lan_ip
     port {
       port        = local.ports.transmission.external
       target_port = local.ports.transmission.internal
@@ -31,7 +31,7 @@ resource "kubernetes_service_v1" "jackett_service" {
     }
   }
   spec {
-    load_balancer_ip = var.host_ip
+    load_balancer_ip = var.lan_ip
     port {
       port        = local.ports.jackett.external
       target_port = local.ports.jackett.internal

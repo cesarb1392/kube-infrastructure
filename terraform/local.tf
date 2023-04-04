@@ -26,7 +26,7 @@ locals {
     wireguard = {
       enabled   = true
       log_level = "info"
-      host_ip   = "192.168.178.233"
+      lan_ip    = "192.168.178.233"
       storage   = "512Mi"
     }
     privateingress = {
@@ -34,7 +34,7 @@ locals {
     }
     pihole = {
       enabled = false
-      host_ip = "192.168.178.232"
+      lan_ip  = "192.168.178.232"
       storage = "512Mi"
     }
     metallb = {
@@ -53,7 +53,7 @@ locals {
         smokeping  = false
         wireshark  = false
       }
-      grafana_host_ip = "192.168.178.235"
+      lan_ip = "192.168.178.235"
     }
     loadtest = {
       enabled    = false
@@ -81,8 +81,8 @@ locals {
       }
     }
     torrente = {
-      enabled = false
-      host_ip = "192.168.178.234"
+      enabled = true
+      lan_ip  = "192.168.178.234"
       storage = "25Gi"
     }
     picamera = {

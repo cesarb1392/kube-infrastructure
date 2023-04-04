@@ -1,12 +1,12 @@
 locals {
   #  https://github.com/grafana/helm-charts/blob/main/charts/grafana/values.yaml
   grafana_values = {
-    adminUser     = "admin"
-    adminPassword = "admin"
+    adminUser     = "z"
+    adminPassword = "z"
     #    "admin" = {
     #      "existingSecret" = kubernetes_secret_v1.admin_password.metadata[0].name
-    #      "userKey"     = "banana"
-    #      "passwordKey" = "password"
+    #      "userKey"     = "x"
+    #      "passwordKey" = "x"
     #    }
 
     "datasources" = {
@@ -51,7 +51,7 @@ locals {
     #    }
     service = {
       type           = "LoadBalancer"
-      loadBalancerIP = var.grafana_host_ip
+      loadBalancerIP = var.lan_ip
       annotations = {
         "metallb.universe.tf/allow-shared-ip" = "${var.namespace}-grafana"
       }

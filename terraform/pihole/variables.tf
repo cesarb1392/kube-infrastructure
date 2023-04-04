@@ -24,6 +24,6 @@ variable "password" {
   sensitive   = true
 }
 
-variable "host_ip" {
+variable "lan_ip" {
   type = string
 }

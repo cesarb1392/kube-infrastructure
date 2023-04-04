@@ -56,7 +56,7 @@ data "template_file" "pihole_values" {
     }
 
     serviceWeb = {
-      loadBalancerIP = var.host_ip
+      loadBalancerIP = var.lan_ip
       type           = "LoadBalancer"
       annotations = {
         "metallb.universe.tf/allow-shared-ip" = "pihole-svc"
@@ -64,7 +64,7 @@ data "template_file" "pihole_values" {
     }
 
     serviceDns = {
-      loadBalancerIP = var.host_ip
+      loadBalancerIP = var.lan_ip
       annotations = {
         "metallb.universe.tf/allow-shared-ip" = "pihole-svc"
       }

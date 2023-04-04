@@ -3,7 +3,7 @@ variable "namespace" {
   type        = string
 }
 
-variable "host_ip" {
+variable "lan_ip" {
   type = string
 }
 

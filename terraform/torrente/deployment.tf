@@ -195,8 +195,6 @@ resource "kubernetes_deployment_v1" "jackett_deployment" {
 }
 
 resource "kubernetes_deployment_v1" "radarr_deployment" {
-  count = 0
-
   metadata {
     name      = join("", [var.namespace, "-radarr-deployment"])
     namespace = var.namespace
@@ -303,8 +301,6 @@ resource "kubernetes_deployment_v1" "radarr_deployment" {
 }
 
 resource "kubernetes_deployment_v1" "sonarr_deployment" {
-  count = 0
-
   metadata {
     name      = join("", [var.namespace, "-sonarr-deployment"])
     namespace = var.namespace

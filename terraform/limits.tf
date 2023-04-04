@@ -1,5 +1,8 @@
 resource "kubernetes_limit_range" "default" {
-  for_each = kubernetes_namespace.this
+  for_each = tomap({
+    for k, v in kubernetes_namespace.this : k => v
+    if v.metadata.0.name != "monitoring"
+  })
 
   metadata {
     labels    = each.value.metadata.0.labels

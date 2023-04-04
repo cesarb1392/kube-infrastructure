@@ -57,7 +57,7 @@ module "pihole" {
   namespace = "pihole"
   password  = var.PI_HOLE_PASS
   TZ        = var.TZ
-  host_ip   = local.applications.pihole.host_ip
+  lan_ip    = local.applications.pihole.lan_ip
 
   depends_on = [module.ingress, module.metallb]
 
@@ -66,13 +66,13 @@ module "pihole" {
 module "monitoring" {
   count = local.applications.monitoring.enabled ? 1 : 0
 
-  source          = "./monitoring"
-  namespace       = "monitoring"
-  TZ              = var.TZ
-  available       = local.applications.monitoring.available
-  puid            = var.PUID
-  pgid            = var.PGID
-  grafana_host_ip = local.applications.monitoring.grafana_host_ip
+  source    = "./monitoring"
+  namespace = "monitoring"
+  TZ        = var.TZ
+  available = local.applications.monitoring.available
+  puid      = var.PUID
+  pgid      = var.PGID
+  lan_ip    = local.applications.monitoring.lan_ip
   #  prometheus_pvc_name = kubernetes_persistent_volume_claim.this["monitoring"].metadata.0.name
 
   depends_on = [module.metallb]
@@ -123,7 +123,7 @@ module "wireguard" {
   private_key                  = var.WG_PRIVATE_KEY
   password                     = var.WG_PASSWORD
   user                         = var.WG_USER
-  host_ip                      = local.applications.wireguard.host_ip
+  lan_ip                       = local.applications.wireguard.lan_ip
   log_level                    = local.applications.wireguard.log_level
   persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["wireguard"].metadata.0.name
   depends_on                   = [module.metallb]
@@ -155,7 +155,7 @@ module "torrente" {
   puid                         = var.PUID
   pgid                         = var.PGID
   timezone                     = var.TZ
-  host_ip                      = local.applications.torrente.host_ip
+  lan_ip                       = local.applications.torrente.lan_ip
   persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["torrente"].metadata.0.name
 
   depends_on = [kubernetes_namespace.this]
