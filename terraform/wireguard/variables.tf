@@ -28,3 +28,8 @@ variable "log_level" {
 variable "persistent_volume_claim_name" {
   type = string
 }
+
+variable "CF_ZONE_ID" {
+  type      = string
+  sensitive = true
+}

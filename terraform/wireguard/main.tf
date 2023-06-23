@@ -72,3 +72,13 @@ resource "helm_release" "this" {
   values = [data.template_file.wireguard.rendered]
 }
 
+
+# https://www.reddit.com/r/WireGuard/comments/10vq2y9/comment/j7n9hsd/?utm_source=share&utm_medium=web2x&context=3
+resource "cloudflare_record" "vpn_record" {
+  zone_id = var.CF_ZONE_ID
+  name    = "vpn"
+  type    = "A"
+  value   = "178.85.155.48"
+  proxied = false
+}
+

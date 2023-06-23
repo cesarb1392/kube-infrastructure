@@ -2,9 +2,10 @@ terraform {
   required_version = "> 1.4.0, < 2.0.0"
 
   required_providers {
-    curl = {
-      source  = "anschoewe/curl"
-      version = ">= 1.0.2"
+    cloudflare = {
+      source  = "cloudflare/cloudflare"
+      version = "~> 3.24.0"
     }
   }
+
 }

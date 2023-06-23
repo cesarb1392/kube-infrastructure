@@ -61,7 +61,7 @@ resource "kubernetes_deployment_v1" "this" {
       spec {
         container {
           name              = "cloudflared-${var.namespace}"
-          image             = "cloudflare/cloudflared:2022.10.0-arm64"
+          image             = "cloudflare/cloudflared:2023.6.1-arm64"
           args              = ["tunnel", "--config", "/etc/cloudflared/config/config.yaml", "run"]
           image_pull_policy = "IfNotPresent"
 

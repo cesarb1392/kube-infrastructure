@@ -1,5 +1,5 @@
 module "ingress" { # replace by public_ingress
-  for_each = local.available_ingresses
+  for_each = local.public_ingress
 
   source    = "./public_ingress"
   namespace = each.key
@@ -127,6 +127,7 @@ module "wireguard" {
   log_level                    = local.applications.wireguard.log_level
   persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["wireguard"].metadata.0.name
   depends_on                   = [module.metallb]
+  CF_ZONE_ID                   = var.CF_ZONE_ID
 }
 
 module "vaultwarden" {

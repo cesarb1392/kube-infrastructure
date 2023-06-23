@@ -86,7 +86,7 @@ locals {
       storage = "25Gi"
     }
     torrente = {
-      enabled = true
+      enabled = false
       lan_ip  = "192.168.178.234"
       storage = "30Gi"
     }
@@ -103,7 +103,7 @@ locals {
     for k, v in local.applications : k => k if v.enabled
   }
 
-  available_ingresses = {
+  public_ingress = {
     for k, v in local.applications : k => v
     if try(v.public_ingress, null) != null && try(v.public_ingress, null) != false && v.enabled
   }
