@@ -7,10 +7,18 @@ variable "lan_ip" {
   type = string
 }
 
-variable "PRIVATE_KEY" {
+variable "OPENVPN_USERNAME" {
   description = ""
   type        = string
   sensitive   = true
+
+}
+
+variable "OPENVPN_PASSWORD" {
+  description = ""
+  type        = string
+  sensitive   = true
+
 }
 
 variable "puid" {
@@ -26,10 +34,6 @@ variable "pgid" {
 variable "timezone" {
   description = ""
   type        = string
-}
-
-variable "vpn_country_code" {
-  type = string
 }
 
 variable "persistent_volume_claim_name" {

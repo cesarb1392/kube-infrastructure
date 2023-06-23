@@ -18,5 +18,9 @@ terraform {
       source  = "cloudflare/cloudflare"
       version = "~> 3.24.0"
     }
+    curl = {
+      source  = "anschoewe/curl"
+      version = ">= 1.0.2"
+    }
   }
 }

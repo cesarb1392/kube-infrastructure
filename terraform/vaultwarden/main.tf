@@ -19,7 +19,7 @@ locals {
   }
   env_vars_hash = sha1(jsonencode(kubernetes_secret.this.data))
 }
-
+#https://greg.jeanmart.me/2020/04/13/self-host-your-password-manager-with-bitward/
 resource "kubernetes_deployment" "this" {
   metadata {
     name      = local.app_name

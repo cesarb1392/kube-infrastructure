@@ -1,6 +1,6 @@
-resource "kubernetes_service_v1" "transmission" {
+resource "kubernetes_service_v1" "transmission_service" {
   metadata {
-    name      = join("", [var.namespace, "-transmission"])
+    name      = join("", [var.namespace, "-transmission-service"])
     namespace = var.namespace
     labels = {
       namespace = var.namespace
@@ -16,14 +16,15 @@ resource "kubernetes_service_v1" "transmission" {
       target_port = local.ports.transmission.internal
       name        = "http"
     }
-    selector = kubernetes_deployment_v1.transmission.spec.0.selector.0.match_labels
+    selector = { app = "transmission" }
     type     = "LoadBalancer"
   }
+
 }
 
-resource "kubernetes_service_v1" "jackett" {
+resource "kubernetes_service_v1" "jackett_service" {
   metadata {
-    name      = join("", [var.namespace, "-jackett"])
+    name      = join("", [var.namespace, "-jackett-service"])
     namespace = var.namespace
     annotations = {
       "metallb.universe.tf/allow-shared-ip" = "torrente-svc"
@@ -36,7 +37,8 @@ resource "kubernetes_service_v1" "jackett" {
       target_port = local.ports.jackett.internal
       name        = "http"
     }
-    selector = kubernetes_deployment_v1.jackett.spec.0.selector.0.match_labels
+    selector = { app = "jackett" }
     type     = "LoadBalancer"
   }
+
 }

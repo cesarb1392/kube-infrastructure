@@ -1,38 +1,48 @@
-resource "kubernetes_secret_v1" "transmission_secret_keys" {
+resource "kubernetes_secret_v1" "vpn" {
   metadata {
-    name      = join("", [var.namespace, "-transmission-secret"])
+    name      = join("", [var.namespace, "-vpn-secret"])
     namespace = var.namespace
-    labels = {
-      namespace = var.namespace
-    }
   }
   data = {
-    username = var.OPENVPN_USERNAME
-    password = var.OPENVPN_PASSWORD
+    #    https://github.com/bubuntux/nordlynx#environment
+    PRIVATE_KEY = var.PRIVATE_KEY
+    NET_LOCAL   = "192.168.178.0/24"
+    TZ          = var.timezone
+    ALLOWED_IPS = "0.0.0.0/0"
+    DNS         = "208.67.222.222,1.1.1.1"
+    END_POINT   = "${local.vpc_server[0].hostname}:51820"
+    PUBLIC_KEY  = local.vpc_server[0].technologies[5].metadata[0].value
+    RECONNECT   = 120
   }
 }
 
-resource "kubernetes_config_map_v1" "transmission_transmission_config_map" {
+resource "kubernetes_config_map_v1" "transmission" {
   metadata {
-    name      = join("", [var.namespace, "-transmission-config-map"])
+    name      = join("", [var.namespace, "-transmission"])
     namespace = var.namespace
-    labels = {
-      namespace = var.namespace
-    }
   }
   data = {
-    LOCAL_NETWORK                         = "192.168.178.0/24"
-    OPENVPN_OPTS                          = "--inactive 3600 --ping 10 --ping-exit 60"
-    OPENVPN_PROVIDER                      = "NORDVPN"
-    TRANSMISSION_DOWNLOAD_QUEUE_SIZE      = "6"
-    TRANSMISSION_RATIO_LIMIT              = "4"
-    TRANSMISSION_RATIO_LIMIT_ENABLED      = "true"
-    TRANSMISSION_SPEED_LIMIT_DOWN         = "10000"
-    TRANSMISSION_SPEED_LIMIT_DOWN_ENABLED = "true"
-    TRANSMISSION_SPEED_LIMIT_UP           = "1000"
-    TRANSMISSION_SPEED_LIMIT_UP_ENABLED   = "true"
-    WEBPROXY_ENABLED                      = "false"
+    #    https://docs.linuxserver.io/images/docker-transmission#environment-variables-e
+    TZ   = var.timezone
+    USER = "banana"
+    PASS = "banana"
+    PUID = var.puid
+    PGID = var.pgid
   }
-
 }
 
+resource "kubernetes_config_map_v1" "jackett" {
+  metadata {
+    name      = join("", [var.namespace, "-jackett"])
+    namespace = var.namespace
+  }
+  data = {
+    #    https://docs.linuxserver.io/images/docker-jackett#environment-variables-e
+    TZ          = var.timezone
+    USER        = "banana"
+    PASS        = "banana"
+    PUID        = var.puid
+    PGID        = var.pgid
+    AUTO_UPDATE = true
+  }
+}

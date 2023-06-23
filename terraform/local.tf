@@ -80,10 +80,15 @@ locals {
         }
       }
     }
+    torrenteold = {
+      enabled = false
+      lan_ip  = "192.168.178.234"
+      storage = "25Gi"
+    }
     torrente = {
       enabled = true
       lan_ip  = "192.168.178.234"
-      storage = "25Gi"
+      storage = "30Gi"
     }
     picamera = {
       enabled        = false

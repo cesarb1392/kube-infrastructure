@@ -87,7 +87,15 @@ variable "OPENVPN_PASSWORD" {
   description = "The username to connect to Grafana UI."
   type        = string
   sensitive   = true
+}
+variable "OPENVPN_PRIVATE_KEY" {
+  description = ""
+  type        = string
+  sensitive   = true
+}
 
+variable "vpn_country_code" {
+  type = string
 }
 
 variable "PUID" {

@@ -34,6 +34,7 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 |------|---------|
 | <a name="requirement_terraform"></a> [terraform](#requirement\_terraform) | > 1.4.0, < 2.0.0 |
 | <a name="requirement_cloudflare"></a> [cloudflare](#requirement\_cloudflare) | ~> 3.24.0 |
+| <a name="requirement_curl"></a> [curl](#requirement\_curl) | >= 1.0.2 |
 | <a name="requirement_helm"></a> [helm](#requirement\_helm) | >= 2.5.0 |
 | <a name="requirement_kubectl"></a> [kubectl](#requirement\_kubectl) | >= 1.7.0 |
 | <a name="requirement_kubernetes"></a> [kubernetes](#requirement\_kubernetes) | >= 2.8.0 |
@@ -58,6 +59,7 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 | <a name="module_pihole"></a> [pihole](#module\_pihole) | ./pihole | n/a |
 | <a name="module_private_ingress"></a> [private\_ingress](#module\_private\_ingress) | ./private_ingress | n/a |
 | <a name="module_torrente"></a> [torrente](#module\_torrente) | ./torrente | n/a |
+| <a name="module_torrenteold"></a> [torrenteold](#module\_torrenteold) | ./torrenteold | n/a |
 | <a name="module_vaultwarden"></a> [vaultwarden](#module\_vaultwarden) | ./vaultwarden | n/a |
 | <a name="module_website"></a> [website](#module\_website) | ./website | n/a |
 | <a name="module_wireguard"></a> [wireguard](#module\_wireguard) | ./wireguard | n/a |
@@ -85,6 +87,7 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 | <a name="input_MINIO_ROOT_USER"></a> [MINIO\_ROOT\_USER](#input\_MINIO\_ROOT\_USER) | n/a | `string` | n/a | yes |
 | <a name="input_MINIO_USERS"></a> [MINIO\_USERS](#input\_MINIO\_USERS) | n/a | <pre>list(<br>    object({<br>      accessKey = string<br>      secretKey = string<br>      policy    = string<br>  }))</pre> | n/a | yes |
 | <a name="input_OPENVPN_PASSWORD"></a> [OPENVPN\_PASSWORD](#input\_OPENVPN\_PASSWORD) | The username to connect to Grafana UI. | `string` | n/a | yes |
+| <a name="input_OPENVPN_PRIVATE_KEY"></a> [OPENVPN\_PRIVATE\_KEY](#input\_OPENVPN\_PRIVATE\_KEY) | n/a | `string` | n/a | yes |
 | <a name="input_OPENVPN_USERNAME"></a> [OPENVPN\_USERNAME](#input\_OPENVPN\_USERNAME) | The username to connect to Grafana UI. | `string` | n/a | yes |
 | <a name="input_PGID"></a> [PGID](#input\_PGID) | n/a | `string` | n/a | yes |
 | <a name="input_PI_HOLE_PASS"></a> [PI\_HOLE\_PASS](#input\_PI\_HOLE\_PASS) | n/a | `string` | n/a | yes |
@@ -94,6 +97,7 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 | <a name="input_WG_PASSWORD"></a> [WG\_PASSWORD](#input\_WG\_PASSWORD) | n/a | `string` | n/a | yes |
 | <a name="input_WG_PRIVATE_KEY"></a> [WG\_PRIVATE\_KEY](#input\_WG\_PRIVATE\_KEY) | n/a | `string` | n/a | yes |
 | <a name="input_WG_USER"></a> [WG\_USER](#input\_WG\_USER) | n/a | `string` | n/a | yes |
+| <a name="input_vpn_country_code"></a> [vpn\_country\_code](#input\_vpn\_country\_code) | n/a | `string` | n/a | yes |
 
 ## Outputs
 

@@ -144,23 +144,6 @@ module "vaultwarden" {
   depends_on = [kubernetes_namespace.this, module.ingress]
 }
 
-module "torrente" {
-  count = local.applications.torrente.enabled ? 1 : 0
-
-  source = "./torrente"
-
-  namespace                    = "torrente"
-  OPENVPN_PASSWORD             = var.OPENVPN_PASSWORD
-  OPENVPN_USERNAME             = var.OPENVPN_USERNAME
-  puid                         = var.PUID
-  pgid                         = var.PGID
-  timezone                     = var.TZ
-  lan_ip                       = local.applications.torrente.lan_ip
-  persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["torrente"].metadata.0.name
-
-  depends_on = [kubernetes_namespace.this]
-}
-
 module "picamera" {
   count = local.applications.picamera.enabled ? 1 : 0
 
@@ -169,4 +152,38 @@ module "picamera" {
   ingress_port = local.applications.picamera.ingress_port
 
   depends_on = [kubernetes_namespace.this, module.ingress]
+}
+
+module "torrenteold" {
+  count = local.applications.torrenteold.enabled ? 1 : 0
+
+  source = "./torrenteold"
+
+  namespace                    = "torrenteold"
+  OPENVPN_PASSWORD             = var.OPENVPN_PASSWORD
+  OPENVPN_USERNAME             = var.OPENVPN_USERNAME
+  puid                         = var.PUID
+  pgid                         = var.PGID
+  timezone                     = var.TZ
+  lan_ip                       = local.applications.torrente.lan_ip
+  persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["torrenteold"].metadata.0.name
+
+  depends_on = [kubernetes_namespace.this]
+}
+
+module "torrente" {
+  count = local.applications.torrente.enabled ? 1 : 0
+
+  source = "./torrente"
+
+  namespace                    = "torrente"
+  PRIVATE_KEY                  = var.OPENVPN_PRIVATE_KEY
+  puid                         = var.PUID
+  pgid                         = var.PGID
+  timezone                     = var.TZ
+  lan_ip                       = local.applications.torrente.lan_ip
+  vpn_country_code             = var.vpn_country_code
+  persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["torrente"].metadata.0.name
+
+  depends_on = [kubernetes_namespace.this]
 }
