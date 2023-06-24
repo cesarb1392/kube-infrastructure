@@ -86,7 +86,7 @@ locals {
       storage = "25Gi"
     }
     torrente = {
-      enabled = false
+      enabled = true
       lan_ip  = "192.168.178.234"
       storage = "30Gi"
     }
