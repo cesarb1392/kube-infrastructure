@@ -24,7 +24,7 @@ resource "kubernetes_deployment_v1" "transmission" {
           }
           env_from {
             config_map_ref {
-              name     = kubernetes_config_map_v1.transmission.metadata[0].name
+              name     = kubernetes_config_map_v1.config.metadata[0].name
               optional = false
             }
           }
@@ -80,7 +80,7 @@ resource "kubernetes_deployment_v1" "jackett" {
           }
           env_from {
             config_map_ref {
-              name     = kubernetes_config_map_v1.jackett.metadata[0].name
+              name     = kubernetes_config_map_v1.config.metadata[0].name
               optional = false
             }
           }
@@ -104,4 +104,117 @@ resource "kubernetes_deployment_v1" "jackett" {
       }
     }
   }
+  depends_on = [helm_release.pod_gateway]
+}
+
+resource "kubernetes_deployment_v1" "radarr" {
+  metadata {
+    name      = "radarr"
+    namespace = var.namespace
+    labels = {
+      namespace = var.namespace
+    }
+  }
+  spec {
+    selector {
+      match_labels = {
+        app = "radarr"
+      }
+    }
+    template {
+      metadata {
+        labels = {
+          app = "radarr"
+        }
+      }
+      spec {
+        container {
+          name  = "radarr"
+          image = "linuxserver/radarr"
+          port {
+            container_port = 7878
+          }
+          env_from {
+            config_map_ref {
+              name     = kubernetes_config_map_v1.config.metadata[0].name
+              optional = false
+            }
+          }
+          volume_mount {
+            mount_path = "/config"
+            name       = "data"
+            sub_path   = "configs/radarr"
+          }
+          volume_mount {
+            mount_path = "/downloads"
+            name       = "data"
+            sub_path   = "downloads/transmission"
+          }
+        }
+        volume {
+          name = "data"
+          persistent_volume_claim {
+            claim_name = var.persistent_volume_claim_name
+          }
+        }
+      }
+    }
+  }
+  depends_on = [helm_release.pod_gateway]
+}
+
+resource "kubernetes_deployment_v1" "sonarr" {
+  metadata {
+    name      = "sonarr"
+    namespace = var.namespace
+    labels = {
+      namespace = var.namespace
+    }
+  }
+  spec {
+    selector {
+      match_labels = {
+        app = "sonarr"
+      }
+    }
+    template {
+      metadata {
+        labels = {
+          app = "sonarr"
+        }
+      }
+      spec {
+        container {
+          name  = "sonarr"
+          image = "linuxserver/sonarr"
+          port {
+            container_port = 8989
+          }
+          env_from {
+            config_map_ref {
+              name     = kubernetes_config_map_v1.config.metadata[0].name
+              optional = false
+            }
+          }
+          volume_mount {
+            mount_path = "/config"
+            name       = "data"
+            sub_path   = "configs/sonarr"
+          }
+          volume_mount {
+            mount_path = "/downloads"
+            name       = "data"
+            sub_path   = "downloads/transmission"
+          }
+        }
+        volume {
+          name = "data"
+          persistent_volume_claim {
+            claim_name = var.persistent_volume_claim_name
+          }
+        }
+      }
+    }
+  }
+  depends_on = [helm_release.pod_gateway]
 }
