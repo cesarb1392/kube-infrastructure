@@ -180,6 +180,8 @@ module "torrente" {
   PRIVATE_KEY                  = var.OPENVPN_PRIVATE_KEY
   puid                         = var.PUID
   pgid                         = var.PGID
+  user                         = var.USER
+  pass                         = var.PASS
   timezone                     = var.TZ
   lan_ip                       = local.applications.torrente.lan_ip
   vpn_country                  = var.vpn_country

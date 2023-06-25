@@ -36,3 +36,14 @@ variable "persistent_volume_claim_name" {
   description = ""
   type        = string
 }
+
+
+variable "user" {
+  description = ""
+  type        = string
+}
+
+variable "pass" {
+  description = ""
+  type        = string
+}

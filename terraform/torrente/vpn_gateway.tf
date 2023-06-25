@@ -94,7 +94,7 @@ locals {
     }
     publicPorts = [
       {
-        hostname = "terminal" # pod name
+        hostname = "transmission" # pod name
         IP       = 10
         ports = [
           {
@@ -116,7 +116,9 @@ resource "helm_release" "pod_gateway" {
   name       = "pod-gateway"
   chart      = "pod-gateway"
   namespace  = var.namespace
-  version    = "6.5.1"
+  #  create_namespace = true
+  #  namespace = "vpn-gateway" # error: MountVolume.SetUp failed for volume "gateway-configmap" : configmap "pod-gateway" not found in target namespace
+  version = "6.5.1"
 
   values = [yamlencode(local.pod_gateway_values)]
 }

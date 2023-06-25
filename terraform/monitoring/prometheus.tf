@@ -23,7 +23,7 @@ locals {
     #    }
 
     grafana = {
-      adminPassword = "adminPassword" # first login, you're asked to update it :)
+      adminPassword = "xxx" # grafana-cli admin reset-admin-password "xxx"
     }
     prometheus = {
       prometheusSpec = {

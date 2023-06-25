@@ -90,10 +90,12 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 | <a name="input_MINIO_ROOT_USER"></a> [MINIO\_ROOT\_USER](#input\_MINIO\_ROOT\_USER) | n/a | `string` | n/a | yes |
 | <a name="input_MINIO_USERS"></a> [MINIO\_USERS](#input\_MINIO\_USERS) | n/a | <pre>list(<br>    object({<br>      accessKey = string<br>      secretKey = string<br>      policy    = string<br>  }))</pre> | n/a | yes |
 | <a name="input_OPENVPN_PRIVATE_KEY"></a> [OPENVPN\_PRIVATE\_KEY](#input\_OPENVPN\_PRIVATE\_KEY) | n/a | `string` | n/a | yes |
+| <a name="input_PASS"></a> [PASS](#input\_PASS) | n/a | `string` | n/a | yes |
 | <a name="input_PGID"></a> [PGID](#input\_PGID) | n/a | `string` | n/a | yes |
 | <a name="input_PI_HOLE_PASS"></a> [PI\_HOLE\_PASS](#input\_PI\_HOLE\_PASS) | n/a | `string` | n/a | yes |
 | <a name="input_PUID"></a> [PUID](#input\_PUID) | n/a | `string` | n/a | yes |
 | <a name="input_TZ"></a> [TZ](#input\_TZ) | n/a | `string` | n/a | yes |
+| <a name="input_USER"></a> [USER](#input\_USER) | n/a | `string` | n/a | yes |
 | <a name="input_VAULTWARDEN_ADMIN_TOKEN"></a> [VAULTWARDEN\_ADMIN\_TOKEN](#input\_VAULTWARDEN\_ADMIN\_TOKEN) | n/a | `string` | n/a | yes |
 | <a name="input_WG_PASSWORD"></a> [WG\_PASSWORD](#input\_WG\_PASSWORD) | n/a | `string` | n/a | yes |
 | <a name="input_WG_PRIVATE_KEY"></a> [WG\_PRIVATE\_KEY](#input\_WG\_PRIVATE\_KEY) | n/a | `string` | n/a | yes |

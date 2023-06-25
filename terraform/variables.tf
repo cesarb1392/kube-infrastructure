@@ -97,3 +97,13 @@ variable "PGID" {
   description = ""
   type        = string
 }
+
+variable "USER" {
+  description = ""
+  type        = string
+}
+
+variable "PASS" {
+  description = ""
+  type        = string
+}
