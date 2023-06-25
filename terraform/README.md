@@ -43,7 +43,9 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 
 | Name | Version |
 |------|---------|
+| <a name="provider_helm"></a> [helm](#provider\_helm) | 2.9.0 |
 | <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 2.18.1 |
+| <a name="provider_template"></a> [template](#provider\_template) | 2.2.0 |
 
 ## Modules
 
@@ -59,7 +61,6 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 | <a name="module_pihole"></a> [pihole](#module\_pihole) | ./pihole | n/a |
 | <a name="module_private_ingress"></a> [private\_ingress](#module\_private\_ingress) | ./private_ingress | n/a |
 | <a name="module_torrente"></a> [torrente](#module\_torrente) | ./torrente | n/a |
-| <a name="module_torrenteold"></a> [torrenteold](#module\_torrenteold) | ./torrenteold | n/a |
 | <a name="module_vaultwarden"></a> [vaultwarden](#module\_vaultwarden) | ./vaultwarden | n/a |
 | <a name="module_website"></a> [website](#module\_website) | ./website | n/a |
 | <a name="module_wireguard"></a> [wireguard](#module\_wireguard) | ./wireguard | n/a |
@@ -68,9 +69,11 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 
 | Name | Type |
 |------|------|
+| [helm_release.cert_manager](https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release) | resource |
 | [kubernetes_limit_range.default](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/limit_range) | resource |
 | [kubernetes_namespace.this](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/namespace) | resource |
 | [kubernetes_persistent_volume_claim.this](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/persistent_volume_claim) | resource |
+| [template_file.cert_manager](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file) | data source |
 
 ## Inputs
 
@@ -86,9 +89,7 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 | <a name="input_MINIO_ROOT_PASSWORD"></a> [MINIO\_ROOT\_PASSWORD](#input\_MINIO\_ROOT\_PASSWORD) | n/a | `string` | n/a | yes |
 | <a name="input_MINIO_ROOT_USER"></a> [MINIO\_ROOT\_USER](#input\_MINIO\_ROOT\_USER) | n/a | `string` | n/a | yes |
 | <a name="input_MINIO_USERS"></a> [MINIO\_USERS](#input\_MINIO\_USERS) | n/a | <pre>list(<br>    object({<br>      accessKey = string<br>      secretKey = string<br>      policy    = string<br>  }))</pre> | n/a | yes |
-| <a name="input_OPENVPN_PASSWORD"></a> [OPENVPN\_PASSWORD](#input\_OPENVPN\_PASSWORD) | The username to connect to Grafana UI. | `string` | n/a | yes |
 | <a name="input_OPENVPN_PRIVATE_KEY"></a> [OPENVPN\_PRIVATE\_KEY](#input\_OPENVPN\_PRIVATE\_KEY) | n/a | `string` | n/a | yes |
-| <a name="input_OPENVPN_USERNAME"></a> [OPENVPN\_USERNAME](#input\_OPENVPN\_USERNAME) | The username to connect to Grafana UI. | `string` | n/a | yes |
 | <a name="input_PGID"></a> [PGID](#input\_PGID) | n/a | `string` | n/a | yes |
 | <a name="input_PI_HOLE_PASS"></a> [PI\_HOLE\_PASS](#input\_PI\_HOLE\_PASS) | n/a | `string` | n/a | yes |
 | <a name="input_PUID"></a> [PUID](#input\_PUID) | n/a | `string` | n/a | yes |
@@ -97,7 +98,7 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 | <a name="input_WG_PASSWORD"></a> [WG\_PASSWORD](#input\_WG\_PASSWORD) | n/a | `string` | n/a | yes |
 | <a name="input_WG_PRIVATE_KEY"></a> [WG\_PRIVATE\_KEY](#input\_WG\_PRIVATE\_KEY) | n/a | `string` | n/a | yes |
 | <a name="input_WG_USER"></a> [WG\_USER](#input\_WG\_USER) | n/a | `string` | n/a | yes |
-| <a name="input_vpn_country_code"></a> [vpn\_country\_code](#input\_vpn\_country\_code) | n/a | `string` | n/a | yes |
+| <a name="input_vpn_country"></a> [vpn\_country](#input\_vpn\_country) | n/a | `string` | n/a | yes |
 
 ## Outputs
 

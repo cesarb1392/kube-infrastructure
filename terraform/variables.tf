@@ -77,24 +77,14 @@ variable "VAULTWARDEN_ADMIN_TOKEN" {
   type      = string
   sensitive = true
 }
-variable "OPENVPN_USERNAME" {
-  description = "The username to connect to Grafana UI."
-  type        = string
-  sensitive   = true
 
-}
-variable "OPENVPN_PASSWORD" {
-  description = "The username to connect to Grafana UI."
-  type        = string
-  sensitive   = true
-}
 variable "OPENVPN_PRIVATE_KEY" {
   description = ""
   type        = string
   sensitive   = true
 }
 
-variable "vpn_country_code" {
+variable "vpn_country" {
   type = string
 }
 

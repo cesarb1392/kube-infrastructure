@@ -28,7 +28,7 @@ variable "timezone" {
   type        = string
 }
 
-variable "vpn_country_code" {
+variable "vpn_country" {
   type = string
 }
 
