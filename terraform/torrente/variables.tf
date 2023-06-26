@@ -32,12 +32,6 @@ variable "vpn_country" {
   type = string
 }
 
-variable "persistent_volume_claim_name" {
-  description = ""
-  type        = string
-}
-
-
 variable "user" {
   description = ""
   type        = string
