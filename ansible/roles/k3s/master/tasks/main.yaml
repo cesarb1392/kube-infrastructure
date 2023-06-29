@@ -72,6 +72,7 @@
     dest: /usr/local/bin/kubectl
     state: link
 
+# https://kubernetes.io/docs/tasks/debug/debug-cluster/crictl/
 - name: Create crictl symlink
   file:
     src: /usr/local/bin/k3s

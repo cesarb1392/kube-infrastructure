@@ -1,10 +1,10 @@
-- hosts: single
+- hosts: master
   tasks:
-    - name: Add ssh keys
-      ansible.posix.authorized_key:
-        user: banana
-        state: present
-        key: "{{ lookup('file', '~/.ssh/pi/id_rsa.pub') }}"
+#    - name: Add ssh keys
+#      ansible.posix.authorized_key:
+#        user: banana
+#        state: present
+#        key: "{{ lookup('file', '~/.ssh/pi/id_rsa.pub') }}"
 
     - name: Check system information
       shell:
@@ -28,11 +28,6 @@
     - name: Install packages
       become: yes
       apt:
-        upgrade: dist
-
-    - name: Install packages
-      become: yes
-      apt:
         name:
           - tree
           - micro
@@ -46,18 +41,6 @@
           - v4l-utils # camera
         state: latest
         cache_valid_time: 600
-
-    - name: Reboot
-      become: yes
-      ansible.builtin.reboot:
-        reboot_timeout: 200
-
-    - name: Apply UFW rules
-      become: yes
-      community.general.ufw:
-        rule: allow
-        port: ssh
-        proto: tcp
 
     - name: Under voltage?
       ansible.builtin.script: ./scripts/undervoltage.sh
@@ -76,13 +59,13 @@
             update_mode: auto
             update_frequency: 10
             oh_my_zsh:
-              theme: spaceship # robbyrussell # spaceship
+              theme: robbyrussell # robbyrussell # spaceship
               plugins:
                 - git
                 - zsh-syntax-highlighting
                 - zsh-autosuggestions
                 - zsh-completions
-                - docker
+#                - docker
 
     - name: Install spaceship prompt
       git:
@@ -134,10 +117,10 @@
       apt:
         clean: yes
 
-    - name: Reboot
-      become: yes
-      ansible.builtin.reboot:
-        reboot_timeout: 200
+#    - name: Reboot
+#      become: yes
+#      ansible.builtin.reboot:
+#        reboot_timeout: 300
 
 #    - name: Install Docker
 #      ansible.builtin.command:

@@ -27,7 +27,7 @@
 
 - name: Set detected_distribution to Raspbian (ARM64 on Debian Buster)
   set_fact:
-    detected_distribution: Raspbian
+    detected_distribution: Raspibian
   when:
     - ansible_facts.architecture is search("aarch64")
     - raspberry_pi|default(false)
@@ -46,8 +46,9 @@
     - "prereq/{{ detected_distribution }}.yaml"
     - "prereq/{{ ansible_distribution }}-{{ ansible_distribution_major_version }}.yaml"
     - "prereq/{{ ansible_distribution }}.yaml"
+    - "prereq/Raspbian.yaml" # change next base on the targe os!!
+    - "prereq/Ubuntu.yaml"
     - "prereq/default.yaml"
-    - "prereq/Raspbian.yaml"
 
   when:
     - raspberry_pi|default(false)
