@@ -13,7 +13,7 @@ resource "kubernetes_namespace" "this" {
 }
 
 
-module "ingress" { # replace by public_ingress
+module "public_ingress" {
   for_each = local.public_ingress
 
   source    = "./public_ingress"
@@ -42,7 +42,7 @@ module "website" {
   target_service = each.value.target_service
   ingress_port   = each.value.ingress_port
 
-  depends_on = [module.ingress]
+  depends_on = [module.public_ingress]
 }
 
 module "metallb" {
@@ -74,7 +74,7 @@ module "pihole" {
   TZ        = var.TZ
   lan_ip    = local.applications.pihole.lan_ip
 
-  depends_on = [module.ingress, module.metallb]
+  depends_on = [module.public_ingress, module.metallb]
 
 }
 
@@ -128,6 +128,9 @@ module "minio" {
   MINIO_ROOT_PASSWORD          = var.MINIO_ROOT_PASSWORD
   MINIO_ROOT_USER              = var.MINIO_ROOT_USER
   persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["minio"].metadata.0.name
+  lan_ip                       = local.applications.minio.lan_ip
+
+  depends_on = [module.metallb]
 }
 
 module "wireguard" {
@@ -141,8 +144,9 @@ module "wireguard" {
   lan_ip                       = local.applications.wireguard.lan_ip
   log_level                    = local.applications.wireguard.log_level
   persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["wireguard"].metadata.0.name
-  depends_on                   = [module.metallb]
   CF_ZONE_ID                   = var.CF_ZONE_ID
+
+  depends_on = [module.metallb]
 }
 
 module "vaultwarden" {
@@ -157,7 +161,7 @@ module "vaultwarden" {
   persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["vaultwarden"].metadata.0.name
   log_level                    = local.applications.vaultwarden.log_level
 
-  depends_on = [kubernetes_namespace.this, module.ingress]
+  depends_on = [kubernetes_namespace.this, module.public_ingress]
 }
 
 module "picamera" {
@@ -167,7 +171,7 @@ module "picamera" {
   namespace    = "picamera"
   ingress_port = local.applications.picamera.ingress_port
 
-  depends_on = [kubernetes_namespace.this, module.ingress]
+  depends_on = [kubernetes_namespace.this, module.public_ingress]
 }
 
 module "torrente" {
@@ -185,5 +189,5 @@ module "torrente" {
   lan_ip      = local.applications.torrente.lan_ip
   vpn_country = var.vpn_country
 
-  depends_on = [kubernetes_namespace.this, helm_release.cert_manager, kubernetes_persistent_volume.ssd]
+  depends_on = [kubernetes_namespace.this, helm_release.cert_manager, module.metallb]
 }

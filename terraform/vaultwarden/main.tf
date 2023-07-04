@@ -1,21 +1,19 @@
 locals {
   app_name = var.namespace
   env_vars = {
-    #    https://github.com/dani-garcia/vaultwarden/blob/d7b0d6f9f538e2b5ca36feb104bcc81e0d59059d/.env.template#L142
-    SERVER_ADMIN_EMAIL        = var.SERVER_ADMIN_EMAIL
-    ORG_CREATION_USERS        = var.SERVER_ADMIN_EMAIL
-    DOMAIN                    = "https://${local.app_name}.${var.DOMAIN}"
-    SHOW_PASSWORD_HINT        = false
-    INVITATIONS_ALLOWED       = false
-    SIGNUPS_ALLOWED           = false
-    SHOW_PASSWORD_HINT        = false
-    SIGNUPS_DOMAINS_WHITELIST = trim(var.SERVER_ADMIN_EMAIL, "contact@")
-    WEB_VAULT_ENABLED         = true
-    WEBSOCKET_ENABLED         = true ## websocket notifications
-    ADMIN_TOKEN               = var.VAULTWARDEN_ADMIN_TOKEN
-    DISABLE_ADMIN_TOKEN       = true
-    LOG_LEVEL                 = var.log_level # "trace", "debug", "info", "warn", "error" and "off"
-    EXTENDED_LOGGING          = true
+    #    https://github.com/dani-garcia/vaultwarden/blob/main/.env.template
+    SERVER_ADMIN_EMAIL  = var.SERVER_ADMIN_EMAIL
+    ORG_CREATION_USERS  = var.SERVER_ADMIN_EMAIL
+    DOMAIN              = "https://${local.app_name}.${var.DOMAIN}"
+    SHOW_PASSWORD_HINT  = false
+    INVITATIONS_ALLOWED = false
+    SIGNUPS_ALLOWED     = false
+    SHOW_PASSWORD_HINT  = false
+    WEB_VAULT_ENABLED   = true
+    WEBSOCKET_ENABLED   = true ## websocket notifications
+    ADMIN_TOKEN         = var.VAULTWARDEN_ADMIN_TOKEN
+    LOG_LEVEL           = var.log_level # "trace", "debug", "info", "warn", "error" and "off"
+    EXTENDED_LOGGING    = true
   }
   env_vars_hash = sha1(jsonencode(kubernetes_secret.this.data))
 }
@@ -26,7 +24,7 @@ resource "kubernetes_deployment" "this" {
     namespace = var.namespace
   }
   spec {
-    replicas = 2
+    replicas = 1
     selector {
       match_labels = { "app" = local.app_name }
     }
@@ -35,19 +33,7 @@ resource "kubernetes_deployment" "this" {
         labels = { "app" = local.app_name }
       }
       spec {
-        affinity {
-          node_affinity {
-            required_during_scheduling_ignored_during_execution {
-              node_selector_term {
-                match_expressions {
-                  key      = "kubernetes.io/hostname"
-                  operator = "In"
-                  values   = ["slowbanana"]
-                }
-              }
-            }
-          }
-        }
+
         container {
           name              = "vaultwarden"
           image             = "vaultwarden/server"

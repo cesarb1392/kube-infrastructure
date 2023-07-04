@@ -37,7 +37,7 @@ locals {
 }
 
 resource "helm_release" "prometheus_server" {
-  count = var.available.prometheus ? 1 : 0
+  count = var.available.prometheus_stack ? 1 : 0
 
   chart      = "kube-prometheus-stack"
   name       = "prometheus"
@@ -47,8 +47,10 @@ resource "helm_release" "prometheus_server" {
   values = [file("${path.module}/prometheus_stack.yaml")]
 }
 
+
+# https://grafana.com/grafana/dashboards/15282-k8s-rke-cluster-monitoring/
 resource "kubernetes_service_v1" "grafana_lan" {
-  count = var.available.prometheus ? 1 : 0
+  count = var.available.prometheus_stack ? 1 : 0
 
   metadata {
     name      = "grafana-lan"

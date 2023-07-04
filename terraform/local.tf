@@ -1,6 +1,6 @@
 locals {
   applications = {
-    portfolio = {
+    portfolio-bk = {
       enabled        = true
       public_ingress = true
       runner         = true
@@ -20,6 +20,7 @@ locals {
       enabled        = true
       public_ingress = true
       target_service = "minio"
+      lan_ip         = "192.168.178.236"
       ingress_port   = 9000
       storage        = "500Mi"
     }
@@ -27,13 +28,13 @@ locals {
       enabled   = true
       log_level = "info"
       lan_ip    = "192.168.178.233"
-      storage   = "512Mi"
+      storage   = "1Gi"
     }
     privateingress = {
       enabled = false
     }
     pihole = {
-      enabled = false
+      enabled = true
       lan_ip  = "192.168.178.232"
       storage = "512Mi"
     }
@@ -45,13 +46,13 @@ locals {
     monitoring = {
       enabled = true
       available = {
-        grafana    = false
-        graphite   = false
-        promtail   = false
-        loki       = false
-        prometheus = true
-        smokeping  = false
-        wireshark  = false
+        grafana          = false
+        graphite         = false
+        promtail         = false
+        loki             = false
+        prometheus_stack = true ##
+        smokeping        = false
+        wireshark        = false
       }
       lan_ip = "192.168.178.235"
     }
@@ -65,11 +66,11 @@ locals {
       public_ingress = true
       target_service = "vaultwarden-svc"
       ingress_port   = 80
-      storage        = "1Gi"
+      storage        = "3Gi"
       log_level      = "info"
     }
     githubrunner = {
-      enabled     = true
+      enabled     = false
       runner_name = "bananaRunner"
       repos = {
         myawesomecv = {
@@ -81,7 +82,7 @@ locals {
       }
     }
     torrente = {
-      enabled = true
+      enabled = false
       lan_ip  = "192.168.178.234"
     }
     picamera = {

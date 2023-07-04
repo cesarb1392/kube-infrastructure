@@ -3,8 +3,7 @@
 resource "helm_release" "minio_storage" {
   namespace = var.namespace
   name      = "minio"
-  chart     = "https://github.com/minio/minio/blob/master/helm-releases/minio-4.0.9.tgz?raw=true"
-  version   = "RELEASE.2022-08-02T23-59-16Z"
+  chart     = "https://github.com/minio/minio/blob/master/helm-releases/minio-5.0.9.tgz?raw=true"
 
   values = [data.template_file.this.rendered]
 }
@@ -43,3 +42,28 @@ data "template_file" "this" {
     }
   )
 }
+
+resource "kubernetes_service_v1" "minio_lan" {
+  metadata {
+    name      = "${var.namespace}-lan"
+    namespace = var.namespace
+    annotations = {
+      "metallb.universe.tf/allow-shared-ip" = "${var.namespace}-svc"
+    }
+  }
+  spec {
+    load_balancer_ip = var.lan_ip
+    port {
+      port        = 80
+      target_port = 9001
+      protocol    = "TCP"
+      name        = "lan-http"
+    }
+    selector = {
+      "app"     = var.namespace
+      "release" = var.namespace
+    }
+    type = "LoadBalancer"
+  }
+}
+

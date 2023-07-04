@@ -1,4 +1,4 @@
-- hosts: master
+- hosts: all
   tasks:
 #    - name: Add ssh keys
 #      ansible.posix.authorized_key:
@@ -117,10 +117,10 @@
       apt:
         clean: yes
 
-#    - name: Reboot
-#      become: yes
-#      ansible.builtin.reboot:
-#        reboot_timeout: 300
+    - name: Reboot
+      become: yes
+      ansible.builtin.reboot:
+        reboot_timeout: 300
 
 #    - name: Install Docker
 #      ansible.builtin.command:

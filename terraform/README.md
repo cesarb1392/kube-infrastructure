@@ -43,8 +43,8 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 
 | Name | Version |
 |------|---------|
-| <a name="provider_helm"></a> [helm](#provider\_helm) | 2.9.0 |
-| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 2.18.1 |
+| <a name="provider_helm"></a> [helm](#provider\_helm) | 2.10.1 |
+| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 2.21.1 |
 | <a name="provider_template"></a> [template](#provider\_template) | 2.2.0 |
 
 ## Modules
@@ -52,7 +52,6 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 | Name | Source | Version |
 |------|--------|---------|
 | <a name="module_github_runner"></a> [github\_runner](#module\_github\_runner) | ./github_runner | n/a |
-| <a name="module_ingress"></a> [ingress](#module\_ingress) | ./public_ingress | n/a |
 | <a name="module_loadtest"></a> [loadtest](#module\_loadtest) | ./load_test | n/a |
 | <a name="module_metallb"></a> [metallb](#module\_metallb) | ./metallb | n/a |
 | <a name="module_minio"></a> [minio](#module\_minio) | ./minio | n/a |
@@ -60,6 +59,7 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 | <a name="module_picamera"></a> [picamera](#module\_picamera) | ./picamera | n/a |
 | <a name="module_pihole"></a> [pihole](#module\_pihole) | ./pihole | n/a |
 | <a name="module_private_ingress"></a> [private\_ingress](#module\_private\_ingress) | ./private_ingress | n/a |
+| <a name="module_public_ingress"></a> [public\_ingress](#module\_public\_ingress) | ./public_ingress | n/a |
 | <a name="module_torrente"></a> [torrente](#module\_torrente) | ./torrente | n/a |
 | <a name="module_vaultwarden"></a> [vaultwarden](#module\_vaultwarden) | ./vaultwarden | n/a |
 | <a name="module_website"></a> [website](#module\_website) | ./website | n/a |
@@ -72,7 +72,6 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 | [helm_release.cert_manager](https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release) | resource |
 | [kubernetes_limit_range.default](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/limit_range) | resource |
 | [kubernetes_namespace.this](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/namespace) | resource |
-| [kubernetes_persistent_volume.ssd](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/persistent_volume) | resource |
 | [kubernetes_persistent_volume_claim.this](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/persistent_volume_claim) | resource |
 | [template_file.cert_manager](https://registry.terraform.io/providers/hashicorp/template/latest/docs/data-sources/file) | data source |
 

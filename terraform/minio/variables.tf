@@ -11,8 +11,14 @@ variable "target_service" {
   description = "target_service"
   type        = string
 }
+
 variable "ingress_port" {
   description = "ingress_port"
+  type        = string
+}
+
+variable "lan_ip" {
+  description = "lan_ip"
   type        = string
 }
 
