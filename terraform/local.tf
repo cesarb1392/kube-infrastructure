@@ -36,7 +36,7 @@ locals {
     pihole = {
       enabled = true
       lan_ip  = "192.168.178.232"
-      storage = "512Mi"
+      #      storage = "512Mi" # pending!
     }
     metallb = {
       enabled      = true
@@ -70,7 +70,7 @@ locals {
       log_level      = "info"
     }
     githubrunner = {
-      enabled     = false
+      enabled     = true
       runner_name = "bananaRunner"
       repos = {
         myawesomecv = {
@@ -82,8 +82,9 @@ locals {
       }
     }
     torrente = {
-      enabled = false
+      enabled = true
       lan_ip  = "192.168.178.234"
+      storage = "2Gi"
     }
     picamera = {
       enabled        = false

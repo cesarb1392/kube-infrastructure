@@ -41,3 +41,8 @@ variable "pass" {
   description = ""
   type        = string
 }
+
+variable "persistent_volume_claim_name" {
+  type = string
+}
+

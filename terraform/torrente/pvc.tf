@@ -35,7 +35,7 @@ resource "kubernetes_persistent_volume" "ssd" {
 resource "kubernetes_persistent_volume_claim" "ssd" {
   wait_until_bound = false
   metadata {
-    name      = "${var.namespace}-pvc"
+    name      = "${var.namespace}-ssd-pvc"
     namespace = var.namespace
   }
   spec {
