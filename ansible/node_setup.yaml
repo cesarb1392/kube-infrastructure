@@ -1,4 +1,4 @@
-- hosts: all
+- hosts: single
   tasks:
 #    - name: Add ssh keys
 #      ansible.posix.authorized_key:
@@ -12,6 +12,20 @@
       register: os_info
     - debug:
         msg: "{{os_info.stdout_lines}}"
+
+    - name: Under voltage?
+      ansible.builtin.script: ./scripts/undervoltage.sh
+      args:
+        executable: bash
+      register: undervoltage
+    - debug: msg="{{ undervoltage.stdout.split('\n') }}"
+
+    - name: Temperature
+      ansible.builtin.script: ./scripts/temp.sh
+      args:
+        executable: bash
+      register: temperature
+    - debug: msg="{{ temperature.stdout.split('\n') }}"
 
     - name: Update all packages to their latest version
       become: yes
@@ -39,15 +53,9 @@
           - autoconf
           - ffmpeg
           - v4l-utils # camera
+          - open-iscsi # longhorn-driver-deployer
         state: latest
         cache_valid_time: 600
-
-    - name: Under voltage?
-      ansible.builtin.script: ./scripts/undervoltage.sh
-      args:
-        executable: bash
-      register: undervoltage
-    - debug: msg="{{ undervoltage.stdout.split('\n') }}"
 
     # ansible-galaxy install gantsign.oh-my-zsh
     - name: run role for each user

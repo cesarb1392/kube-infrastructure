@@ -1,7 +1,6 @@
-- hosts: node
+- hosts: single
   become: yes
   tasks:
-
     # Allow OpenSSH. (Note that as ufw manages its own state, simply removing
     # a rule=allow task can leave those ports exposed. Either use delete=true
     # or a separate state=reset task)
@@ -41,23 +40,23 @@
     - name: allow K3s ports
       community.general.ufw:
         rule: allow
-        port: 8472
+        port: 8472 # only for flannel
         proto: udp
     - community.general.ufw:
         rule: allow
-        port: 6443
+        port: 6443 # K3s supervisor and Kubernetes API Server
         proto: tcp
     - community.general.ufw:
         rule: allow
-        port: 51820
+        port: 51820 # only for flannel ipv4
         proto: udp
     - community.general.ufw:
         rule: allow
-        port: 51821
+        port: 51821 # only for flannel ipv6
         proto: udp
     - community.general.ufw:
         rule: allow
-        port: 10250
+        port: 10250 # metrics
         proto: tcp
     - community.general.ufw:
         rule: allow
@@ -72,6 +71,10 @@
         rule: allow
         port: 7946
         proto: any
+
+    - name: enable UFW
+      community.general.ufw:
+        state: enabled
 
     #- name: enable all traffic between nodes
     #  community.general.ufw:

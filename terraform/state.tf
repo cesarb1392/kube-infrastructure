@@ -1,7 +1,6 @@
 terraform {
-  #  terraform init -migrate-state -backend-config="access_key=<accessKey>" -backend-config="secret_key=<secretKey>"
   backend "s3" {
-    bucket                      = "kubernetes"
+    bucket                      = "k3s"
     key                         = "terraform.tfstate"
     endpoint                    = "https://minio.cesarb.dev"
     region                      = "main"

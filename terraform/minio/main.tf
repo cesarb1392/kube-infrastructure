@@ -1,5 +1,4 @@
 # https://min.io/docs/minio/kubernetes/upstream/index.html?ref=docs-redirect
-# https://github.com/minio/minio/blob/master/helm/minio/values.yaml
 resource "helm_release" "minio_storage" {
   namespace = var.namespace
   name      = "minio"
@@ -10,6 +9,7 @@ resource "helm_release" "minio_storage" {
 
 
 data "template_file" "this" {
+  # https://github.com/minio/minio/blob/master/helm/minio/values.yaml
   template = yamlencode(
     {
       mode         = "standalone"
@@ -39,6 +39,19 @@ data "template_file" "this" {
         }
       }
       users = var.MINIO_USERS
+      affinity = {
+        node_affinity = {
+          required_during_scheduling_ignored_during_execution = {
+            node_selector_term = {
+              match_expressions = {
+                key      = "kubernetes.io/hostname"
+                operator = "In"
+                values   = ["fastbanana"]
+              }
+            }
+          }
+        }
+      }
     }
   )
 }

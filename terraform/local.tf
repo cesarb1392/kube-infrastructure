@@ -3,7 +3,7 @@ locals {
     portfolio-bk = {
       enabled        = true
       public_ingress = true
-      runner         = true
+      runner         = false
       image          = "monkeybanana13/portfolio" # defining images creates default deployment
       target_service = "portfolio-svc"
       ingress_port   = 80
@@ -34,10 +34,13 @@ locals {
       enabled = false
     }
     pihole = {
-      enabled = true
+      enabled = false
       lan_ip  = "192.168.178.232"
       #      storage = "512Mi" # pending!
     }
+
+    ## seems like there should be a svc already created, otherwise it uses the default one and it fails cause
+    ## it ain't attached to a pod
     metallb = {
       enabled      = true
       log_level    = "debug"
@@ -70,7 +73,7 @@ locals {
       log_level      = "info"
     }
     githubrunner = {
-      enabled     = true
+      enabled     = false
       runner_name = "bananaRunner"
       repos = {
         myawesomecv = {
@@ -84,7 +87,7 @@ locals {
     torrente = {
       enabled = true
       lan_ip  = "192.168.178.234"
-      storage = "2Gi"
+      storage = "1Gi"
     }
     picamera = {
       enabled        = false

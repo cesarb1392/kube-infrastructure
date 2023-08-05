@@ -4,10 +4,13 @@ resource "kubernetes_namespace" "this" {
   metadata {
     name = each.value
     labels = {
-      namespace      = each.value
-      application    = each.value
-      managed-by     = "Terraform"
-      routed-gateway = each.value == "torrente" ? true : false
+      namespace                            = each.value
+      application                          = each.value
+      managed-by                           = "Terraform"
+      routed-gateway                       = each.value == "torrente" ? true : false
+      "pod-security.kubernetes.io/enforce" = each.value == "metallb" ? "privileged" : null
+      "pod-security.kubernetes.io/audit"   = each.value == "metallb" ? "privileged" : null
+      "pod-security.kubernetes.io/warn"    = each.value == "metallb" ? "privileged" : null
     }
   }
 }
@@ -32,6 +35,21 @@ module "public_ingress" {
   depends_on = [kubernetes_namespace.this]
 }
 
+#module "public_ingress_helm" {
+#  for_each = local.public_ingress
+#
+#  source = "./cloudflare"
+#
+#  namespace = each.key
+#  CF_ACCOUNT_ID = var.CF_ACCOUNT_ID
+#  CF_ZONE_NAME = var.CF_ZONE_NAME
+#
+#  target_service = each.value.target_service
+#  ingress_port   = each.value.ingress_port
+#  hostname       = each.key
+##  cf_access      = can(each.value.cf_access) ? each.value.cf_access : false
+#}
+
 module "website" {
   for_each = local.available_websites
 
@@ -42,7 +60,7 @@ module "website" {
   target_service = each.value.target_service
   ingress_port   = each.value.ingress_port
 
-  depends_on = [module.public_ingress]
+  depends_on = [kubernetes_namespace.this]
 }
 
 module "metallb" {
@@ -74,7 +92,7 @@ module "pihole" {
   TZ        = var.TZ
   lan_ip    = local.applications.pihole.lan_ip
 
-  depends_on = [module.public_ingress, module.metallb]
+  depends_on = [module.metallb, kubernetes_namespace.this]
 
 }
 
@@ -90,7 +108,7 @@ module "monitoring" {
   lan_ip    = local.applications.monitoring.lan_ip
   #  prometheus_pvc_name = kubernetes_persistent_volume_claim.this["monitoring"].metadata.0.name
 
-  depends_on = [module.metallb]
+  depends_on = [module.metallb, kubernetes_namespace.this]
 }
 
 module "loadtest" {
@@ -130,7 +148,7 @@ module "minio" {
   persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["minio"].metadata.0.name
   lan_ip                       = local.applications.minio.lan_ip
 
-  depends_on = [module.metallb]
+  depends_on = [module.metallb, kubernetes_namespace.this]
 }
 
 module "wireguard" {
@@ -146,7 +164,7 @@ module "wireguard" {
   persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["wireguard"].metadata.0.name
   CF_ZONE_ID                   = var.CF_ZONE_ID
 
-  depends_on = [module.metallb]
+  depends_on = [module.metallb, kubernetes_namespace.this]
 }
 
 module "vaultwarden" {
@@ -161,7 +179,7 @@ module "vaultwarden" {
   persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["vaultwarden"].metadata.0.name
   log_level                    = local.applications.vaultwarden.log_level
 
-  depends_on = [kubernetes_namespace.this, module.public_ingress]
+  depends_on = [kubernetes_namespace.this, ]
 }
 
 module "picamera" {
@@ -171,7 +189,7 @@ module "picamera" {
   namespace    = "picamera"
   ingress_port = local.applications.picamera.ingress_port
 
-  depends_on = [kubernetes_namespace.this, module.public_ingress]
+  depends_on = [kubernetes_namespace.this, ]
 }
 
 module "torrente" {
@@ -191,5 +209,5 @@ module "torrente" {
   persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["torrente"].metadata.0.name
 
 
-  depends_on = [kubernetes_namespace.this, helm_release.cert_manager, module.metallb]
+  depends_on = [kubernetes_namespace.this, module.metallb]
 }

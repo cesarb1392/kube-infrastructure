@@ -48,7 +48,7 @@ resource "kubernetes_deployment_v1" "transmission" {
           }
           volume_mount {
             mount_path = "/config"
-            name       = "config"
+            name       = "data"
             sub_path   = "configs/transmission"
           }
           volume_mount {
@@ -61,12 +61,6 @@ resource "kubernetes_deployment_v1" "transmission" {
           name = "data"
           persistent_volume_claim {
             claim_name = kubernetes_persistent_volume_claim.ssd.metadata.0.name
-          }
-        }
-        volume {
-          name = "config"
-          persistent_volume_claim {
-            claim_name = var.persistent_volume_claim_name
           }
         }
       }
