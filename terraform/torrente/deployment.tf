@@ -21,19 +21,19 @@ resource "kubernetes_deployment_v1" "transmission" {
         #          run_as_group = "0"
         #          fs_group     = "0"
         #        }
-        affinity {
-          node_affinity {
-            required_during_scheduling_ignored_during_execution {
-              node_selector_term {
-                match_expressions {
-                  key      = "kubernetes.io/hostname"
-                  operator = "In"
-                  values   = ["slowbanana"]
-                }
-              }
-            }
-          }
-        }
+        #        affinity {
+        #          node_affinity {
+        #            required_during_scheduling_ignored_during_execution {
+        #              node_selector_term {
+        #                match_expressions {
+        #                  key      = "kubernetes.io/hostname"
+        #                  operator = "In"
+        #                  values   = ["slowbanana"]
+        #                }
+        #              }
+        #            }
+        #          }
+        #        }
         container {
           name  = "transmission"
           image = "lscr.io/linuxserver/transmission"
@@ -60,7 +60,7 @@ resource "kubernetes_deployment_v1" "transmission" {
         volume {
           name = "data"
           persistent_volume_claim {
-            claim_name = kubernetes_persistent_volume_claim.ssd.metadata.0.name
+            claim_name = var.persistent_volume_claim_name
           }
         }
       }

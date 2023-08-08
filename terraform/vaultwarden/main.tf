@@ -2,18 +2,18 @@ locals {
   app_name = var.namespace
   env_vars = {
     #    https://github.com/dani-garcia/vaultwarden/blob/main/.env.template
-    SERVER_ADMIN_EMAIL  = var.SERVER_ADMIN_EMAIL
-    ORG_CREATION_USERS  = var.SERVER_ADMIN_EMAIL
-    DOMAIN              = "https://${local.app_name}.${var.DOMAIN}"
-    SHOW_PASSWORD_HINT  = false
-    INVITATIONS_ALLOWED = false
-    SIGNUPS_ALLOWED     = false
-    SHOW_PASSWORD_HINT  = false
-    WEB_VAULT_ENABLED   = true
-    WEBSOCKET_ENABLED   = true ## websocket notifications
-    ADMIN_TOKEN         = var.VAULTWARDEN_ADMIN_TOKEN
-    LOG_LEVEL           = var.log_level # "trace", "debug", "info", "warn", "error" and "off"
-    EXTENDED_LOGGING    = true
+    DOMAIN                    = "https://${local.app_name}.${var.DOMAIN}"
+    SHOW_PASSWORD_HINT        = false
+    INVITATIONS_ALLOWED       = false
+    ORG_CREATION_USERS        = var.SERVER_ADMIN_EMAIL
+    SIGNUPS_DOMAINS_WHITELIST = var.DOMAIN
+    SIGNUPS_ALLOWED           = true
+    SHOW_PASSWORD_HINT        = false
+    WEB_VAULT_ENABLED         = true
+    WEBSOCKET_ENABLED         = true ## websocket notifications
+    ADMIN_TOKEN               = var.VAULTWARDEN_ADMIN_TOKEN
+    LOG_LEVEL                 = var.log_level # "trace", "debug", "info", "warn", "error" and "off"
+    EXTENDED_LOGGING          = true
   }
   env_vars_hash = sha1(jsonencode(kubernetes_secret.this.data))
 }

@@ -87,7 +87,7 @@ locals {
     torrente = {
       enabled = true
       lan_ip  = "192.168.178.234"
-      storage = "1Gi"
+      storage = "40Gi"
     }
     picamera = {
       enabled        = false
