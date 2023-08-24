@@ -74,3 +74,29 @@ resource "kubernetes_service_v1" "grafana_lan" {
     type = "LoadBalancer"
   }
 }
+
+/* 
+resource "kubernetes_service_v1" "carlosedp_monitoring" {
+  count = var.available.carlosedp_monitoring ? 1 : 0
+
+  metadata {
+    name      = "grafana-lan"
+    namespace = var.namespace
+    annotations = {
+      "metallb.universe.tf/allow-shared-ip" = "${var.namespace}-svc"
+    }
+  }
+  spec {
+    load_balancer_ip = var.lan_ip
+    port {
+      port        = 80
+      target_port = 3000
+      protocol    = "TCP"
+      name        = "lan-http"
+    }
+    selector = {
+      "app." = "grafana"
+    }
+    type = "LoadBalancer"
+  }
+} */

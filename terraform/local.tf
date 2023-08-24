@@ -1,8 +1,11 @@
 locals {
   applications = {
+    cert-manager = {
+      enabled = true
+    }
     portfolio-bk = {
-      enabled        = true
-      public_ingress = true
+      enabled        = false
+      public_ingress = false
       runner         = false
       image          = "monkeybanana13/portfolio" # defining images creates default deployment
       target_service = "portfolio-svc"
@@ -34,7 +37,7 @@ locals {
       enabled = false
     }
     pihole = {
-      enabled = false
+      enabled = true
       lan_ip  = "192.168.178.232"
       #      storage = "512Mi" # pending!
     }
@@ -47,15 +50,21 @@ locals {
       address_pool = "192.168.178.230-192.168.178.240"
     }
     monitoring = {
-      enabled = true
+      /* trying out https://github.com/carlosedp/cluster-monitoring */
+
+
+      /* kubectl taint nodes mainbanana key1=value1:NoSchedule */
+      /* kubectl taint nodes fastbanana key1=value1:NoSchedule- */
+      enabled = false
       available = {
-        grafana          = false
-        graphite         = false
-        promtail         = false
-        loki             = false
-        prometheus_stack = true ##
-        smokeping        = false
-        wireshark        = false
+        carlosedp_monitoring = false
+        grafana              = false
+        graphite             = false
+        promtail             = false
+        loki                 = false
+        prometheus_stack     = true ## arm64 doesn't work
+        smokeping            = false
+        wireshark            = false
       }
       lan_ip = "192.168.178.235"
     }
@@ -85,14 +94,14 @@ locals {
       }
     }
     torrente = {
-      enabled = true
+      enabled = false
       lan_ip  = "192.168.178.234"
-      storage = "40Gi"
+      storage = "1Gi"
     }
     picamera = {
       enabled        = false
-      cf_access      = true
-      public_ingress = true
+      cf_access      = false
+      public_ingress = false
       target_service = "picamera-svc"
       ingress_port   = 80
     }

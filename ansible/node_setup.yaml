@@ -37,7 +37,14 @@
       become: yes
       ansible.builtin.apt:
         upgrade: dist
-        update_cache: no
+        update_cache: yes
+
+    - name: Pass options to dpkg on run
+      become: yes
+      ansible.builtin.apt:
+        upgrade: dist
+        update_cache: yes
+        dpkg_options: 'force-confold,force-confdef'
 
     - name: Install packages
       become: yes
@@ -124,6 +131,35 @@
       become: yes
       apt:
         clean: yes
+
+    # Allow OpenSSH. (Note that as ufw manages its own state, simply removing
+    # a rule=allow task can leave those ports exposed. Either use delete=true
+    # or a separate state=reset task)
+    - name: allow 22
+      become: yes
+      community.general.ufw:
+        rule: allow
+        name: OpenSSH
+
+    - name: Set logging
+      become: yes
+      community.general.ufw:
+        logging: 'on'
+
+    # Sometimes it is desirable to let the sender know when traffic is
+    # being denied, rather than simply ignoring it. In these cases, use
+    # reject instead of deny. In addition, log rejected connections:
+    - name: reject all
+      become: yes
+      community.general.ufw:
+        rule: reject
+        port: auth
+        log: true
+    
+    - name: enable UFW
+      become: yes
+      community.general.ufw:
+        state: enabled
 
     - name: Reboot
       become: yes

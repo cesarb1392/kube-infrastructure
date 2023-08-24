@@ -21,31 +21,43 @@ resource "helm_release" "metallb" {
 }
 
 
-## Check out this!!
-#resource "kubectl_manifest" "address_pool" {
-#  yaml_body = <<YAML
-#apiVersion: metallb.io/v1beta1
-#kind: IPAddressPool
-#metadata:
-#  name: "default"
-#  namespace: "${var.namespace}"
-#spec:
-# addresses: [${local.default_address_pool}]
-#YAML
-#
-#  depends_on = [helm_release.metallb]
-#}
+/* data "kubectl_file_documents" "docs" {
+  content = templatefile("${path.module}/crds.yaml", {
+    default_address_pool = local.default_address_pool
+    namespace            = var.namespace
+  })
+}
 
-#resource "kubectl_manifest" "advertisement" {
-#  yaml_body = <<YAML
-#apiVersion: metallb.io/v1beta1
-#kind: L2Advertisement
-#metadata:
-#  name: "default"
-#  namespace: "${var.namespace}"
-#spec:
-# ipAddressPools: ["default"]
-#YAML
-#
-#  depends_on = [helm_release.metallb]
-#}
+resource "kubectl_manifest" "this" {
+  for_each  = data.kubectl_file_documents.docs.manifests
+  yaml_body = each.value
+} */
+
+## Check out this!!
+/* resource "kubectl_manifest" "address_pool" {
+  yaml_body = <<-EOF
+apiVersion: metallb.io/v1beta1
+kind: IPAddressPool
+metadata:
+  name: "default"
+  namespace: "${var.namespace}"
+spec:
+ addresses: [${local.default_address_pool}]
+EOF
+
+  depends_on = [helm_release.metallb]
+}
+
+resource "kubectl_manifest" "advertisement" {
+  yaml_body = <<-EOF
+apiVersion: metallb.io/v1beta1
+kind: L2Advertisement
+metadata:
+  name: "default"
+  namespace: "${var.namespace}"
+spec:
+ ipAddressPools: ["default"]
+EOF
+
+  depends_on = [helm_release.metallb]
+} */
