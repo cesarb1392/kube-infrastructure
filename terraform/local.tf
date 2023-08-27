@@ -55,7 +55,7 @@ locals {
 
       /* kubectl taint nodes mainbanana key1=value1:NoSchedule */
       /* kubectl taint nodes fastbanana key1=value1:NoSchedule- */
-      enabled = false
+      enabled = true
       available = {
         carlosedp_monitoring = false
         grafana              = false

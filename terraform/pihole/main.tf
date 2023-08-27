@@ -59,14 +59,14 @@ data "template_file" "pihole_values" {
       loadBalancerIP = var.lan_ip
       type           = "LoadBalancer"
       annotations = {
-        "metallb.universe.tf/allow-shared-ip" = "pihole-svc"
+        "metallb.universe.tf/allow-shared-ip" = "${var.namespace}-svc"
       }
     }
 
     serviceDns = {
       loadBalancerIP = var.lan_ip
       annotations = {
-        "metallb.universe.tf/allow-shared-ip" = "pihole-svc"
+        "metallb.universe.tf/allow-shared-ip" = "${var.namespace}-svc"
       }
       type = "LoadBalancer"
     }
