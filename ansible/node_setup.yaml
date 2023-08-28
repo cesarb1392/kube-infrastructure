@@ -1,4 +1,4 @@
-- hosts: single
+- hosts: all
   tasks:
 #    - name: Add ssh keys
 #      ansible.posix.authorized_key:

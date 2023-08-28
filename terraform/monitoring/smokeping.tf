@@ -14,15 +14,13 @@ resource "helm_release" "smokeping" {
   name      = "smokeping"
   chart     = "nicholaswilde/smokeping"
 
-  values = [data.template_file.smokeping.0.rendered]
+  values = [yamlencode(local.smokeping)]
 
   depends_on = [null_resource.smokeping]
 }
 
-data "template_file" "smokeping" {
-  count = var.available.smokeping ? 1 : 0
-
-  template = yamlencode({
+locals {
+  smokeping = {
     # https://github.com/nicholaswilde/helm-charts/blob/main/charts/smokeping/values.yaml
     service = {
       port = {
@@ -32,7 +30,7 @@ data "template_file" "smokeping" {
     env = {
       TZ = var.TZ
     }
-  })
+  }
 }
 
 resource "kubernetes_service" "smokeping_lan" {

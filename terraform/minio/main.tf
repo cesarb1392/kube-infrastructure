@@ -4,56 +4,54 @@ resource "helm_release" "minio_storage" {
   name      = "minio"
   chart     = "https://github.com/minio/minio/blob/master/helm-releases/minio-5.0.9.tgz?raw=true"
 
-  values = [data.template_file.this.rendered]
+  values = [yamlencode(local.minio)]
 }
 
 
-data "template_file" "this" {
+locals {
   # https://github.com/minio/minio/blob/master/helm/minio/values.yaml
-  template = yamlencode(
-    {
-      mode         = "standalone"
-      replicas     = 1
-      rootUser     = var.MINIO_ROOT_USER
-      rootPassword = var.MINIO_ROOT_PASSWORD
-      persistence = {
-        existingClaim = var.persistent_volume_claim_name
-      }
-      service = {
-        type = "ClusterIP"
-        port = var.ingress_port
-      }
-      consoleService = {
-        type = "ClusterIP"
-        port = 9091 # web ui
-      }
+  minio = {
+    mode         = "standalone"
+    replicas     = 1
+    rootUser     = var.MINIO_ROOT_USER
+    rootPassword = var.MINIO_ROOT_PASSWORD
+    persistence = {
+      existingClaim = var.persistent_volume_claim_name
+    }
+    service = {
+      type = "ClusterIP"
+      port = var.ingress_port
+    }
+    consoleService = {
+      type = "ClusterIP"
+      port = 9091 # web ui
+    }
 
-      resources = {
-        requests = {
-          memory = "500Mi"
-          cpu    = 1
-        }
-        limits = {
-          memory = "1Gi"
-          cpu    = 1
-        }
+    resources = {
+      requests = {
+        memory = "500Mi"
+        cpu    = 1
       }
-      users = var.MINIO_USERS
-      affinity = {
-        node_affinity = {
-          required_during_scheduling_ignored_during_execution = {
-            node_selector_term = {
-              match_expressions = {
-                key      = "kubernetes.io/hostname"
-                operator = "In"
-                values   = ["fastbanana"]
-              }
+      limits = {
+        memory = "1Gi"
+        cpu    = 1
+      }
+    }
+    users = var.MINIO_USERS
+    affinity = {
+      node_affinity = {
+        required_during_scheduling_ignored_during_execution = {
+          node_selector_term = {
+            match_expressions = {
+              key      = "kubernetes.io/hostname"
+              operator = "In"
+              values   = ["fastbanana"]
             }
           }
         }
       }
     }
-  )
+  }
 }
 
 resource "kubernetes_service_v1" "minio_lan" {

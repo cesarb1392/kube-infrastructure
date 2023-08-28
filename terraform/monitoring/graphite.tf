@@ -14,14 +14,12 @@ resource "helm_release" "graphite" {
   name      = "graphite"
   chart     = "kiwigrid/graphite"
 
-  values     = [data.template_file.graphite.0.rendered]
+  values     = [yamlencode(local.graphite)]
   depends_on = [null_resource.graphite]
 }
 
-data "template_file" "graphite" {
-  count = var.available.graphite ? 1 : 0
-
-  template = yamlencode({
+locals {
+  graphite = ({
     service = {
       annotation = {
         #          "metallb.universe.tf/allow-shared-ip" = "graphite-svc"

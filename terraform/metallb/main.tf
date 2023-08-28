@@ -1,5 +1,5 @@
 locals {
-  chart_config = {
+  metallb = {
     #    https://github.com/metallb/metallb/blob/main/charts/metallb/values.yaml
     speaker = {
       logLevel = var.log_level
@@ -17,7 +17,7 @@ resource "helm_release" "metallb" {
   force_update    = true
   namespace       = var.namespace
 
-  values = [yamlencode(local.chart_config)]
+  values = [yamlencode(local.metallb)]
 }
 
 

@@ -1,5 +1,5 @@
-data "template_file" "wireguard" {
-  template = yamlencode({
+locals {
+  wireguard = {
     # wg-access-server config
     config = {
       wireguard = {
@@ -56,7 +56,7 @@ data "template_file" "wireguard" {
         memory = "128Mi"
       }
     }
-  })
+  }
 }
 
 resource "helm_release" "this" {
@@ -68,7 +68,7 @@ resource "helm_release" "this" {
   cleanup_on_fail = true
   force_update    = true
 
-  values = [data.template_file.wireguard.rendered]
+  values = [yamlencode(local.wireguard)]
 }
 
 
@@ -77,6 +77,6 @@ resource "cloudflare_record" "vpn_record" {
   zone_id = var.CF_ZONE_ID
   name    = "vpn"
   type    = "A"
-  value   = "178.85.155.48"
+  value   = "77.249.204.117"
   proxied = false
 }

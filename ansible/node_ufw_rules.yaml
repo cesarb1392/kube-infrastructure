@@ -1,4 +1,4 @@
-- hosts: single
+- hosts: all
   become: yes
   tasks:
     # Allow OpenSSH. (Note that as ufw manages its own state, simply removing

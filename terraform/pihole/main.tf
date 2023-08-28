@@ -15,14 +15,14 @@ resource "helm_release" "this" {
   cleanup_on_fail = true
   force_update    = true
 
-  values = [data.template_file.pihole_values.rendered]
+  values = [yamlencode(local.pihole)]
 
   depends_on = [null_resource.add_chart_locally]
 }
 
-data "template_file" "pihole_values" {
+locals {
   #  https://github.com/MoJo2600/pihole-kubernetes/blob/master/charts/pihole/values.yaml
-  template = yamlencode({
+  pihole = {
     replicaCount = 1
     # maximum number of Pods that can be created over the desired number of `ReplicaSet` during updating.
     maxSurge = 1
@@ -77,5 +77,5 @@ data "template_file" "pihole_values" {
       nameservers = ["127.0.0.1", "1.1.1.1", "1.0.0.1"]
     }
     adminPassword = var.password
-  })
+  }
 }
