@@ -34,30 +34,30 @@ resource "kubectl_manifest" "this" {
 } */
 
 ## Check out this!!
-/* resource "kubectl_manifest" "address_pool" {
-  yaml_body = <<-EOF
-apiVersion: metallb.io/v1beta1
-kind: IPAddressPool
-metadata:
-  name: "default"
-  namespace: "${var.namespace}"
-spec:
- addresses: [${local.default_address_pool}]
-EOF
+# resource "kubectl_manifest" "address_pool" {
+#   yaml_body = <<-EOF
+# apiVersion: metallb.io/v1beta1
+# kind: IPAddressPool
+# metadata:
+#   name: "default"
+#   namespace: "${var.namespace}"
+# spec:
+#  addresses: [${local.default_address_pool}]
+# EOF
 
-  depends_on = [helm_release.metallb]
-}
+#   depends_on = [helm_release.metallb]
+# }
 
-resource "kubectl_manifest" "advertisement" {
-  yaml_body = <<-EOF
-apiVersion: metallb.io/v1beta1
-kind: L2Advertisement
-metadata:
-  name: "default"
-  namespace: "${var.namespace}"
-spec:
- ipAddressPools: ["default"]
-EOF
+# resource "kubectl_manifest" "advertisement" {
+#   yaml_body = <<-EOF
+# apiVersion: metallb.io/v1beta1
+# kind: L2Advertisement
+# metadata:
+#   name: "default"
+#   namespace: "${var.namespace}"
+# spec:
+#  ipAddressPools: ["default"]
+# EOF
 
-  depends_on = [helm_release.metallb]
-} */
+#   depends_on = [helm_release.metallb]
+# } 

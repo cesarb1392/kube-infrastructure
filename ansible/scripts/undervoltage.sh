@@ -17,20 +17,32 @@ BAD="${RED}YES${NC}"
 #Get Status, extract hex
 STATUS=$(vcgencmd get_throttled)
 STATUS=${STATUS#*=}
-echo -n "Status: "
-(($STATUS != 0)) && echo "${RED}${STATUS}${NC}" || echo "${GREEN}${STATUS}${NC}"
-echo "Undervolted:"
-echo -n "   Now: "
-((($STATUS & UNDERVOLTED) != 0)) && echo "${BAD}" || echo "${GOOD}"
-echo -n "   Run: "
-((($STATUS & HAS_UNDERVOLTED) != 0)) && echo "${BAD}" || echo "${GOOD}"
-echo "Throttled:"
-echo -n "   Now: "
-((($STATUS & THROTTLED) != 0)) && echo "${BAD}" || echo "${GOOD}"
-echo -n "   Run: "
-((($STATUS & HAS_THROTTLED) != 0)) && echo "${BAD}" || echo "${GOOD}"
-echo "Frequency Capped:"
-echo -n "   Now: "
-((($STATUS & CAPPED) != 0)) && echo "${BAD}" || echo "${GOOD}"
-echo -n "   Run: "
-((($STATUS & HAS_CAPPED) != 0)) && echo "${BAD}" || echo "${GOOD}"
+
+
+for x in {0..100} ; do
+    if (( x % 10 == 0 ))
+    then
+      #Get Status, extract hex
+      STATUS=$(vcgencmd get_throttled)
+      STATUS=${STATUS#*=}
+      echo -n "Status: "
+      (($STATUS != 0)) && echo "${RED}${STATUS}${NC}" || echo "${GREEN}${STATUS}${NC}"
+      echo "Undervolted:"
+      echo -n "   Now: "
+      ((($STATUS & UNDERVOLTED) != 0)) && echo "${BAD}" || echo "${GOOD}"
+      echo -n "   Run: "
+      ((($STATUS & HAS_UNDERVOLTED) != 0)) && echo "${BAD}" || echo "${GOOD}"
+      echo "Throttled:"
+      echo -n "   Now: "
+      ((($STATUS & THROTTLED) != 0)) && echo "${BAD}" || echo "${GOOD}"
+      echo -n "   Run: "
+      ((($STATUS & HAS_THROTTLED) != 0)) && echo "${BAD}" || echo "${GOOD}"
+      echo "Frequency Capped:"
+      echo -n "   Now: "
+      ((($STATUS & CAPPED) != 0)) && echo "${BAD}" || echo "${GOOD}"
+      echo -n "   Run: "
+      ((($STATUS & HAS_CAPPED) != 0)) && echo "${BAD}" || echo "${GOOD}"
+
+    fi
+    sleep 1
+done

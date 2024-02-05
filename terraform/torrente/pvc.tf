@@ -24,7 +24,7 @@ resource "kubernetes_persistent_volume" "this" {
           match_expressions {
             key      = "kubernetes.io/hostname"
             operator = "In"
-            values   = ["fastbanana"]
+            values   = ["slowbanana"]
           }
         }
       }

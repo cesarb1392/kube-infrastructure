@@ -38,19 +38,19 @@ locals {
       }
     }
     users = var.MINIO_USERS
-    affinity = {
-      node_affinity = {
-        required_during_scheduling_ignored_during_execution = {
-          node_selector_term = {
-            match_expressions = {
-              key      = "kubernetes.io/hostname"
-              operator = "In"
-              values   = ["fastbanana"]
-            }
-          }
-        }
-      }
-    }
+    # affinity = {
+    #   node_affinity = {
+    #     required_during_scheduling_ignored_during_execution = {
+    #       node_selector_term = {
+    #         match_expressions = {
+    #           key      = "kubernetes.io/hostname"
+    #           operator = "In"
+    #           values   = ["fastbanana"]
+    #         }
+    #       }
+    #     }
+    #   }
+    # }
   }
 }
 

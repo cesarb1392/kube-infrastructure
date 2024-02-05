@@ -26,7 +26,7 @@ resource "helm_release" "cloudflare_tunnel" {
   name       = "cloudflare"
   repository = "https://cloudflare.github.io/helm-charts"
   namespace  = var.namespace
-  version    = "0.2.0"
+  version    = "0.3.0"
 
   values = [yamlencode(local.cloudflare_tunnel)]
 }

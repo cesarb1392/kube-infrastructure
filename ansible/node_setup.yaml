@@ -1,4 +1,4 @@
-- hosts: all
+- hosts: node
   tasks:
 #    - name: Add ssh keys
 #      ansible.posix.authorized_key:
@@ -12,20 +12,33 @@
       register: os_info
     - debug:
         msg: "{{os_info.stdout_lines}}"
+    
+    - name: Configure dpkg
+      become: yes
+      shell:
+        "dpkg --configure -a"
+    
+    - name: Copy undervoltage script
+    #   ansible.builtin.script: ./scripts/undervoltage.sh
+    #   args:
+    #     executable: bash
+    #   register: undervoltage
+    # - debug: msg="{{ undervoltage.stdout.split('\n') }}"
+      copy:
+        src: ./scripts/undervoltage.sh
+        dest: ~/undervoltage.sh
+        mode: a+x
 
-    - name: Under voltage?
-      ansible.builtin.script: ./scripts/undervoltage.sh
-      args:
-        executable: bash
-      register: undervoltage
-    - debug: msg="{{ undervoltage.stdout.split('\n') }}"
-
-    - name: Temperature
-      ansible.builtin.script: ./scripts/temp.sh
-      args:
-        executable: bash
-      register: temperature
-    - debug: msg="{{ temperature.stdout.split('\n') }}"
+    - name: Copy temperature script
+    #   ansible.builtin.script: ./scripts/temperature.sh
+    #   args:
+    #     executable: bash
+    #   register: temperature
+    # - debug: msg="{{ temperature.stdout.split('\n') }}"
+      copy:
+        src: ./scripts/temperature.sh
+        dest: ~/temperature.sh
+        mode: a+x
 
     - name: Update all packages to their latest version
       become: yes
@@ -64,7 +77,7 @@
         state: latest
         cache_valid_time: 600
 
-    # ansible-galaxy install gantsign.oh-my-zsh
+    # RUN!!! ansible-galaxy install gantsign.oh-my-zsh
     - name: run role for each user
       include_role:
         name: gantsign.oh-my-zsh

@@ -47,6 +47,8 @@ alertmanager:
 grafana:
   # username is 'admin'
   adminPassword: admin
+  nodeSelector:
+    name: "slowbanana" 
   ingress:
     enabled: false
     annotations:
@@ -57,6 +59,21 @@ grafana:
       - secretName: tls-credential
         hosts:
           - grafana.k3s.local
+
+prometheusOperator:
+  nodeSelector:
+      name: "slowbanana" 
+  prometheusSpecs:
+    nodeSelector: 
+      name: "slowbanana" 
+  admissionWebhooks:
+    deployment:
+      nodeSelector: 
+        name: "slowbanana" 
+    patch:
+      nodeSelector: 
+        name: "slowbanana"         
+
 
 prometheus:
   ingress:
@@ -71,6 +88,8 @@ prometheus:
           - prometheus.k3s.local
 
   prometheusSpec:
+    nodeSelector:
+        name: "slowbanana" 
     externalUrl: "https://prometheus.k3s.local/"
     routePrefix: /
 

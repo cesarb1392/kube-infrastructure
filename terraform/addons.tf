@@ -1,7 +1,10 @@
 locals {
   cert_manager = {
     #https://github.com/cert-manager/cert-manager/blob/master/deploy/charts/cert-manager/values.yaml
-    installCRDs = true
+    installCRDs    = true
+    serviceAccount = { create = false }
+    prometheus     = { enabled = false }
+    livenessProbe  = { enabled = false }
   }
 }
 

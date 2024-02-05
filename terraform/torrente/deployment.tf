@@ -21,19 +21,19 @@ resource "kubernetes_deployment_v1" "transmission" {
         #          run_as_group = "0"
         #          fs_group     = "0"
         #        }
-        #        affinity {
-        #          node_affinity {
-        #            required_during_scheduling_ignored_during_execution {
-        #              node_selector_term {
-        #                match_expressions {
-        #                  key      = "kubernetes.io/hostname"
-        #                  operator = "In"
-        #                  values   = ["slowbanana"]
-        #                }
-        #              }
-        #            }
-        #          }
-        #        }
+        affinity {
+          node_affinity {
+            required_during_scheduling_ignored_during_execution {
+              node_selector_term {
+                match_expressions {
+                  key      = "kubernetes.io/hostname"
+                  operator = "In"
+                  values   = ["slowbanana"]
+                }
+              }
+            }
+          }
+        }
         container {
           name  = "transmission"
           image = "lscr.io/linuxserver/transmission"
@@ -60,7 +60,7 @@ resource "kubernetes_deployment_v1" "transmission" {
         volume {
           name = "config"
           persistent_volume_claim {
-            claim_name = var.persistent_volume_claim_name
+            claim_name = kubernetes_persistent_volume_claim.this.metadata.0.name
           }
         }
 
@@ -97,6 +97,19 @@ resource "kubernetes_deployment_v1" "jackett" {
         }
       }
       spec {
+        affinity {
+          node_affinity {
+            required_during_scheduling_ignored_during_execution {
+              node_selector_term {
+                match_expressions {
+                  key      = "kubernetes.io/hostname"
+                  operator = "In"
+                  values   = ["slowbanana"]
+                }
+              }
+            }
+          }
+        }
         container {
           name  = "jackett"
           image = "lscr.io/linuxserver/jackett"
@@ -123,7 +136,7 @@ resource "kubernetes_deployment_v1" "jackett" {
         volume {
           name = "config"
           persistent_volume_claim {
-            claim_name = var.persistent_volume_claim_name
+            claim_name = kubernetes_persistent_volume_claim.this.metadata.0.name
           }
         }
       }
@@ -153,6 +166,19 @@ resource "kubernetes_deployment_v1" "prowlarr" {
         }
       }
       spec {
+        affinity {
+          node_affinity {
+            required_during_scheduling_ignored_during_execution {
+              node_selector_term {
+                match_expressions {
+                  key      = "kubernetes.io/hostname"
+                  operator = "In"
+                  values   = ["slowbanana"]
+                }
+              }
+            }
+          }
+        }
         container {
           name  = "prowlarr"
           image = "lscr.io/linuxserver/prowlarr"
@@ -179,7 +205,7 @@ resource "kubernetes_deployment_v1" "prowlarr" {
         volume {
           name = "config"
           persistent_volume_claim {
-            claim_name = var.persistent_volume_claim_name
+            claim_name = kubernetes_persistent_volume_claim.this.metadata.0.name
           }
         }
       }
@@ -235,7 +261,7 @@ resource "kubernetes_deployment_v1" "radarr" {
         volume {
           name = "config"
           persistent_volume_claim {
-            claim_name = var.persistent_volume_claim_name
+            claim_name = kubernetes_persistent_volume_claim.this.metadata.0.name
           }
         }
       }
@@ -265,6 +291,19 @@ resource "kubernetes_deployment_v1" "sonarr" {
         }
       }
       spec {
+        affinity {
+          node_affinity {
+            required_during_scheduling_ignored_during_execution {
+              node_selector_term {
+                match_expressions {
+                  key      = "kubernetes.io/hostname"
+                  operator = "In"
+                  values   = ["slowbanana"]
+                }
+              }
+            }
+          }
+        }
         container {
           name  = "sonarr"
           image = "linuxserver/sonarr"
@@ -291,7 +330,7 @@ resource "kubernetes_deployment_v1" "sonarr" {
         volume {
           name = "config"
           persistent_volume_claim {
-            claim_name = var.persistent_volume_claim_name
+            claim_name = kubernetes_persistent_volume_claim.this.metadata.0.name
           }
         }
       }

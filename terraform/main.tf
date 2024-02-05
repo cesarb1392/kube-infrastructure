@@ -197,16 +197,16 @@ module "torrente" {
 
   source = "./torrente"
 
-  namespace                    = "torrente"
-  PRIVATE_KEY                  = var.OPENVPN_PRIVATE_KEY
-  puid                         = var.PUID
-  pgid                         = var.PGID
-  user                         = var.USER
-  pass                         = var.PASS
-  timezone                     = var.TZ
-  lan_ip                       = local.applications.torrente.lan_ip
-  vpn_country                  = var.vpn_country
-  persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["torrente"].metadata.0.name
+  namespace   = "torrente"
+  PRIVATE_KEY = var.OPENVPN_PRIVATE_KEY
+  puid        = var.PUID
+  pgid        = var.PGID
+  user        = var.USER
+  pass        = var.PASS
+  timezone    = var.TZ
+  lan_ip      = local.applications.torrente.lan_ip
+  vpn_country = var.vpn_country
+  # persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["torrente"].metadata.0.name
 
   depends_on = [kubernetes_namespace.this, module.metallb]
 }

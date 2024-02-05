@@ -1,4 +1,5 @@
-#https://docs.k8s-at-home.com/guides/pod-gateway/#pod-gateway-helm-release
+# https://staging.artifacthub.io/packages/helm/k8s-at-home/pod-gateway
+# https://github.com/k8s-at-home/charts/tree/master/charts/stable/pod-gateway
 
 locals {
   pod_gateway_values = {
@@ -26,6 +27,19 @@ locals {
           image = {
             repository = "docker.io/qmcgaw/gluetun"
             tag        = "latest"
+          }
+        }
+        affinity = {
+          node_affinity = {
+            required_during_scheduling_ignored_during_execution = {
+              node_selector_term = {
+                match_expressions = {
+                  key      = "kubernetes.io/hostname"
+                  operator = "In"
+                  values   = ["slowbanana"]
+                }
+              }
+            }
           }
         }
         env = [

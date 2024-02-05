@@ -3,9 +3,9 @@ locals {
     cert-manager = {
       enabled = true
     }
-    portfolio-bk = {
-      enabled        = false
-      public_ingress = false
+    portfolio = {
+      enabled        = true
+      public_ingress = true # local.applications.portfolio.enabled
       runner         = false
       image          = "monkeybanana13/portfolio" # defining images creates default deployment
       target_service = "portfolio-svc"
@@ -13,7 +13,7 @@ locals {
     }
     sharesecrets = {
       enabled        = false
-      public_ingress = false
+      public_ingress = false # local.applications.shareasecret.enabled
       runner         = false
       image          = "monkeybanana13/share-a-secret"
       target_service = "sharesecrets-svc"
@@ -21,7 +21,7 @@ locals {
     }
     minio = {
       enabled        = true
-      public_ingress = true
+      public_ingress = true # local.applications.minio.enabled
       target_service = "minio"
       lan_ip         = "192.168.178.236"
       ingress_port   = 9000
@@ -63,13 +63,13 @@ locals {
         promtail             = false
         loki                 = false
         prometheus_stack     = true ## arm64 doesn't work
-        smokeping            = false
-        wireshark            = false
+        smokeping            = true
+        wireshark            = true
       }
       lan_ip = "192.168.178.235"
     }
     loadtest = {
-      enabled    = false
+      enabled    = true
       target_url = "https://${var.CF_ZONE_NAME}"
     }
     vaultwarden = {
@@ -96,7 +96,7 @@ locals {
     torrente = {
       enabled = false
       lan_ip  = "192.168.178.234"
-      storage = "1Gi"
+      # storage = "1Gi"
     }
     picamera = {
       enabled        = false
@@ -105,6 +105,7 @@ locals {
       target_service = "picamera-svc"
       ingress_port   = 80
     }
+
   }
 
   available_namespaces = {
