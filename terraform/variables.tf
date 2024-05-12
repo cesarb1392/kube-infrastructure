@@ -107,3 +107,8 @@ variable "PASS" {
   description = ""
   type        = string
 }
+
+variable "PUBLIC_IP" {
+  description = ""
+  type        = string
+}

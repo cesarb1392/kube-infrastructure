@@ -33,3 +33,7 @@ variable "CF_ZONE_ID" {
   type      = string
   sensitive = true
 }
+
+variable "public_ip" {
+  type = string
+}

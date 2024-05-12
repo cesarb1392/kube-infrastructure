@@ -14,7 +14,7 @@ resource "helm_release" "graphite" {
   name      = "graphite"
   chart     = "kiwigrid/graphite"
 
-  values     = [yamlencode(local.graphite)]
+  # values     = [yamlencode(local.graphite)]
   depends_on = [null_resource.graphite]
 }
 

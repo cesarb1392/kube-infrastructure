@@ -13,13 +13,10 @@ locals {
       }
   } }
   prometheusOperator = {
-    nodeSelector   = { nodeSelector = { "name" = "slowbanana" } }
-    prometheusSpec = { nodeSelector = { "name" = "slowbanana" } }
+    # nodeSelector   = { nodeSelector = { "name" = "slowbanana" } }
+    # prometheusSpec = { nodeSelector = { "name" = "slowbanana" } }
     admissionWebhooks = {
-      # patch = {
-      #   nodeSelector = { "name" = "slowbanana" }
-      # }
-      deployment = { nodeSelector = { "name" = "slowbanana" } }
+      # deployment = { nodeSelector = { "name" = "slowbanana" } }
     }
   }
 
@@ -45,9 +42,9 @@ locals {
   }
   prometheus = {
     prometheusSpec = {
-      retention    = "10d"
-      replicas     = 1
-      nodeSelector = { "name" = "slowbanana" }
+      retention = "10d"
+      replicas  = 1
+      # nodeSelector = { "name" = "slowbanana" }
       #        storageSpec = {}
     }
   }

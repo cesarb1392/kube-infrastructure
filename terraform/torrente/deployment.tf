@@ -28,7 +28,7 @@ resource "kubernetes_deployment_v1" "transmission" {
                 match_expressions {
                   key      = "kubernetes.io/hostname"
                   operator = "In"
-                  values   = ["slowbanana"]
+                  values   = ["fastbanana"]
                 }
               }
             }
@@ -104,7 +104,7 @@ resource "kubernetes_deployment_v1" "jackett" {
                 match_expressions {
                   key      = "kubernetes.io/hostname"
                   operator = "In"
-                  values   = ["slowbanana"]
+                  values   = ["fastbanana"]
                 }
               }
             }
@@ -173,7 +173,7 @@ resource "kubernetes_deployment_v1" "prowlarr" {
                 match_expressions {
                   key      = "kubernetes.io/hostname"
                   operator = "In"
-                  values   = ["slowbanana"]
+                  values   = ["fastbanana"]
                 }
               }
             }
@@ -298,7 +298,7 @@ resource "kubernetes_deployment_v1" "sonarr" {
                 match_expressions {
                   key      = "kubernetes.io/hostname"
                   operator = "In"
-                  values   = ["slowbanana"]
+                  values   = ["fastbanana"]
                 }
               }
             }

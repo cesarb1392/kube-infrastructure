@@ -91,6 +91,7 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 | <a name="input_PASS"></a> [PASS](#input\_PASS) | n/a | `string` | n/a | yes |
 | <a name="input_PGID"></a> [PGID](#input\_PGID) | n/a | `string` | n/a | yes |
 | <a name="input_PI_HOLE_PASS"></a> [PI\_HOLE\_PASS](#input\_PI\_HOLE\_PASS) | n/a | `string` | n/a | yes |
+| <a name="input_PUBLIC_IP"></a> [PUBLIC\_IP](#input\_PUBLIC\_IP) | n/a | `string` | n/a | yes |
 | <a name="input_PUID"></a> [PUID](#input\_PUID) | n/a | `string` | n/a | yes |
 | <a name="input_TZ"></a> [TZ](#input\_TZ) | n/a | `string` | n/a | yes |
 | <a name="input_USER"></a> [USER](#input\_USER) | n/a | `string` | n/a | yes |

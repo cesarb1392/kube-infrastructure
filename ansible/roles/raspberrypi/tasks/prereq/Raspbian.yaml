@@ -1,4 +1,9 @@
 ---
+- name: Ensure package iptables is installed
+  apt:
+    pkg:
+      - iptables
+
 - name: Activating cgroup support
   lineinfile:
     path: /boot/cmdline.txt

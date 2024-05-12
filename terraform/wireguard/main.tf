@@ -77,6 +77,6 @@ resource "cloudflare_record" "vpn_record" {
   zone_id = var.CF_ZONE_ID
   name    = "vpn"
   type    = "A"
-  value   = "77.249.204.117"
+  value   = var.public_ip
   proxied = false
 }

@@ -29,19 +29,19 @@ locals {
             tag        = "latest"
           }
         }
-        affinity = {
-          node_affinity = {
-            required_during_scheduling_ignored_during_execution = {
-              node_selector_term = {
-                match_expressions = {
-                  key      = "kubernetes.io/hostname"
-                  operator = "In"
-                  values   = ["slowbanana"]
-                }
-              }
-            }
-          }
-        }
+        # affinity = {
+        #   node_affinity = {
+        #     required_during_scheduling_ignored_during_execution = {
+        #       node_selector_term = {
+        #         match_expressions = {
+        #           key      = "kubernetes.io/hostname"
+        #           operator = "In"
+        #           values   = ["slowbanana"]
+        #         }
+        #       }
+        #     }
+        #   }
+        # }
         env = [
           {
             name  = "VPN_SERVICE_PROVIDER"
@@ -77,7 +77,7 @@ locals {
           }
         ]
         networkPolicy = {
-          enabled = true
+          enabled = false
           egress = [
             {
               to = [

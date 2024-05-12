@@ -60,7 +60,7 @@ module "website" {
   target_service = each.value.target_service
   ingress_port   = each.value.ingress_port
 
-  depends_on = [kubernetes_namespace.this]
+  depends_on = [kubernetes_namespace.this, module.metallb]
 }
 
 module "metallb" {
@@ -80,7 +80,7 @@ module "private_ingress" {
   source    = "./private_ingress"
   namespace = "private-ingress"
 
-  depends_on = [kubernetes_namespace.this]
+  depends_on = [kubernetes_namespace.this, module.metallb]
 }
 
 module "pihole" {
@@ -163,6 +163,7 @@ module "wireguard" {
   log_level                    = local.applications.wireguard.log_level
   persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["wireguard"].metadata.0.name
   CF_ZONE_ID                   = var.CF_ZONE_ID
+  public_ip                    = var.PUBLIC_IP
 
   depends_on = [module.metallb, kubernetes_namespace.this]
 }
