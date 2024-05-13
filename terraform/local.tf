@@ -2,10 +2,10 @@ locals {
   # kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.26/deploy/local-path-storage.yaml
   applications = {
     cert-manager = {
-      enabled = false
+      enabled = true
     }
     portfolio = {
-      enabled        = false
+      enabled        = true
       public_ingress = true # local.applications.portfolio.enabled
       runner         = false
       image          = "monkeybanana13/portfolio" # defining images creates default deployment
@@ -21,7 +21,7 @@ locals {
       ingress_port   = 80
     }
     minio = {
-      enabled        = false
+      enabled        = true
       public_ingress = true # local.applications.minio.enabled
       target_service = "minio"
       lan_ip         = "192.168.178.236"
@@ -29,7 +29,7 @@ locals {
       storage        = "100Mi"
     }
     wireguard = {
-      enabled   = false
+      enabled   = true
       log_level = "info"
       lan_ip    = "192.168.178.233"
       storage   = "100Mi"
@@ -38,7 +38,7 @@ locals {
       enabled = false
     }
     pihole = {
-      enabled = false
+      enabled = true
       lan_ip  = "192.168.178.232"
       #      storage = "512Mi" # pending!
     }
@@ -46,7 +46,7 @@ locals {
     ## seems like there should be a svc already created, otherwise it uses the default one and it fails cause
     ## it ain't attached to a pod
     metallb = {
-      enabled      = false
+      enabled      = true
       log_level    = "debug"
       address_pool = "192.168.178.230-192.168.178.240"
     }
@@ -56,7 +56,7 @@ locals {
 
       /* kubectl taint nodes mainbanana key1=value1:NoSchedule */
       /* kubectl taint nodes fastbanana key1=value1:NoSchedule- */
-      enabled = false
+      enabled = true
       available = {
         carlosedp_monitoring = false
         grafana              = false
@@ -64,7 +64,7 @@ locals {
         promtail             = false
         loki                 = false
         prometheus_stack     = true ## arm64 doesn't work
-        smokeping            = true
+        smokeping            = false
         wireshark            = false
       }
       lan_ip = "192.168.178.235"
@@ -74,7 +74,7 @@ locals {
       target_url = "https://${var.CF_ZONE_NAME}"
     }
     vaultwarden = {
-      enabled        = false
+      enabled        = true
       cf_access      = false #false  otherwise the mobile app doesn't work
       public_ingress = true
       target_service = "vaultwarden-svc"
@@ -95,9 +95,8 @@ locals {
       }
     }
     torrente = {
-      enabled = false
+      enabled = true
       lan_ip  = "192.168.178.234"
-      # storage = "1Gi"
     }
     picamera = {
       enabled        = false

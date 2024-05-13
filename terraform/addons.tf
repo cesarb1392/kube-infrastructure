@@ -34,8 +34,8 @@ resource "kubernetes_persistent_volume_claim" "this" {
     namespace = each.key
   }
   spec {
-    access_modes       = ["ReadWriteOnce"]
-    storage_class_name = "local-path"
+    access_modes = ["ReadWriteOnce"]
+    # storage_class_name = "local-path"
     resources {
       requests = {
         storage = each.value.storage

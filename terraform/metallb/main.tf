@@ -32,7 +32,7 @@ resource "helm_release" "metallb" {
 #   yaml_body = each.value
 # }
 
-# Check out this!!
+# # # Check out this!!
 # resource "kubectl_manifest" "address_pool" {
 #   yaml_body = <<-EOF
 #   apiVersion: metallb.io/v1beta1

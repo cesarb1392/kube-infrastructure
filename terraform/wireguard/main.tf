@@ -80,3 +80,6 @@ resource "cloudflare_record" "vpn_record" {
   value   = var.public_ip
   proxied = false
 }
+
+
+# todo add labels to nodes

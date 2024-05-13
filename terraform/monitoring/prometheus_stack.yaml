@@ -2,10 +2,10 @@
 # k3s uses sqllite, so we cannot monitor etcd in the same way
 defaultRules:
   rules:
-    etcd: false
+    etcd: true
 
 kubeEtcd:
-  enabled: false
+  enabled: true
 
 # matched to service port 'prom-stack-kube-prometheus-kube-controller-manager' -n kube-system
 kubeControllerManager:
@@ -47,8 +47,8 @@ alertmanager:
 grafana:
   # username is 'admin'
   adminPassword: admin
-  # nodeSelector:
-  #   name: "slowbanana" 
+  nodeSelector:
+    name: "slowbanana" 
   ingress:
     enabled: false
     annotations:
@@ -60,19 +60,19 @@ grafana:
         hosts:
           - grafana.k3s.local
 
-# prometheusOperator:
-#   nodeSelector:
-#       name: "slowbanana" 
-#   prometheusSpecs:
-#     nodeSelector: 
-#       name: "slowbanana" 
-#   admissionWebhooks:
-#     deployment:
-#       nodeSelector: 
-#         name: "slowbanana" 
-#     patch:
-#       nodeSelector: 
-#         name: "slowbanana"         
+prometheusOperator:
+  nodeSelector:
+      name: "slowbanana" 
+  prometheusSpecs:
+    nodeSelector: 
+      name: "slowbanana" 
+  admissionWebhooks:
+    deployment:
+      nodeSelector: 
+        name: "slowbanana" 
+    patch:
+      nodeSelector: 
+        name: "slowbanana"         
 
 
 prometheus:
@@ -88,8 +88,8 @@ prometheus:
           - prometheus.k3s.local
 
   prometheusSpec:
-    # nodeSelector:
-    #     name: "slowbanana" 
+    nodeSelector:
+        name: "slowbanana" 
     externalUrl: "https://prometheus.k3s.local/"
     routePrefix: /
 
