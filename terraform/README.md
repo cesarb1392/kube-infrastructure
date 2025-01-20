@@ -43,8 +43,8 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 
 | Name | Version |
 |------|---------|
-| <a name="provider_helm"></a> [helm](#provider\_helm) | 2.11.0 |
-| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 2.23.0 |
+| <a name="provider_helm"></a> [helm](#provider\_helm) | 2.16.1 |
+| <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 2.35.0 |
 
 ## Modules
 
@@ -86,8 +86,8 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 | <a name="input_KUBECONFIG"></a> [KUBECONFIG](#input\_KUBECONFIG) | n/a | `string` | n/a | yes |
 | <a name="input_MINIO_ROOT_PASSWORD"></a> [MINIO\_ROOT\_PASSWORD](#input\_MINIO\_ROOT\_PASSWORD) | n/a | `string` | n/a | yes |
 | <a name="input_MINIO_ROOT_USER"></a> [MINIO\_ROOT\_USER](#input\_MINIO\_ROOT\_USER) | n/a | `string` | n/a | yes |
-| <a name="input_MINIO_USERS"></a> [MINIO\_USERS](#input\_MINIO\_USERS) | n/a | <pre>list(<br>    object({<br>      accessKey = string<br>      secretKey = string<br>      policy    = string<br>  }))</pre> | n/a | yes |
-| <a name="input_OPENVPN_PRIVATE_KEY"></a> [OPENVPN\_PRIVATE\_KEY](#input\_OPENVPN\_PRIVATE\_KEY) | n/a | `string` | n/a | yes |
+| <a name="input_MINIO_USERS"></a> [MINIO\_USERS](#input\_MINIO\_USERS) | n/a | <pre>list(<br/>    object({<br/>      accessKey = string<br/>      secretKey = string<br/>      policy    = string<br/>  }))</pre> | n/a | yes |
+| <a name="input_NORD_TOKEN"></a> [NORD\_TOKEN](#input\_NORD\_TOKEN) | n/a | `string` | n/a | yes |
 | <a name="input_PASS"></a> [PASS](#input\_PASS) | n/a | `string` | n/a | yes |
 | <a name="input_PGID"></a> [PGID](#input\_PGID) | n/a | `string` | n/a | yes |
 | <a name="input_PI_HOLE_PASS"></a> [PI\_HOLE\_PASS](#input\_PI\_HOLE\_PASS) | n/a | `string` | n/a | yes |

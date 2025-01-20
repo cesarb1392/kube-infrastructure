@@ -27,7 +27,7 @@ terraform {
 
 terraform {
   backend "s3" {
-    bucket                      = "k8s-home"
+    bucket                      = "kube-infrastructure"
     key                         = "terraform.tfstate"
     endpoint                    = "https://minio.cesarb.dev"
     region                      = "main"

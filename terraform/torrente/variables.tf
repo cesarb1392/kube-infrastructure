@@ -7,7 +7,7 @@ variable "lan_ip" {
   type = string
 }
 
-variable "PRIVATE_KEY" {
+variable "TOKEN" {
   description = ""
   type        = string
   sensitive   = true

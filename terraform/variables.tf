@@ -78,7 +78,7 @@ variable "VAULTWARDEN_ADMIN_TOKEN" {
   sensitive = true
 }
 
-variable "OPENVPN_PRIVATE_KEY" {
+variable "NORD_TOKEN" {
   description = ""
   type        = string
   sensitive   = true

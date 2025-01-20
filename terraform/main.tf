@@ -199,7 +199,7 @@ module "torrente" {
   source = "./torrente"
 
   namespace   = "torrente"
-  PRIVATE_KEY = var.OPENVPN_PRIVATE_KEY
+  TOKEN       = var.NORD_TOKEN
   puid        = var.PUID
   pgid        = var.PGID
   user        = var.USER
