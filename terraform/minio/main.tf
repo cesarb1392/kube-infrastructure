@@ -60,6 +60,8 @@ resource "kubernetes_service_v1" "minio_lan" {
     namespace = var.namespace
     annotations = {
       "metallb.universe.tf/allow-shared-ip" = "${var.namespace}-svc"
+      "metallb.io/ip-allocated-from-pool"   = "default"
+
     }
   }
   spec {

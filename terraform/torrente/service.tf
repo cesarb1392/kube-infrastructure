@@ -7,6 +7,8 @@ resource "kubernetes_service_v1" "transmission" {
     }
     annotations = {
       "metallb.universe.tf/allow-shared-ip" = "${var.namespace}-svc"
+      "metallb.io/ip-allocated-from-pool"   = "default"
+
     }
   }
   spec {
@@ -15,7 +17,7 @@ resource "kubernetes_service_v1" "transmission" {
     port {
       port        = 9000
       target_port = kubernetes_deployment_v1.transmission.spec.0.template.0.spec.0.container.1.port.0.container_port
-      name        = "http"
+      protocol    = "TCP"
     }
     selector = kubernetes_deployment_v1.transmission.spec.0.selector.0.match_labels
   }
@@ -30,6 +32,8 @@ resource "kubernetes_service_v1" "jackett" {
     }
     annotations = {
       "metallb.universe.tf/allow-shared-ip" = "${var.namespace}-svc"
+      "metallb.io/ip-allocated-from-pool"   = "default"
+
     }
   }
   spec {
@@ -53,6 +57,8 @@ resource "kubernetes_service_v1" "prowlarr" {
     }
     annotations = {
       "metallb.universe.tf/allow-shared-ip" = "${var.namespace}-svc"
+      "metallb.io/ip-allocated-from-pool"   = "default"
+
     }
   }
   spec {
@@ -60,7 +66,7 @@ resource "kubernetes_service_v1" "prowlarr" {
     type             = "LoadBalancer"
     port {
       port        = 9002
-      target_port = kubernetes_deployment_v1.prowlarr.spec.0.template.0.spec.0.container.1.port.0.container_port
+      target_port = kubernetes_deployment_v1.prowlarr.spec.0.template.0.spec.0.container.0.port.0.container_port
       name        = "http"
     }
     selector = kubernetes_deployment_v1.prowlarr.spec.0.selector.0.match_labels
@@ -76,6 +82,7 @@ resource "kubernetes_service_v1" "sonarr" {
     }
     annotations = {
       "metallb.universe.tf/allow-shared-ip" = "${var.namespace}-svc"
+      "metallb.io/ip-allocated-from-pool"   = "default"
     }
   }
   spec {
@@ -83,7 +90,7 @@ resource "kubernetes_service_v1" "sonarr" {
     type             = "LoadBalancer"
     port {
       port        = 9003
-      target_port = kubernetes_deployment_v1.sonarr.spec.0.template.0.spec.0.container.1.port.0.container_port
+      target_port = kubernetes_deployment_v1.sonarr.spec.0.template.0.spec.0.container.0.port.0.container_port
       name        = "http"
     }
     selector = kubernetes_deployment_v1.sonarr.spec.0.selector.0.match_labels
@@ -99,6 +106,7 @@ resource "kubernetes_service_v1" "radarr" {
     }
     annotations = {
       "metallb.universe.tf/allow-shared-ip" = "${var.namespace}-svc"
+      "metallb.io/ip-allocated-from-pool"   = "default"
     }
   }
   spec {
@@ -106,7 +114,7 @@ resource "kubernetes_service_v1" "radarr" {
     type             = "LoadBalancer"
     port {
       port        = 9004
-      target_port = kubernetes_deployment_v1.radarr.spec.0.template.0.spec.0.container.1.port.0.container_port
+      target_port = kubernetes_deployment_v1.radarr.spec.0.template.0.spec.0.container.0.port.0.container_port
       name        = "http"
     }
     selector = kubernetes_deployment_v1.radarr.spec.0.selector.0.match_labels
@@ -122,6 +130,8 @@ resource "kubernetes_service_v1" "filebrowser" {
     }
     annotations = {
       "metallb.universe.tf/allow-shared-ip" = "${var.namespace}-svc"
+      "metallb.io/ip-allocated-from-pool"   = "default"
+
     }
   }
   spec {

@@ -19,10 +19,21 @@ resource "kubernetes_deployment_v1" "transmission" {
         container {
           name  = "nordvpn-init"
           image = "ghcr.io/bubuntux/nordlynx:2023-06-01"
-
           env {
             name  = "PRIVATE_KEY"
             value = var.TOKEN
+          }
+          env {
+            name  = "DNS"
+            value = "10.43.0.10"
+          }
+          env {
+            name  = "TABLE"
+            value = "auto"
+          }
+          env {
+            name  = "POST_UP"
+            value = "/sbin/iptables -A INPUT -p tcp --dport 9091 -j ACCEPT;/sbin/iptables -A OUTPUT -p tcp --sport 9091 -j ACCEPT;"
           }
 
           env {
@@ -31,7 +42,7 @@ resource "kubernetes_deployment_v1" "transmission" {
           }
           env {
             name  = "NET_LOCAL"
-            value = "192.168.178.0/24"
+            value = "10.42.0.0/16"
           }
           security_context {
             capabilities {
@@ -98,19 +109,30 @@ resource "kubernetes_deployment_v1" "jackett" {
         container {
           name  = "nordvpn-init"
           image = "ghcr.io/bubuntux/nordlynx:2023-06-01"
-
           env {
             name  = "PRIVATE_KEY"
             value = var.TOKEN
           }
 
           env {
+            name  = "POST_UP"
+            value = "/sbin/iptables -A INPUT -p tcp --dport 9117 -j ACCEPT;/sbin/iptables -A OUTPUT -p tcp --sport 9117 -j ACCEPT;"
+          }
+          env {
+            name  = "DNS"
+            value = "10.43.0.10"
+          }
+          env {
+            name  = "TABLE"
+            value = "auto"
+          }
+          env {
             name  = "TZ"
             value = "Europe/Madrid"
           }
           env {
             name  = "NET_LOCAL"
-            value = "192.168.178.0/24"
+            value = "10.42.0.0/16"
           }
           security_context {
             capabilities {
@@ -174,29 +196,6 @@ resource "kubernetes_deployment_v1" "prowlarr" {
       }
       spec {
         container {
-          name  = "nordvpn-init"
-          image = "ghcr.io/bubuntux/nordlynx:2023-06-01"
-
-          env {
-            name  = "PRIVATE_KEY"
-            value = var.TOKEN
-          }
-
-          env {
-            name  = "TZ"
-            value = "Europe/Madrid"
-          }
-          env {
-            name  = "NET_LOCAL"
-            value = "192.168.178.0/24"
-          }
-          security_context {
-            capabilities {
-              add = ["NET_ADMIN"]
-            }
-          }
-        }
-        container {
           name  = "prowlarr"
           image = "lscr.io/linuxserver/prowlarr"
           port {
@@ -246,29 +245,6 @@ resource "kubernetes_deployment_v1" "radarr" {
         }
       }
       spec {
-        container {
-          name  = "nordvpn-init"
-          image = "ghcr.io/bubuntux/nordlynx:2023-06-01"
-
-          env {
-            name  = "PRIVATE_KEY"
-            value = var.TOKEN
-          }
-
-          env {
-            name  = "TZ"
-            value = "Europe/Madrid"
-          }
-          env {
-            name  = "NET_LOCAL"
-            value = "192.168.178.0/24"
-          }
-          security_context {
-            capabilities {
-              add = ["NET_ADMIN"]
-            }
-          }
-        }
         container {
           name  = "radarr"
           image = "lscr.io/linuxserver/radarr"
@@ -324,29 +300,6 @@ resource "kubernetes_deployment_v1" "sonarr" {
         }
       }
       spec {
-        container {
-          name  = "nordvpn-init"
-          image = "ghcr.io/bubuntux/nordlynx:2023-06-01"
-
-          env {
-            name  = "PRIVATE_KEY"
-            value = var.TOKEN
-          }
-
-          env {
-            name  = "TZ"
-            value = "Europe/Madrid"
-          }
-          env {
-            name  = "NET_LOCAL"
-            value = "192.168.178.0/24"
-          }
-          security_context {
-            capabilities {
-              add = ["NET_ADMIN"]
-            }
-          }
-        }
         container {
           name  = "sonarr"
           image = "lscr.io/linuxserver/sonarr"
