@@ -3,8 +3,7 @@ resource "helm_release" "minio_storage" {
   namespace = var.namespace
   name      = "minio"
   chart     = "https://github.com/minio/minio/blob/master/helm-releases/minio-5.0.9.tgz?raw=true"
-
-  values = [yamlencode(local.minio)]
+  values    = [yamlencode(local.minio)]
 }
 
 
@@ -29,12 +28,12 @@ locals {
 
     resources = {
       requests = {
-        memory = "500Mi"
-        cpu    = 1
+        memory = "256Mi"
+        cpu    = 0.3
       }
       limits = {
-        memory = "1Gi"
-        cpu    = 1
+        memory = "256Mi"
+        cpu    = 0.3
       }
     }
     users = var.MINIO_USERS

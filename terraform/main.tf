@@ -90,7 +90,7 @@ module "pihole" {
   namespace = "pihole"
   password  = var.PI_HOLE_PASS
   TZ        = var.TZ
-  lan_ip    = local.applications.pihole.lan_ip
+  lan_ip    = local.lan_ips.pihole
 
   depends_on = [module.metallb, kubernetes_namespace.this]
 
@@ -105,7 +105,7 @@ module "monitoring" {
   available = local.applications.monitoring.available
   puid      = var.PUID
   pgid      = var.PGID
-  lan_ip    = local.applications.monitoring.lan_ip
+  lan_ip    = local.lan_ips.monitoring
   #  prometheus_pvc_name = kubernetes_persistent_volume_claim.this["monitoring"].metadata.0.name
 
   depends_on = [module.metallb, kubernetes_namespace.this]
@@ -146,7 +146,7 @@ module "minio" {
   MINIO_ROOT_PASSWORD          = var.MINIO_ROOT_PASSWORD
   MINIO_ROOT_USER              = var.MINIO_ROOT_USER
   persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["minio"].metadata.0.name
-  lan_ip                       = local.applications.minio.lan_ip
+  lan_ip                       = local.lan_ips.minio
 
   depends_on = [module.metallb, kubernetes_namespace.this]
 }
@@ -159,7 +159,7 @@ module "wireguard" {
   private_key                  = var.WG_PRIVATE_KEY
   password                     = var.WG_PASSWORD
   user                         = var.WG_USER
-  lan_ip                       = local.applications.wireguard.lan_ip
+  lan_ip                       = local.lan_ips.wireguard
   log_level                    = local.applications.wireguard.log_level
   persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["wireguard"].metadata.0.name
   CF_ZONE_ID                   = var.CF_ZONE_ID
@@ -205,9 +205,19 @@ module "torrente" {
   user        = var.USER
   pass        = var.PASS
   timezone    = var.TZ
-  lan_ip      = local.applications.torrente.lan_ip
+  lan_ip      = local.lan_ips.torrente
   vpn_country = var.vpn_country
   # persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["torrente"].metadata.0.name
 
   depends_on = [kubernetes_namespace.this, module.metallb]
+}
+
+
+module "falco" {
+  count = local.applications.falco.enabled ? 1 : 0
+
+  source = "./falco"
+
+  namespace = "falco"
+  lan_ip    = local.lan_ips.falco
 }

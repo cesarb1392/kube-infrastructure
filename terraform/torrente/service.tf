@@ -145,3 +145,57 @@ resource "kubernetes_service_v1" "filebrowser" {
     selector = kubernetes_deployment_v1.filebrowser.spec.0.selector.0.match_labels
   }
 }
+
+
+resource "kubernetes_service_v1" "syncthing" {
+  metadata {
+    name      = local.app_name
+    namespace = var.namespace
+    labels = {
+      namespace = var.namespace
+    }
+    annotations = {
+      "metallb.universe.tf/allow-shared-ip" = "${var.namespace}-svc"
+      "metallb.io/ip-allocated-from-pool"   = "default"
+
+    }
+  }
+  spec {
+    load_balancer_ip = var.lan_ip
+    type             = "LoadBalancer"
+    port {
+      port        = 9006
+      target_port = kubernetes_deployment_v1.syncthing_reverse_proxy.spec.0.template.0.spec.0.container.0.port.0.container_port
+      name        = "http"
+    }
+    selector = kubernetes_deployment_v1.syncthing_reverse_proxy.spec.0.selector.0.match_labels
+  }
+}
+
+resource "kubernetes_service" "syncthing" {
+  metadata {
+    name      = "syncthing-service"
+    namespace = var.namespace
+  }
+
+  spec {
+    selector = {
+      app = "syncthing"
+    }
+    port {
+      name        = "webui"
+      port        = 8384
+      target_port = 8384
+    }
+    port {
+      name        = "sync-tcp"
+      port        = 22000
+      target_port = 22000
+    }
+    port {
+      name        = "sync-udp"
+      port        = 21027
+      target_port = 21027
+    }
+  }
+}

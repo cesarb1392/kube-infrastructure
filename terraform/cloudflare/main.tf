@@ -1,6 +1,5 @@
 locals {
   cloudflare_tunnel = {
-    #    https://github.com/metallb/metallb/blob/main/charts/metallb/values.yaml
     cloudflare = {
       account    = var.CF_ACCOUNT_ID
       tunnelName = cloudflare_argo_tunnel.this.name
@@ -18,6 +17,16 @@ locals {
       ]
     }
     replicaCount = 1
+    resources = {
+      limits = {
+        cpu : "100m",
+        memory : "128Mi"
+      },
+      memory = {
+        cpu : "100m",
+        memory : "128Mi"
+      }
+    }
   }
 }
 

@@ -30,6 +30,16 @@ resource "kubernetes_deployment_v1" "this" {
           name              = var.app_name
           image             = var.app_image
           image_pull_policy = "IfNotPresent"
+          resources {
+            limits = {
+              cpu    = "20m"
+              memory = "20m"
+            }
+            requests = {
+              cpu    = "20m"
+              memory = "20m"
+            }
+          }
           port {
             container_port = var.ingress_port
           }

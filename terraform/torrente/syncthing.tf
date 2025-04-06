@@ -62,6 +62,15 @@ resource "kubernetes_deployment_v1" "syncthing_reverse_proxy" {
           name              = "${local.app_name}-reverse-proxy"
           image             = "nginx:1.19.0"
           image_pull_policy = "IfNotPresent"
+          resources {
+            limits = {
+              memory = "50Mi"
+            }
+            requests = {
+              cpu    = "50m"
+              memory = "50Mi"
+            }
+          }
           port {
             container_port = 80
           }
@@ -82,37 +91,6 @@ resource "kubernetes_deployment_v1" "syncthing_reverse_proxy" {
   }
 }
 
-resource "kubernetes_service_v1" "syncthing" {
-  metadata {
-    name      = local.app_name
-    namespace = var.namespace
-    labels = {
-      namespace = var.namespace
-    }
-    annotations = {
-      "metallb.universe.tf/allow-shared-ip" = "${var.namespace}-svc"
-      "metallb.io/ip-allocated-from-pool"   = "default"
-
-    }
-  }
-  spec {
-    load_balancer_ip = var.lan_ip
-    type             = "LoadBalancer"
-    port {
-      port        = 9006
-      target_port = kubernetes_deployment_v1.syncthing_reverse_proxy.spec.0.template.0.spec.0.container.0.port.0.container_port
-      name        = "http"
-    }
-    selector = kubernetes_deployment_v1.syncthing_reverse_proxy.spec.0.selector.0.match_labels
-  }
-}
-
-
-########################################################
-########################################################
-########################################################
-
-
 resource "kubernetes_deployment" "syncthing" {
   metadata {
     name      = "syncthing"
@@ -124,25 +102,30 @@ resource "kubernetes_deployment" "syncthing" {
 
   spec {
     replicas = 1
-
     selector {
       match_labels = {
         app = "syncthing"
       }
     }
-
     template {
       metadata {
         labels = {
           app = "syncthing"
         }
       }
-
       spec {
         container {
           name  = "syncthing"
           image = "linuxserver/syncthing"
-
+          resources {
+            limits = {
+              memory = "200Mi"
+            }
+            requests = {
+              cpu    = "200m"
+              memory = "200Mi"
+            }
+          }
           port {
             container_port = 8384
           }
@@ -181,34 +164,6 @@ resource "kubernetes_deployment" "syncthing" {
           }
         }
       }
-    }
-  }
-}
-
-resource "kubernetes_service" "syncthing" {
-  metadata {
-    name      = "syncthing-service"
-    namespace = var.namespace
-  }
-
-  spec {
-    selector = {
-      app = "syncthing"
-    }
-    port {
-      name        = "webui"
-      port        = 8384
-      target_port = 8384
-    }
-    port {
-      name        = "sync-tcp"
-      port        = 22000
-      target_port = 22000
-    }
-    port {
-      name        = "sync-udp"
-      port        = 21027
-      target_port = 21027
     }
   }
 }

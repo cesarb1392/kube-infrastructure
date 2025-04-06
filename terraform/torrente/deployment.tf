@@ -19,6 +19,17 @@ resource "kubernetes_deployment_v1" "transmission" {
         container {
           name  = "nordvpn-init"
           image = "ghcr.io/bubuntux/nordlynx:2023-06-01"
+
+          resources {
+            limits = {
+              memory = "50Mi"
+            }
+            requests = {
+              cpu    = "50m"
+              memory = "50Mi"
+            }
+          }
+
           env {
             name  = "PRIVATE_KEY"
             value = var.TOKEN
@@ -53,6 +64,15 @@ resource "kubernetes_deployment_v1" "transmission" {
         container {
           name  = "transmission"
           image = "lscr.io/linuxserver/transmission"
+          resources {
+            limits = {
+              memory = "100Mi"
+            }
+            requests = {
+              cpu    = "100m"
+              memory = "100Mi"
+            }
+          }
           port {
             container_port = 9091
           }
@@ -109,6 +129,15 @@ resource "kubernetes_deployment_v1" "jackett" {
         container {
           name  = "nordvpn-init"
           image = "ghcr.io/bubuntux/nordlynx:2023-06-01"
+          resources {
+            limits = {
+              memory = "50Mi"
+            }
+            requests = {
+              cpu    = "50m"
+              memory = "50Mi"
+            }
+          }
           env {
             name  = "PRIVATE_KEY"
             value = var.TOKEN
@@ -145,6 +174,15 @@ resource "kubernetes_deployment_v1" "jackett" {
           image = "lscr.io/linuxserver/jackett:0.22.1014"
           port {
             container_port = 9117
+          }
+          resources {
+            limits = {
+              memory = "100Mi"
+            }
+            requests = {
+              cpu    = "100m"
+              memory = "100Mi"
+            }
           }
           env_from {
             config_map_ref {
@@ -201,6 +239,15 @@ resource "kubernetes_deployment_v1" "prowlarr" {
           port {
             container_port = 9696
           }
+          resources {
+            limits = {
+              memory = "300Mi"
+            }
+            requests = {
+              cpu    = "200m"
+              memory = "300Mi"
+            }
+          }
           env_from {
             config_map_ref {
               name     = kubernetes_config_map_v1.config.metadata[0].name
@@ -248,6 +295,15 @@ resource "kubernetes_deployment_v1" "radarr" {
         container {
           name  = "radarr"
           image = "lscr.io/linuxserver/radarr"
+          resources {
+            limits = {
+              memory = "300Mi"
+            }
+            requests = {
+              cpu    = "200m"
+              memory = "300Mi"
+            }
+          }
           port {
             container_port = 7878
           }
@@ -303,6 +359,15 @@ resource "kubernetes_deployment_v1" "sonarr" {
         container {
           name  = "sonarr"
           image = "lscr.io/linuxserver/sonarr"
+          resources {
+            limits = {
+              memory = "300Mi"
+            }
+            requests = {
+              cpu    = "200m"
+              memory = "300Mi"
+            }
+          }
           port {
             container_port = 8989
           }
@@ -359,6 +424,15 @@ resource "kubernetes_deployment_v1" "filebrowser" {
         container {
           name  = "filebrowser"
           image = "filebrowser/filebrowser:s6"
+          resources {
+            limits = {
+              memory = "200Mi"
+            }
+            requests = {
+              cpu    = "100m"
+              memory = "200Mi"
+            }
+          }
           port {
             container_port = 80
           }

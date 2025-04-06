@@ -1,5 +1,13 @@
 locals {
-  # kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.26/deploy/local-path-storage.yaml
+
+  lan_ips = {
+    pihole     = "192.168.178.232"
+    wireguard  = "192.168.178.233"
+    torrente   = "192.168.178.234"
+    monitoring = "192.168.178.235"
+    minio      = "192.168.178.236"
+    falco      = "192.168.178.237"
+  }
   applications = {
     cert-manager = {
       enabled = true
@@ -24,14 +32,12 @@ locals {
       enabled        = true
       public_ingress = true # local.applications.minio.enabled
       target_service = "minio"
-      lan_ip         = "192.168.178.236"
       ingress_port   = 9000
       storage        = "100Mi"
     }
     wireguard = {
       enabled   = true
       log_level = "info"
-      lan_ip    = "192.168.178.233"
       storage   = "100Mi"
     }
     privateingress = {
@@ -39,7 +45,6 @@ locals {
     }
     pihole = {
       enabled = true
-      lan_ip  = "192.168.178.232"
       #      storage = "512Mi" # pending!
     }
 
@@ -67,7 +72,6 @@ locals {
         smokeping            = false
         wireshark            = false
       }
-      lan_ip = "192.168.178.235"
     }
     loadtest = {
       enabled    = false
@@ -96,7 +100,6 @@ locals {
     }
     torrente = {
       enabled = true
-      lan_ip  = "192.168.178.234"
     }
     picamera = {
       enabled        = false
@@ -105,7 +108,9 @@ locals {
       target_service = "picamera-svc"
       ingress_port   = 80
     }
-
+    falco = {
+      enabled = false
+    }
   }
 
   available_namespaces = {

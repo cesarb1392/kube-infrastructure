@@ -27,6 +27,10 @@ To set up state, run:
 terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secret_key=$SECRET_KEY"
 ```
 
+```
+# kubectl apply -f https://raw.githubusercontent.com/rancher/local-path-provisioner/v0.0.26/deploy/local-path-storage.yaml
+```
+
 <!-- BEGIN_TF_DOCS -->
 ## Requirements
 
@@ -50,6 +54,7 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 
 | Name | Source | Version |
 |------|--------|---------|
+| <a name="module_falco"></a> [falco](#module\_falco) | ./falco | n/a |
 | <a name="module_github_runner"></a> [github\_runner](#module\_github\_runner) | ./github_runner | n/a |
 | <a name="module_loadtest"></a> [loadtest](#module\_loadtest) | ./load_test | n/a |
 | <a name="module_metallb"></a> [metallb](#module\_metallb) | ./metallb | n/a |
