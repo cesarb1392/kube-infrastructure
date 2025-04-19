@@ -32,6 +32,15 @@ locals {
       }
     }
     tty = true
+    collectors = {
+      enabled    = true
+      docker     = { enabled = false }
+      crio       = { enabled = false }
+      containerd = { enabled = true }
+      kubernetes = { enabled = true }
+
+    }
+
     resources = {
       requests = {
         cpu    = "500m", # Request half a core
