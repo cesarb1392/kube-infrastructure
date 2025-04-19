@@ -177,11 +177,11 @@ resource "kubernetes_deployment_v1" "jackett" {
           }
           resources {
             limits = {
-              memory = "100Mi"
+              memory = "256Mi"
             }
             requests = {
               cpu    = "100m"
-              memory = "100Mi"
+              memory = "256Mi"
             }
           }
           env_from {

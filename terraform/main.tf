@@ -220,4 +220,6 @@ module "falco" {
 
   namespace = "falco"
   lan_ip    = local.lan_ips.falco
+  user      = var.USER
+  pass      = var.PASS
 }

@@ -7,3 +7,12 @@ variable "lan_ip" {
   type = string
 }
 
+variable "user" {
+  description = ""
+  type        = string
+}
+
+variable "pass" {
+  description = ""
+  type        = string
+}

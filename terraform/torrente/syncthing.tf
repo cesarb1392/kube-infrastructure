@@ -1,11 +1,11 @@
 locals {
-  app_name     = "syncthing"
-  service_port = 80
+  syncthing_name = "syncthing"
+  service_port   = 80
 }
 
 resource "kubernetes_config_map" "nginx_config" {
   metadata {
-    name      = "${local.app_name}-reverse-proxy-nginx-config"
+    name      = "${local.syncthing_name}-reverse-proxy-nginx-config"
     namespace = var.namespace
   }
 
@@ -34,10 +34,10 @@ EOT
 
 resource "kubernetes_deployment_v1" "syncthing_reverse_proxy" {
   metadata {
-    name      = "${local.app_name}-reverse-proxy"
+    name      = "${local.syncthing_name}-reverse-proxy"
     namespace = var.namespace
     labels = {
-      app = "${local.app_name}-reverse-proxy"
+      app = "${local.syncthing_name}-reverse-proxy"
     }
   }
 
@@ -46,20 +46,20 @@ resource "kubernetes_deployment_v1" "syncthing_reverse_proxy" {
 
     selector {
       match_labels = {
-        app = "${local.app_name}-reverse-proxy"
+        app = "${local.syncthing_name}-reverse-proxy"
       }
     }
 
     template {
       metadata {
         labels = {
-          app = "${local.app_name}-reverse-proxy"
+          app = "${local.syncthing_name}-reverse-proxy"
         }
       }
 
       spec {
         container {
-          name              = "${local.app_name}-reverse-proxy"
+          name              = "${local.syncthing_name}-reverse-proxy"
           image             = "nginx:1.19.0"
           image_pull_policy = "IfNotPresent"
           resources {
@@ -83,7 +83,7 @@ resource "kubernetes_deployment_v1" "syncthing_reverse_proxy" {
         volume {
           name = "nginx-config"
           config_map {
-            name = "${local.app_name}-reverse-proxy-nginx-config"
+            name = "${local.syncthing_name}-reverse-proxy-nginx-config"
           }
         }
       }
@@ -119,11 +119,11 @@ resource "kubernetes_deployment" "syncthing" {
           image = "linuxserver/syncthing"
           resources {
             limits = {
-              memory = "200Mi"
+              memory = "400Mi"
             }
             requests = {
               cpu    = "200m"
-              memory = "200Mi"
+              memory = "400Mi"
             }
           }
           port {
@@ -167,3 +167,4 @@ resource "kubernetes_deployment" "syncthing" {
     }
   }
 }
+

@@ -149,7 +149,7 @@ resource "kubernetes_service_v1" "filebrowser" {
 
 resource "kubernetes_service_v1" "syncthing" {
   metadata {
-    name      = local.app_name
+    name      = local.syncthing_name
     namespace = var.namespace
     labels = {
       namespace = var.namespace

@@ -28,12 +28,11 @@ locals {
 
     resources = {
       requests = {
-        memory = "256Mi"
-        cpu    = 0.3
+        memory = "512Mi"
       }
       limits = {
-        memory = "256Mi"
-        cpu    = 0.3
+        cpu    = "250m"
+        memory = "512Mi"
       }
     }
     users = var.MINIO_USERS

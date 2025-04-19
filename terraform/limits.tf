@@ -1,7 +1,7 @@
 resource "kubernetes_limit_range" "default" {
   for_each = tomap({
     for k, v in kubernetes_namespace.this : k => v
-    if(v.metadata.0.name != "monitoring" && v.metadata.0.name != "torrente")
+    if(v.metadata.0.name != "monitoring" && v.metadata.0.name != "torrente" && v.metadata.0.name != "falco")
   })
 
   metadata {

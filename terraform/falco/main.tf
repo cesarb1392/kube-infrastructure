@@ -1,33 +1,46 @@
 locals {
   falco = {
-    #     # https://github.com/falcosecurity/charts/blob/master/charts/falco/values.yaml
-    scc = { create : false }
-    # customRules        = {} # Add rule overrides if needed 
-    # fakeEventGenerator = { enabled = true }
-
-    # driver = {
-    #   kind = "auto"
-    #   # kind = "ebpf"  # Preferred for containerized environments vs kernel module
-    # }
+    # https://github.com/falcosecurity/charts/blob/master/charts/falco/values.yaml
+    scc                = { create = false }
+    customRules        = {} # Add rule overrides if needed 
+    fakeEventGenerator = { enabled = true }
+    driver = {
+      enabled = true
+      kind    = "kmod"
+      ## sudo apt update && sudo apt upgrade -y && sudo apt install --no-install-recommends dkms && sudo wget https://raw.githubusercontent.com/notro/rpi-source/master/rpi-source -O /usr/bin/rpi-source && sudo chmod +x /usr/bin/rpi-source && rpi-source --skip-gcc && dkms --version
+      # kind = "ebpf" # Preferred for containerized environments vs kernel module
+    }
     falcosidekick = {
+      # https://github.com/falcosecurity/charts/blob/master/charts/falcosidekick/values.yaml
       enabled    = true
       listenPort = 2801
       webui = {
-        enabled      = true,
+        enabled      = true
+        user         = "${var.user}:${var.pass}"
+        loglevel     = "debug" # "info"
         replicaCount = 1
+        # allowcors = false
+        image = {
+          tag = "2.2.0"
+        }
+        service = {
+          annotations = {
+            "metallb.io/ip-allocated-from-pool"   = "default"
+            "metallb.universe.tf/allow-shared-ip" = "${var.namespace}-svc"
+          }
+        }
       }
     }
-    # ebpf = {
-    #   hostNetwork = true  # Required for eBPF in some environments
-    # }
-    # tty = true
-
-    # resources = {
-    #   requests = { cpu = "1", memory = "1280Mi" }
-    #   limits = { memory = "1280Mi" }
-    # }
-    # (combined from similar events): Error creating: pods "falco-hjdc7" is forbidden: [maximum memory usage per Container is 1Gi, but limit is 1280Mi, maximum memory usage per Pod is 1Gi, but li │
-    # │ it is 1536Mi, maximum cpu usage per Pod is 1, but limit is 1250m[]
+    tty = true
+    resources = {
+      requests = {
+        cpu    = "500m", # Request half a core
+        memory = "512Mi" # Request 512 MiB
+      }
+      limits = {
+        memory = "512Mi"
+      }
+    }
   }
 }
 
@@ -53,11 +66,13 @@ resource "kubernetes_service_v1" "falco_lan" {
     load_balancer_ip = var.lan_ip
     port {
       port        = 80
-      target_port = 2801
+      target_port = 2802
       protocol    = "TCP"
     }
     selector = {
-      "app.kubernetes.io/name" = var.namespace
+      "app.kubernetes.io/component" : "ui"
+      "app.kubernetes.io/instance" : "falco"
+      "app.kubernetes.io/name" : "falcosidekick"
     }
     type = "LoadBalancer"
   }

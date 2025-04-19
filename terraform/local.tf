@@ -44,7 +44,7 @@ locals {
       enabled = false
     }
     pihole = {
-      enabled = true
+      enabled = false
       #      storage = "512Mi" # pending!
     }
 
@@ -109,7 +109,7 @@ locals {
       ingress_port   = 80
     }
     falco = {
-      enabled = false
+      enabled = true
     }
   }
 
