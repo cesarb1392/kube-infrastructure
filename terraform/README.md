@@ -48,12 +48,14 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 | Name | Version |
 |------|---------|
 | <a name="provider_helm"></a> [helm](#provider\_helm) | 2.17.0 |
+| <a name="provider_kubectl"></a> [kubectl](#provider\_kubectl) | 1.19.0 |
 | <a name="provider_kubernetes"></a> [kubernetes](#provider\_kubernetes) | 2.36.0 |
 
 ## Modules
 
 | Name | Source | Version |
 |------|--------|---------|
+| <a name="module_cert_manager"></a> [cert\_manager](#module\_cert\_manager) | ./cert_manager | n/a |
 | <a name="module_falco"></a> [falco](#module\_falco) | ./falco | n/a |
 | <a name="module_github_runner"></a> [github\_runner](#module\_github\_runner) | ./github_runner | n/a |
 | <a name="module_loadtest"></a> [loadtest](#module\_loadtest) | ./load_test | n/a |
@@ -73,7 +75,9 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 
 | Name | Type |
 |------|------|
-| [helm_release.cert_manager](https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release) | resource |
+| [helm_release.nginx_ingress](https://registry.terraform.io/providers/hashicorp/helm/latest/docs/resources/release) | resource |
+| [kubectl_manifest.cert](https://registry.terraform.io/providers/gavinbunney/kubectl/latest/docs/resources/manifest) | resource |
+| [kubectl_manifest.ingress](https://registry.terraform.io/providers/gavinbunney/kubectl/latest/docs/resources/manifest) | resource |
 | [kubernetes_limit_range.default](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/limit_range) | resource |
 | [kubernetes_namespace.this](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/namespace) | resource |
 | [kubernetes_persistent_volume_claim.this](https://registry.terraform.io/providers/hashicorp/kubernetes/latest/docs/resources/persistent_volume_claim) | resource |

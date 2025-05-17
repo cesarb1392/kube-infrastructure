@@ -3,13 +3,18 @@ locals {
     # https://github.com/falcosecurity/charts/blob/master/charts/falco/values.yaml
     scc                = { create = false }
     customRules        = {} # Add rule overrides if needed 
-    fakeEventGenerator = { enabled = true }
+    fakeEventGenerator = { enabled = false }
     driver = {
       enabled = true
       kind    = "kmod"
       ## sudo apt update && sudo apt upgrade -y && sudo apt install --no-install-recommends dkms && sudo wget https://raw.githubusercontent.com/notro/rpi-source/master/rpi-source -O /usr/bin/rpi-source && sudo chmod +x /usr/bin/rpi-source && rpi-source --skip-gcc && dkms --version
       # kind = "ebpf" # Preferred for containerized environments vs kernel module
     }
+    containerd = {
+      enabled = true
+      socket  = "/run/k3s/containerd/containerd.sock"
+    }
+
     falcosidekick = {
       # https://github.com/falcosecurity/charts/blob/master/charts/falcosidekick/values.yaml
       enabled    = true
@@ -17,7 +22,7 @@ locals {
       webui = {
         enabled      = true
         user         = "${var.user}:${var.pass}"
-        loglevel     = "debug" # "info"
+        loglevel     = "info"
         replicaCount = 1
         # allowcors = false
         image = {
@@ -36,11 +41,10 @@ locals {
       enabled    = true
       docker     = { enabled = false }
       crio       = { enabled = false }
-      containerd = { enabled = true }
+      containerd = { enabled = true, socket = "/run/k3s/containerd/containerd.sock" }
       kubernetes = { enabled = true }
 
     }
-
     resources = {
       requests = {
         cpu    = "500m", # Request half a core

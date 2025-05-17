@@ -1,33 +1,4 @@
-locals {
-  cert_manager = {
-    # #https://github.com/cert-manager/cert-manager/blob/master/deploy/charts/cert-manager/values.yaml
-    crds = {
-      enabled = true
-      keep    = true
-    }
-    serviceAccount = { create = false }
-    prometheus     = { enabled = false }
-    livenessProbe  = { enabled = false }
-    # enableCertificateOwnerRef = true
-  }
-}
 
-# Cert Manager
-##https://opensource.com/article/20/3/ssl-letsencrypt-k3s
-resource "helm_release" "cert_manager" {
-  count = local.applications.cert-manager.enabled ? 1 : 0
-
-  name             = "cert-manager"
-  chart            = "cert-manager"
-  repository       = "https://charts.jetstack.io"
-  create_namespace = false
-  namespace        = "cert-manager"
-  version          = "v1.12.3"
-
-  values = [yamlencode(local.cert_manager)]
-
-  depends_on = [kubernetes_namespace.this]
-}
 # Local-path storage
 resource "kubernetes_persistent_volume_claim" "this" {
   for_each = local.available_storage

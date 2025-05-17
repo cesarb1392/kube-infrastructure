@@ -74,6 +74,14 @@ module "metallb" {
   depends_on = [kubernetes_namespace.this]
 }
 
+module "cert_manager" {
+  count = local.applications.certmanager.enabled ? 1 : 0
+
+  source     = "./cert_manager"
+  namespace  = "certmanager"
+  depends_on = [kubernetes_namespace.this]
+}
+
 module "private_ingress" {
   count = local.applications.privateingress.enabled ? 1 : 0
 
@@ -222,4 +230,69 @@ module "falco" {
   lan_ip    = local.lan_ips.falco
   user      = var.USER
   pass      = var.PASS
+}
+
+
+resource "helm_release" "nginx_ingress" {
+  name             = "ingress-nginx"
+  namespace        = "ingress-nginx"
+  repository       = "https://kubernetes.github.io/ingress-nginx"
+  chart            = "ingress-nginx"
+  version          = "4.12.2"
+  create_namespace = true
+  # https://github.com/kubernetes/ingress-nginx/blob/main/charts/ingress-nginx/values.yaml
+  set {
+    name  = "controller.service.type"
+    value = "LoadBalancer"
+  }
+  set {
+    name  = "controller.nodeSelector.kubernetes\\.io/arch"
+    value = "arm64"
+  }
+}
+
+resource "kubectl_manifest" "cert" {
+  yaml_body = <<-EOF
+  apiVersion: cert-manager.io/v1
+  kind: Certificate
+  metadata:
+    name: falco.192-168-178-237.sslip.io
+    namespace: falco
+  spec:
+    secretName: falco.192-168-178-237.sslip.io
+    duration: 2160h # 90 days
+    renewBefore: 360h # 15 days
+    dnsNames:
+      - falco.192-168-178-237.sslip.io
+    issuerRef:
+      name: banana-ca-issuer
+      kind: ClusterIssuer
+  EOF
+}
+
+resource "kubectl_manifest" "ingress" {
+  yaml_body = <<-EOF
+  apiVersion: networking.k8s.io/v1
+  kind: Ingress
+  metadata:
+    name: falco
+    namespace: falco
+  spec:
+    ingressClassName: nginx
+    tls:
+      - hosts:
+          - falco.192-168-178-237.sslip.io
+        secretName: falco.192-168-178-237.sslip.io
+    rules:
+      - host: falco.192-168-178-237.sslip.io
+        http:
+          paths:
+            - path: /
+              pathType: Prefix
+              backend:
+                service:
+                  name: falco-falcosidekick-ui
+                  port:
+                    number: 80
+EOF
 }

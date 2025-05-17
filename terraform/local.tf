@@ -9,7 +9,7 @@ locals {
     falco      = "192.168.178.237"
   }
   applications = {
-    cert-manager = {
+    certmanager = {
       enabled = true
     }
     portfolio = {
@@ -30,7 +30,7 @@ locals {
     }
     minio = {
       enabled        = true
-      public_ingress = true # local.applications.minio.enabled
+      public_ingress = true
       target_service = "minio"
       ingress_port   = 9000
       storage        = "100Mi"
