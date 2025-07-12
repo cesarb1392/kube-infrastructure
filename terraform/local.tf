@@ -1,4 +1,5 @@
 locals {
+  address_pool = "192.168.178.230-192.168.178.240"
   lan_ips = {
     pihole     = "192.168.178.232"
     wireguard  = "192.168.178.233"
@@ -52,7 +53,7 @@ locals {
     metallb = {
       enabled      = true
       log_level    = "debug"
-      address_pool = "192.168.178.230-192.168.178.240"
+      address_pool = local.address_pool
     }
     monitoring = {
       enabled = true
@@ -93,7 +94,7 @@ locals {
       }
     }
     torrente = {
-      enabled = false
+      enabled = true
       storage = "200Gi"
     }
     picamera = {

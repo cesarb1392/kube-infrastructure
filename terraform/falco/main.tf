@@ -6,9 +6,8 @@ locals {
     fakeEventGenerator = { enabled = false }
     driver = {
       enabled = true
-      kind    = "kmod"
       ## sudo apt update && sudo apt upgrade -y && sudo apt install --no-install-recommends dkms && sudo wget https://raw.githubusercontent.com/notro/rpi-source/master/rpi-source -O /usr/bin/rpi-source && sudo chmod +x /usr/bin/rpi-source && rpi-source --skip-gcc && dkms --version
-      # kind = "ebpf" # Preferred for containerized environments vs kernel module
+      kind = "modern_ebpf" # with k3s. Preferred for containerized environments vs kernel module
     }
     containerd = {
       enabled = true

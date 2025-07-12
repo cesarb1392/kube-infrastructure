@@ -171,7 +171,7 @@ resource "kubernetes_deployment_v1" "jackett" {
         }
         container {
           name  = "jackett"
-          image = "lscr.io/linuxserver/jackett:0.22.1014"
+          image = "lscr.io/linuxserver/jackett"
           port {
             container_port = 9117
           }

@@ -35,7 +35,7 @@ resource "kubernetes_deployment_v1" "this" {
               memory = "50Mi"
             }
             requests = {
-              cpu    = "20m"
+              cpu    = "50m"
               memory = "50Mi"
             }
           }

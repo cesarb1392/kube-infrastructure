@@ -22,12 +22,12 @@ resource "kubernetes_limit_range" "default" {
         memory = "1Gi"
       }
       default = {
-        cpu    = "250m"
-        memory = "256Mi"
+        cpu    = "50m"
+        memory = "32Mi"
       }
       default_request = {
-        cpu    = "100m"
-        memory = "128Mi"
+        cpu    = "50m"
+        memory = "32Mi"
       }
     }
     limit {
