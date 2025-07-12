@@ -160,7 +160,7 @@ resource "kubernetes_deployment" "syncthing" {
         volume {
           name = "torrente"
           persistent_volume_claim {
-            claim_name = kubernetes_persistent_volume_claim.this.metadata.0.name
+            claim_name = var.persistent_volume_claim_name
           }
         }
       }

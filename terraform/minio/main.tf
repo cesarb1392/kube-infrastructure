@@ -1,12 +1,3 @@
-# https://min.io/docs/minio/kubernetes/upstream/index.html?ref=docs-redirect
-resource "helm_release" "minio_storage" {
-  namespace = var.namespace
-  name      = "minio"
-  chart     = "https://github.com/minio/minio/blob/master/helm-releases/minio-5.0.9.tgz?raw=true"
-  values    = [yamlencode(local.minio)]
-}
-
-
 locals {
   # https://github.com/minio/minio/blob/master/helm/minio/values.yaml
   minio = {
@@ -36,21 +27,17 @@ locals {
       }
     }
     users = var.MINIO_USERS
-    # affinity = {
-    #   node_affinity = {
-    #     required_during_scheduling_ignored_during_execution = {
-    #       node_selector_term = {
-    #         match_expressions = {
-    #           key      = "kubernetes.io/hostname"
-    #           operator = "In"
-    #           values   = ["fastbanana"]
-    #         }
-    #       }
-    #     }
-    #   }
-    # }
   }
 }
+
+# https://min.io/docs/minio/kubernetes/upstream/index.html?ref=docs-redirect
+resource "helm_release" "minio_storage" {
+  namespace = var.namespace
+  name      = "minio"
+  chart     = "https://github.com/minio/minio/blob/master/helm-releases/minio-5.0.9.tgz?raw=true"
+  values    = [yamlencode(local.minio)]
+}
+
 
 resource "kubernetes_service_v1" "minio_lan" {
   metadata {

@@ -7,7 +7,7 @@ prometheus:
         spec:
           resources:
             requests:
-              storage: 1Gi
+              storage: 5Gi
     resources:
       requests:
         memory: 1Gi

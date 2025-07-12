@@ -74,7 +74,7 @@
           - ffmpeg
           - v4l-utils # camera
           - open-iscsi # longhorn-driver-deployer
-          - linux-modules-extra-raspi # https://docs.k3s.io/installation/requirements?os=pi#ubuntu-vxlan-module
+          # - linux-modules-extra-raspi # https://docs.k3s.io/installation/requirements?os=pi#ubuntu-vxlan-module
         state: latest
         cache_valid_time: 600
 
@@ -94,7 +94,7 @@
                 - zsh-syntax-highlighting
                 - zsh-autosuggestions
                 - zsh-completions
-#                - docker
+
 
     - name: Install spaceship prompt
       git:

@@ -36,3 +36,26 @@ resource "kubernetes_service_v1" "grafana_lan" {
     type = "LoadBalancer"
   }
 }
+
+resource "kubernetes_persistent_volume_claim" "this" {
+  count = var.available.prometheus_stack ? 1 : 0
+
+  wait_until_bound = false # otherwise pending forever since the pod isnt created yet
+
+  metadata {
+    name      = "prometheus-prometheus-kube-prometheus-prometheus-db-prometheus-prometheus-kube-prometheus-prometheus-0" # "${var.namespace}-transmission-pvc"
+    namespace = var.namespace
+    labels = {
+      "app.kubernetes.io/name" = "${var.namespace}-pv"
+    }
+  }
+  spec {
+    access_modes       = ["ReadWriteOnce"]
+    storage_class_name = "local-path"
+    resources {
+      requests = {
+        storage = "5Gi"
+      }
+    }
+  }
+}

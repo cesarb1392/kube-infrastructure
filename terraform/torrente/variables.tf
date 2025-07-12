@@ -42,7 +42,7 @@ variable "pass" {
   type        = string
 }
 
-# variable "persistent_volume_claim_name" {
-#   type = string
-# }
+variable "persistent_volume_claim_name" {
+  type = string
+}
 

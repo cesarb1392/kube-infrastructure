@@ -10,7 +10,7 @@ locals {
   }
   applications = {
     certmanager = {
-      enabled = true
+      enabled = false
     }
     portfolio = {
       enabled        = true
@@ -29,11 +29,11 @@ locals {
       ingress_port   = 80
     }
     minio = {
-      enabled        = true
+      enabled        = false
       public_ingress = true
       target_service = "minio"
       ingress_port   = 9000
-      storage        = "100Mi"
+      storage        = "500Mi"
     }
     wireguard = {
       enabled   = true
@@ -56,11 +56,6 @@ locals {
       address_pool = "192.168.178.230-192.168.178.240"
     }
     monitoring = {
-      /* trying out https://github.com/carlosedp/cluster-monitoring */
-
-
-      /* kubectl taint nodes mainbanana key1=value1:NoSchedule */
-      /* kubectl taint nodes fastbanana key1=value1:NoSchedule- */
       enabled = true
       available = {
         carlosedp_monitoring = false
@@ -69,7 +64,7 @@ locals {
         promtail             = false
         loki                 = false
         prometheus_stack     = true ## arm64 doesn't work
-        smokeping            = true
+        smokeping            = false
         wireshark            = false
       }
     }
@@ -83,7 +78,7 @@ locals {
       public_ingress = true
       target_service = "vaultwarden-svc"
       ingress_port   = 80
-      storage        = "3Gi"
+      storage        = "2Gi"
       log_level      = "info"
     }
     githubrunner = {
@@ -99,7 +94,8 @@ locals {
       }
     }
     torrente = {
-      enabled = true
+      enabled = false
+      storage = "200Gi"
     }
     picamera = {
       enabled        = false

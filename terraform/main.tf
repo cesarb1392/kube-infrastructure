@@ -35,20 +35,20 @@ module "public_ingress" {
   depends_on = [kubernetes_namespace.this]
 }
 
-#module "public_ingress_helm" {
-#  for_each = local.public_ingress
-#
-#  source = "./cloudflare"
-#
-#  namespace = each.key
-#  CF_ACCOUNT_ID = var.CF_ACCOUNT_ID
-#  CF_ZONE_NAME = var.CF_ZONE_NAME
-#
-#  target_service = each.value.target_service
-#  ingress_port   = each.value.ingress_port
-#  hostname       = each.key
-##  cf_access      = can(each.value.cf_access) ? each.value.cf_access : false
-#}
+module "public_ingress_helm" {
+  for_each = local.public_ingress
+
+  source = "./cloudflare"
+
+  namespace     = each.key
+  CF_ACCOUNT_ID = var.CF_ACCOUNT_ID
+  CF_ZONE_NAME  = var.CF_ZONE_NAME
+
+  target_service = each.value.target_service
+  ingress_port   = each.value.ingress_port
+  hostname       = each.key
+  #  cf_access      = can(each.value.cf_access) ? each.value.cf_access : false
+}
 
 module "website" {
   for_each = local.available_websites
@@ -141,23 +141,23 @@ module "github_runner" {
   depends_on = [kubernetes_namespace.this]
 }
 
-module "minio" {
-  count = local.applications.minio.enabled ? 1 : 0
+# module "minio" {
+#   count = local.applications.minio.enabled ? 1 : 0
 
-  source = "./minio"
+#   source = "./minio"
 
-  namespace                    = "minio"
-  app_name                     = "minio"
-  ingress_port                 = local.applications.minio.ingress_port
-  target_service               = local.applications.minio.target_service
-  MINIO_USERS                  = var.MINIO_USERS
-  MINIO_ROOT_PASSWORD          = var.MINIO_ROOT_PASSWORD
-  MINIO_ROOT_USER              = var.MINIO_ROOT_USER
-  persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["minio"].metadata.0.name
-  lan_ip                       = local.lan_ips.minio
+#   namespace                    = "minio"
+#   app_name                     = "minio"
+#   ingress_port                 = local.applications.minio.ingress_port
+#   target_service               = local.applications.minio.target_service
+#   MINIO_USERS                  = var.MINIO_USERS
+#   MINIO_ROOT_PASSWORD          = var.MINIO_ROOT_PASSWORD
+#   MINIO_ROOT_USER              = var.MINIO_ROOT_USER
+#   persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["minio"].metadata.0.name
+#   lan_ip                       = local.lan_ips.minio
 
-  depends_on = [module.metallb, kubernetes_namespace.this]
-}
+#   depends_on = [module.metallb, kubernetes_namespace.this]
+# }
 
 module "wireguard" {
   count = local.applications.wireguard.enabled ? 1 : 0
@@ -176,20 +176,20 @@ module "wireguard" {
   depends_on = [module.metallb, kubernetes_namespace.this]
 }
 
-module "vaultwarden" {
-  count = local.applications.vaultwarden.enabled ? 1 : 0
+# module "vaultwarden" {
+#   count = local.applications.vaultwarden.enabled ? 1 : 0
 
-  source                       = "./vaultwarden"
-  namespace                    = "vaultwarden"
-  ingress_port                 = local.applications.vaultwarden.ingress_port
-  SERVER_ADMIN_EMAIL           = var.CF_ACCESS_EMAIL_LIST.0
-  DOMAIN                       = var.CF_ZONE_NAME
-  VAULTWARDEN_ADMIN_TOKEN      = var.VAULTWARDEN_ADMIN_TOKEN
-  persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["vaultwarden"].metadata.0.name
-  log_level                    = local.applications.vaultwarden.log_level
+#   source                       = "./vaultwarden"
+#   namespace                    = "vaultwarden"
+#   ingress_port                 = local.applications.vaultwarden.ingress_port
+#   SERVER_ADMIN_EMAIL           = var.CF_ACCESS_EMAIL_LIST.0
+#   DOMAIN                       = var.CF_ZONE_NAME
+#   VAULTWARDEN_ADMIN_TOKEN      = var.VAULTWARDEN_ADMIN_TOKEN
+#   persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["vaultwarden"].metadata.0.name
+#   log_level                    = local.applications.vaultwarden.log_level
 
-  depends_on = [kubernetes_namespace.this, ]
-}
+#   depends_on = [kubernetes_namespace.this, ]
+# }
 
 module "picamera" {
   count = local.applications.picamera.enabled ? 1 : 0
@@ -201,24 +201,24 @@ module "picamera" {
   depends_on = [kubernetes_namespace.this, ]
 }
 
-module "torrente" {
-  count = local.applications.torrente.enabled ? 1 : 0
+# module "torrente" {
+#   count = local.applications.torrente.enabled ? 1 : 0
 
-  source = "./torrente"
+#   source = "./torrente"
 
-  namespace   = "torrente"
-  TOKEN       = var.NORD_TOKEN
-  puid        = var.PUID
-  pgid        = var.PGID
-  user        = var.USER
-  pass        = var.PASS
-  timezone    = var.TZ
-  lan_ip      = local.lan_ips.torrente
-  vpn_country = var.vpn_country
-  # persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["torrente"].metadata.0.name
+#   namespace                    = "torrente"
+#   TOKEN                        = var.NORD_TOKEN
+#   puid                         = var.PUID
+#   pgid                         = var.PGID
+#   user                         = var.USER
+#   pass                         = var.PASS
+#   timezone                     = var.TZ
+#   lan_ip                       = local.lan_ips.torrente
+#   vpn_country                  = var.vpn_country
+#   persistent_volume_claim_name = kubernetes_persistent_volume_claim.this["torrente"].metadata.0.name
 
-  depends_on = [kubernetes_namespace.this, module.metallb]
-}
+#   # depends_on = [kubernetes_namespace.this, module.metallb]
+# }
 
 
 module "falco" {
@@ -230,69 +230,4 @@ module "falco" {
   lan_ip    = local.lan_ips.falco
   user      = var.USER
   pass      = var.PASS
-}
-
-
-resource "helm_release" "nginx_ingress" {
-  name             = "ingress-nginx"
-  namespace        = "ingress-nginx"
-  repository       = "https://kubernetes.github.io/ingress-nginx"
-  chart            = "ingress-nginx"
-  version          = "4.12.2"
-  create_namespace = true
-  # https://github.com/kubernetes/ingress-nginx/blob/main/charts/ingress-nginx/values.yaml
-  set {
-    name  = "controller.service.type"
-    value = "LoadBalancer"
-  }
-  set {
-    name  = "controller.nodeSelector.kubernetes\\.io/arch"
-    value = "arm64"
-  }
-}
-
-resource "kubectl_manifest" "cert" {
-  yaml_body = <<-EOF
-  apiVersion: cert-manager.io/v1
-  kind: Certificate
-  metadata:
-    name: falco.192-168-178-237.sslip.io
-    namespace: falco
-  spec:
-    secretName: falco.192-168-178-237.sslip.io
-    duration: 2160h # 90 days
-    renewBefore: 360h # 15 days
-    dnsNames:
-      - falco.192-168-178-237.sslip.io
-    issuerRef:
-      name: banana-ca-issuer
-      kind: ClusterIssuer
-  EOF
-}
-
-resource "kubectl_manifest" "ingress" {
-  yaml_body = <<-EOF
-  apiVersion: networking.k8s.io/v1
-  kind: Ingress
-  metadata:
-    name: falco
-    namespace: falco
-  spec:
-    ingressClassName: nginx
-    tls:
-      - hosts:
-          - falco.192-168-178-237.sslip.io
-        secretName: falco.192-168-178-237.sslip.io
-    rules:
-      - host: falco.192-168-178-237.sslip.io
-        http:
-          paths:
-            - path: /
-              pathType: Prefix
-              backend:
-                service:
-                  name: falco-falcosidekick-ui
-                  port:
-                    number: 80
-EOF
 }

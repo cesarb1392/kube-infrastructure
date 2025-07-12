@@ -1,0 +1,32 @@
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   annotations:
+#     metallb.universe.tf/allow-shared-ip: calico-system-svc
+#   name: whisker-lan
+#   namespace: calico-system
+# spec:
+#   ports:
+#   - port: 8081
+#     protocol: TCP
+#     targetPort: 8081
+#   selector:
+#     k8s-app: whisker
+#   type: LoadBalancer
+
+# apiVersion: v1
+# kind: Service
+# metadata:
+#   annotations:
+#     metallb.universe.tf/allow-shared-ip: longhorn-system-svc
+#   name: longhorn-lan
+#   namespace: longhorn-system
+# spec:
+#   ports:
+#   - port: 80
+#     protocol: TCP
+#     targetPort: 8000
+#   selector:
+#     app: longhorn-ui
+#   type: LoadBalancer
+

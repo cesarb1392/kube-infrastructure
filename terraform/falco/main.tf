@@ -91,3 +91,51 @@ resource "kubernetes_service_v1" "falco_lan" {
   }
 }
 
+
+
+
+# resource "kubectl_manifest" "cert" {
+#   yaml_body = <<-EOF
+#   apiVersion: cert-manager.io/v1
+#   kind: Certificate
+#   metadata:
+#     name: falco.192-168-178-237.sslip.io
+#     namespace: falco
+#   spec:
+#     secretName: falco.192-168-178-237.sslip.io
+#     duration: 2160h # 90 days
+#     renewBefore: 360h # 15 days
+#     dnsNames:
+#       - falco.192-168-178-237.sslip.io
+#     issuerRef:
+#       name: banana-ca-issuer
+#       kind: ClusterIssuer
+#   EOF
+# }
+
+# resource "kubectl_manifest" "ingress" {
+#   yaml_body = <<-EOF
+#   apiVersion: networking.k8s.io/v1
+#   kind: Ingress
+#   metadata:
+#     name: falco
+#     namespace: falco
+#   spec:
+#     ingressClassName: nginx
+#     tls:
+#       - hosts:
+#           - falco.192-168-178-237.sslip.io
+#         secretName: falco.192-168-178-237.sslip.io
+#     rules:
+#       - host: falco.192-168-178-237.sslip.io
+#         http:
+#           paths:
+#             - path: /
+#               pathType: Prefix
+#               backend:
+#                 service:
+#                   name: falco-falcosidekick-ui
+#                   port:
+#                     number: 80
+# EOF
+# }
