@@ -58,12 +58,14 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 | <a name="module_github_runner"></a> [github\_runner](#module\_github\_runner) | ./github_runner | n/a |
 | <a name="module_loadtest"></a> [loadtest](#module\_loadtest) | ./load_test | n/a |
 | <a name="module_metallb"></a> [metallb](#module\_metallb) | ./metallb | n/a |
+| <a name="module_minio"></a> [minio](#module\_minio) | ./minio | n/a |
 | <a name="module_monitoring"></a> [monitoring](#module\_monitoring) | ./monitoring | n/a |
 | <a name="module_picamera"></a> [picamera](#module\_picamera) | ./picamera | n/a |
 | <a name="module_pihole"></a> [pihole](#module\_pihole) | ./pihole | n/a |
 | <a name="module_private_ingress"></a> [private\_ingress](#module\_private\_ingress) | ./private_ingress | n/a |
 | <a name="module_public_ingress"></a> [public\_ingress](#module\_public\_ingress) | ./public_ingress | n/a |
-| <a name="module_public_ingress_helm"></a> [public\_ingress\_helm](#module\_public\_ingress\_helm) | ./cloudflare | n/a |
+| <a name="module_torrente"></a> [torrente](#module\_torrente) | ./torrente | n/a |
+| <a name="module_vaultwarden"></a> [vaultwarden](#module\_vaultwarden) | ./vaultwarden | n/a |
 | <a name="module_website"></a> [website](#module\_website) | ./website | n/a |
 | <a name="module_wireguard"></a> [wireguard](#module\_wireguard) | ./wireguard | n/a |
 
@@ -86,6 +88,7 @@ terraform init -backend-config="access_key=$ACCESS_TOKEN" -backend-config="secre
 | <a name="input_CF_ZONE_NAME"></a> [CF\_ZONE\_NAME](#input\_CF\_ZONE\_NAME) | n/a | `string` | n/a | yes |
 | <a name="input_GH_ACCESS_TOKEN"></a> [GH\_ACCESS\_TOKEN](#input\_GH\_ACCESS\_TOKEN) | n/a | `string` | n/a | yes |
 | <a name="input_KUBECONFIG"></a> [KUBECONFIG](#input\_KUBECONFIG) | n/a | `string` | n/a | yes |
+| <a name="input_KUBECONTEXT"></a> [KUBECONTEXT](#input\_KUBECONTEXT) | n/a | `string` | n/a | yes |
 | <a name="input_MINIO_ROOT_PASSWORD"></a> [MINIO\_ROOT\_PASSWORD](#input\_MINIO\_ROOT\_PASSWORD) | n/a | `string` | n/a | yes |
 | <a name="input_MINIO_ROOT_USER"></a> [MINIO\_ROOT\_USER](#input\_MINIO\_ROOT\_USER) | n/a | `string` | n/a | yes |
 | <a name="input_MINIO_USERS"></a> [MINIO\_USERS](#input\_MINIO\_USERS) | n/a | <pre>list(<br/>    object({<br/>      accessKey = string<br/>      secretKey = string<br/>      policy    = string<br/>  }))</pre> | n/a | yes |

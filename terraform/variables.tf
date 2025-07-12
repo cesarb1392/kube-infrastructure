@@ -7,7 +7,11 @@ variable "CF_API_TOKEN" {
 variable "KUBECONFIG" {
   type      = string
   sensitive = true
+}
 
+variable "KUBECONTEXT" {
+  type      = string
+  sensitive = true
 }
 
 variable "TZ" {

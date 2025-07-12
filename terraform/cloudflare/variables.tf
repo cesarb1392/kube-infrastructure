@@ -24,3 +24,8 @@ variable "CF_ZONE_NAME" {
   type      = string
   sensitive = true
 }
+
+variable "CF_ZONE_ID" {
+  type      = string
+  sensitive = true
+}

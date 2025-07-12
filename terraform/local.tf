@@ -1,5 +1,4 @@
 locals {
-
   lan_ips = {
     pihole     = "192.168.178.232"
     wireguard  = "192.168.178.233"
@@ -125,5 +124,4 @@ locals {
   available_storage = {
     for k, v in local.applications : k => v if try(v.storage, null) != null && v.enabled
   }
-
 }

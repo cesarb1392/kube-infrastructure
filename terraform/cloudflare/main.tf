@@ -19,12 +19,12 @@ locals {
     replicaCount = 1
     resources = {
       limits = {
-        cpu : "100m",
-        memory : "128Mi"
+        cpu    = "100m",
+        memory = "128Mi"
       },
       memory = {
-        cpu : "100m",
-        memory : "128Mi"
+        cpu    = "100m",
+        memory = "128Mi"
       }
     }
   }

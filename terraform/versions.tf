@@ -39,16 +39,19 @@ terraform {
 # }
 
 provider "kubernetes" {
-  config_path = var.KUBECONFIG
+  config_path    = var.KUBECONFIG
+  config_context = var.KUBECONTEXT
 }
 
 provider "kubectl" {
-  config_path = var.KUBECONFIG
+  config_path    = var.KUBECONFIG
+  config_context = var.KUBECONTEXT
 }
 
 provider "helm" {
   kubernetes {
-    config_path = var.KUBECONFIG
+    config_path    = var.KUBECONFIG
+    config_context = var.KUBECONTEXT
   }
   debug = true
 }
@@ -56,4 +59,3 @@ provider "helm" {
 provider "cloudflare" {
   api_token = var.CF_API_TOKEN
 }
-
