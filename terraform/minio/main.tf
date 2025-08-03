@@ -34,7 +34,7 @@ locals {
 resource "helm_release" "minio_storage" {
   namespace = var.namespace
   name      = "minio"
-  chart     = "https://github.com/minio/minio/blob/master/helm-releases/minio-5.0.9.tgz?raw=true"
+  chart     = "https://github.com/minio/minio/blob/master/helm-releases/minio-5.4.0.tgz?raw=true"
   values    = [yamlencode(local.minio)]
 }
 

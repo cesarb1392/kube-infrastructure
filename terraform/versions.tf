@@ -1,5 +1,5 @@
 terraform {
-  required_version = "> 1.5.0, < 2.0.0"
+  required_version = ">= 1.12.0, < 2.0.0"
 
   required_providers {
     kubernetes = {
@@ -16,7 +16,7 @@ terraform {
     }
     cloudflare = {
       source  = "cloudflare/cloudflare"
-      version = "~> 3.24.0"
+      version = ">= 3.24.0"
     }
     curl = {
       source  = "anschoewe/curl"
@@ -29,14 +29,20 @@ terraform {
 #   backend "s3" {
 #     bucket                      = "kube-infrastructure"
 #     key                         = "terraform.tfstate"
-#     endpoint                    = "https://minio.cesarb.dev"
+#     endpoints = {
+#      s3                    = "https://minio.cesarb.dev"
+#     }
+#     access_key = "1c2uKN4hV7RotjaN"
+#     secret_key = "i3O3wHlnxW7hxgeGKSdbwAYB0prBIgOm"
+
 #     region                      = "main"
 #     skip_credentials_validation = true
 #     skip_metadata_api_check     = true
 #     skip_region_validation      = true
-#     force_path_style            = true
+#     use_path_style            = true
 #   }
 # }
+
 
 provider "kubernetes" {
   config_path    = var.KUBECONFIG
@@ -49,7 +55,7 @@ provider "kubectl" {
 }
 
 provider "helm" {
-  kubernetes {
+  kubernetes = {
     config_path    = var.KUBECONFIG
     config_context = var.KUBECONTEXT
   }

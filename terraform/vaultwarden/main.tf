@@ -58,12 +58,11 @@ resource "kubernetes_deployment" "this" {
 
           resources {
             limits = {
-              cpu    = "100m"
-              memory = "128Mi"
+              memory = "256Mi"
             }
             requests = {
               cpu    = "100m"
-              memory = "128Mi"
+              memory = "256Mi"
             }
           }
           volume_mount {

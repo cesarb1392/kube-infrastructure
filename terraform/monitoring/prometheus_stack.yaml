@@ -27,9 +27,9 @@ grafana:
   resources:
     requests:
       cpu: 100m
-      memory: 512Mi
+      memory: 612Mi
     limits:
-      memory: 512Mi
+      memory: 612Mi
   nodeSelector:
     kubernetes.io/arch: arm64
 

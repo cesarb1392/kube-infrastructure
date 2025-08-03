@@ -22,7 +22,7 @@ locals {
     }
     sharesecrets = {
       enabled        = false
-      public_ingress = false # local.applications.shareasecret.enabled
+      public_ingress = false
       runner         = false
       image          = "monkeybanana13/share-a-secret"
       target_service = "sharesecrets-svc"
@@ -33,7 +33,7 @@ locals {
       public_ingress = true
       target_service = "minio"
       ingress_port   = 9000
-      storage        = "500Mi"
+      storage        = "5Gi"
     }
     wireguard = {
       enabled   = true

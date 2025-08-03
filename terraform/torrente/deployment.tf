@@ -131,11 +131,11 @@ resource "kubernetes_deployment_v1" "jackett" {
           image = "ghcr.io/bubuntux/nordlynx:2023-06-01"
           resources {
             limits = {
-              memory = "50Mi"
+              memory = "128Mi"
             }
             requests = {
               cpu    = "50m"
-              memory = "50Mi"
+              memory = "128Mi"
             }
           }
           env {
@@ -400,75 +400,75 @@ resource "kubernetes_deployment_v1" "sonarr" {
 }
 
 
-# resource "kubernetes_deployment_v1" "filebrowser" {
-#   metadata {
-#     name      = "filebrowser"
-#     namespace = var.namespace
-#     labels = {
-#       namespace = var.namespace
-#     }
-#   }
-#   spec {
-#     selector {
-#       match_labels = {
-#         app = "filebrowser"
-#       }
-#     }
-#     template {
-#       metadata {
-#         labels = {
-#           app = "filebrowser"
-#         }
-#       }
-#       spec {
-#         container {
-#           name  = "filebrowser"
-#           image = "filebrowser/filebrowser:s6"
-#           resources {
-#             limits = {
-#               memory = "200Mi"
-#             }
-#             requests = {
-#               cpu    = "100m"
-#               memory = "200Mi"
-#             }
-#           }
-#           port {
-#             container_port = 80
-#           }
-#           env {
-#             name  = "FB_AUTH_METHOD"
-#             value = "none"
-#           }
-#           env_from {
-#             config_map_ref {
-#               name     = kubernetes_config_map_v1.config.metadata[0].name
-#               optional = false
-#             }
-#           }
-#           volume_mount {
-#             mount_path = "/config"
-#             name       = "torrente"
-#             sub_path   = "configs/filebrowser"
-#           }
-#           volume_mount {
-#             mount_path = "/database"
-#             name       = "torrente"
-#             sub_path   = "configs/filebrowser/database"
-#           }
-#           volume_mount {
-#             mount_path = "/srv"
-#             name       = "torrente"
-#             sub_path   = "filebrowser"
-#           }
-#         }
-#         volume {
-#           name = "torrente"
-#           persistent_volume_claim {
-#             claim_name = var.persistent_volume_claim_name
-#           }
-#         }
-#       }
-#     }
-#   }
-# }
+resource "kubernetes_deployment_v1" "filebrowser" {
+  metadata {
+    name      = "filebrowser"
+    namespace = var.namespace
+    labels = {
+      namespace = var.namespace
+    }
+  }
+  spec {
+    selector {
+      match_labels = {
+        app = "filebrowser"
+      }
+    }
+    template {
+      metadata {
+        labels = {
+          app = "filebrowser"
+        }
+      }
+      spec {
+        container {
+          name  = "filebrowser"
+          image = "filebrowser/filebrowser:s6"
+          resources {
+            limits = {
+              memory = "200Mi"
+            }
+            requests = {
+              cpu    = "100m"
+              memory = "200Mi"
+            }
+          }
+          port {
+            container_port = 80
+          }
+          env {
+            name  = "FB_AUTH_METHOD"
+            value = "none"
+          }
+          env_from {
+            config_map_ref {
+              name     = kubernetes_config_map_v1.config.metadata[0].name
+              optional = false
+            }
+          }
+          volume_mount {
+            mount_path = "/config"
+            name       = "torrente"
+            sub_path   = "configs/filebrowser"
+          }
+          volume_mount {
+            mount_path = "/database"
+            name       = "torrente"
+            sub_path   = "configs/filebrowser/database"
+          }
+          volume_mount {
+            mount_path = "/srv"
+            name       = "torrente"
+            sub_path   = "downloads"
+          }
+        }
+        volume {
+          name = "torrente"
+          persistent_volume_claim {
+            claim_name = var.persistent_volume_claim_name
+          }
+        }
+      }
+    }
+  }
+}
